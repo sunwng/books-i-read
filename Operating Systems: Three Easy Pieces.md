@@ -83,3 +83,41 @@
     → Register Context를 교체하기 때문에 Context Switching이라고 하는 거임
     - 이외에도 Process State, Process Memory 시작 포인트, Process Memory 사이즈, PID 등 많음
     - 이 Data Structure 는 Process Control Block (PCB) 라고 불리기도 함
+
+### CH05. Interlude: Process API
+
+→ Process와 관련한 UNIX 시스템의 유용한 API를 살펴봄
+
+- `fork()`
+    - Process를 생성함
+    - Parent Process의 복사본인 Child Process가 생성됨
+    - Child Process는 생성된 시점 (`fork()` 호출 시점) 부터 실행됨
+    - fork() 의 return으로 Parnet Process는 Child Process의 PID, Child Process는 0 을 받음
+- `wait()`
+    - Child Process의 종료를 기다림
+    - `waitpid()` 를 사용하면 Child Process를 특정할 수 있음
+- `exec()`
+    - Parent Process와 다른 Process를 생성함
+    - Child Process가 `exec()`를 통해 다른 Process를 실행시키면 해당 Process로 덮어쓰여짐
+- 이렇게 설계한 이유?
+    - Process 생성은 기존의 Process를 복사하여 만드는 것이 편함
+    - 이후 다른 Process로 덮어 쓰기 전, 추가로 처리해줘야할 것들이 있다면 `exec()` 실행 전 실행 가능함
+    - 이게 책에서 설명하는 이유인듯
+
+### CH06. Mechanism: Limited Direct Execution
+
+- Restricted Operations
+    - 모든 Process가 모든 System Call에 권한을 가진다면 엉망진창일 것
+        
+        → User mode / Kernel mode 로 Process의 mode를 나눔
+        
+    - User mode에서는 제한된 System Call 권한을 가짐
+    - 사용하지 못하는 System Call을 사용하기 위해서는 Kernel의 System Call을 호출해야함
+- Switching Between Processes
+    - Process가 CPU를 점유하고 있다면, OS Process는 영원히 제어권을 갖지 못하게 됨
+    (재부팅만이 방법)
+    - 가장 좋은 방법은 timer interrupt 를 사용하는 것
+    - timer interrupt가 발생하면 현재 Process를 멈추고 interrupt handler가 실행됨
+    → OS Process가 다시 제어권을 갖게 됨
+    - 이제 주기적으로 OS Process가 제어권을 가져올 수 있기에, 여러 Process 중 어떤 Process를 다음에 실행시킬지 정할 수 있음 → Scheduler의 역할
+    - 그리고 여기서 CPU를 점유하는 Process가 다른 Process로 바뀌는 것이 바로 Context Switch
