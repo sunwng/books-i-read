@@ -121,3 +121,69 @@
     → OS Process가 다시 제어권을 갖게 됨
     - 이제 주기적으로 OS Process가 제어권을 가져올 수 있기에, 여러 Process 중 어떤 Process를 다음에 실행시킬지 정할 수 있음 → Scheduler의 역할
     - 그리고 여기서 CPU를 점유하는 Process가 다른 Process로 바뀌는 것이 바로 Context Switch
+
+### CH07. Scheduling: Introduction
+
+→ 이제 어떻게 다음으로 실행시킬 Process를 정할지 알아볼 차례 (여러번 봐서 지겨운 주제)
+
+- Scheduling Metric
+    - Process 선정 Policy를 평가할 때 기준이 필요함
+    - 간단하게 `완료시간 - 도착시간` 으로 하는 turnaround time으로 비교
+    - + `첫 시작시간 - 도착시간` 으로 하는 response time 도 사용
+- FIFO (First In, First Out)
+    - 말 그대로 먼저 온 순
+    - 그럴리는 없겠지만, 만약 정확히 같은 시간에 도착한 프로세스들에 대해서는 어떻게 선택할지 의문
+    - 프로세스가 CPU를 선점하고 빼았기지 않는다면, 각 프로세스의 작업 시간에 따라 성능은 오락가락함
+- SJF (Shorted Job First)
+    - 시작 가능한 Process Pool 에서 작업 시간이 가장 짧은 것부터 시작
+    - 하지만, 실제로는 작업 시간을 알 수 없음
+- STCF (Shortest Time-to-Completion First)
+    - SJF를 선점형으로 개선한 것
+- RR (Round Robin)
+    - 위의 Policy들은 모두 Response Time 성능이 좋지 않음
+    - 그래서 일정 time slice동안 모든 프로세스를 동등하게 실행하는 Policy가 제안됨
+    - 그리고 그 time slice 는 당연히 time interrupt 의 배수여야함
+    (그래야 OS Process가 time interrupt 시마다 몇번째인지 체크하고 프로세스를 교체함)
+    - time slice가 작을수록 response time 성능은 증가함
+    - 하지만 context switching 수가 증가한다는 tradeoff가 존재함
+    - 또한 Turnaround time 역시 증가함
+- I/O 고려
+    - Disk I/O 가 일어나면, 해당 Process는 I/O 완료까지 CPU를 사용하지 않음 → 이걸 고려
+    - Disk I/O 시작 시, Scheduler는 해당 Process를 Blocked State로 변경 후 다른 Process 실행
+    - Disk I/O 완료 시, 해당 Process를 Ready State로 변경
+
+### CH08. Scheduling: The Multi-Level Feedback Queue
+
+- MLFQ (Multi-Level Feeadback Queue)
+    - 현대적인 Scheduler
+    - 목표
+        - Turnaround time 최적화
+            - Turnaround time 성능은 SJF와 같은 Policy에서 좋은 성능을 보였고 이 성능을 높이려면 일반적으로 Process의 작업 시간을 알고 있어야 했음
+        - Response time 최소화
+            - RR과는 다르게, Turnaround time 성능을 해치지 않으면서 Response time을 최소화하고자 함
+    - 기본
+        - 각각 다른 Priority level이 할당된 여러개의 Queue로 구성
+        - 다음 실행할 Process 선택 시 Priority를 사용 (높은 Priority Queue에 있는 Process 선택)
+        - 같은 Queue 내의 Process에 대해서는 RR
+        - Priority는 Process의 Observed behavior를 통해 결정 (한번 결정되고 끝 아님)
+            - 예를 들어, 키보드 I/O 가 많았던 Process라면 Interactive해야할 것으로 판단하고 높은 Priority 부여
+            - I/O 없는 CPU Intensive한 Process라면 낮은 Priority 부여
+    - How to Change Priority
+        - Process가 새로 들어오면, 일단 가장 높은 Priority에 할당
+        - Process가 여러 time slice를 사용할수록, Priority 감소
+        - Process가 자신의 time slice가 끝나기전에 CPU 사용을 멈춘다면 (I/O 등의 이유로), Priority 유지
+    - 즉 SJF처럼 행동하고 싶은데 Process의 작업 시간을 알지 못하기 때문에, 처음 들어온 Process는 짧을 수 있다고 가정하고 가장 높은 Priority에 할당하는 것
+    - 문제점
+        - 높은 Priority의 Process가 엄청 많다면 → 낮은 Priority의 Process는 기아 상태
+        - 만약 Process를 time slice가 끝나기 직전마다 CPU를 내려놓게 한다면 → 높은 Priority 유지 가능
+    - The Priority Boost
+        - 첫번째 문제를 해결하기 위해, 주기적으로 (time period $S$) 모든 Process를 가장 높은 Priority Queue로 올려버리는 전략을 추가할 수 있음
+        - $S$ 의 값에는 정답이 없음
+        - 기아 상태를 해결 가능
+        - CPU-bound한 Process가 갑자기 Interactive한 성격을 띄게 될 경우도 대응 가능
+    - Better Accounting
+        - 두번째 문제를 해결하기 위해, 해당 Priority에서 가능한 time slice를 정해두고 사용 시간을 누적한 후 이를 넘기면 Priority를 감소시킴
+    - 근본적인 질문
+        - 몇개의 Queue로 구성할지, time period는 몇으로 설정할지, 할당 time slice는 몇으로 설정할지 등 정해야할 Parameter가 너무 많음
+        - 하지만 모두 정답이 있는 것은 아님
+        - 딥러닝의 힘을 빌리기 좋은 Parameter 결정 문제일지도..
