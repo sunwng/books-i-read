@@ -187,3 +187,85 @@
         - 몇개의 Queue로 구성할지, time period는 몇으로 설정할지, 할당 time slice는 몇으로 설정할지 등 정해야할 Parameter가 너무 많음
         - 하지만 모두 정답이 있는 것은 아님
         - 딥러닝의 힘을 빌리기 좋은 Parameter 결정 문제일지도..
+
+### CH09. Scheduling: Proportional Share
+
+- Proportional-share Scheduler
+    - Fair-share Scheduler라고도 불림
+    - Turnaround time과 Response time을 최적화 하기 위해 나온게 MLFQ 였다면, 이건 모든 Process에게 일정 CPU time을 보장해주는 것이 목적
+    - Ticket이라는 개념을 사용
+        - 1 Ticket은 일정 CPU time을 사용할 수 있는 권리
+        - 전체 Ticket Number 중 OS는 랜덤하게 하나를 뽑음
+        - Ticket이 많을수록 해당 Process는 뽑힐 확률이 증가함
+    - 근데, OS가 어떻게 알맞은 Ticket의 수를 Process에게 할당할지 의문
+    - 만약, CPU 사용 시간이 길지 않다면 → 랜덤하게 뽑는 것은 평균으로 회귀하지 못함 (불균형하게 할당됨)
+        - 이를 해결하기 위해 제안된 것은 Stride라는 개념을 사용하는 것
+        - Stride는 각 Ticket Number의 역수
+        - 모든 Process는 시작할 때 pass value가 0으로 초기화된 상태로 시작
+        - 그리고 OS는 pass value가 최소인 Process를 실행시키고 해당 Process의 pass value에 Stride를 더해줌
+        - 이렇게되면 나름? Ticket number가 높은 Process의 선택 빈도도 오르고 Ticket number가 낮은 Process도 실행될 수 있음
+- CFS (Completely Fair Scheduler)
+    - Linux의 Scheduler
+    - Fair-share 개념을 한정적으로 적용
+    - virtual runtime (`vruntime`) 이라는 개념을 사용
+        - 모든 Process는 실행되고 정지될 때마다 사용한 시간에 비례하여 `vruntime`이 증가함
+        - 그리고 Scheduler는 가장 낮은 `vruntime`을 갖는 Process를 실행시킴
+    - 하지만, 각 Process를 얼마나 실행시켜야하는지 알 수 없음
+    - 이를 위해 `sched_latency` 라는 parameter를 사용
+        - 기본적으로 `sched_latency`는 48ms로 설정
+        - 그리고 Scheduler는 매 순간마다 `sched_latency`를 Ready 상태의 전체 Process 수로 나눈 값을 time slice 값으로 설정
+    - 근데, 만약 Ready 상태의 Process가 너무 많으면 time slice는 엄청 작아지고 Context Switching 오버헤드가 심해지지 않나?
+    - 이걸 해결하기 위해 `min_granularity` 라는 parameter를 사용하고, 이건 time slice의 최소값임
+    (보통 6ms로 설정된다고 함)
+    - 또한, `nice` 개념을 사용하여 Process의 Priority를 관리
+        - nice는 -20 ~ +19 의 범위를 갖는 값
+        - 낮을수록 Priority가 높음
+        - 각 nice value에 따른 weight가 정의되어있음 (e.g. -20은 88761, 19는 15)
+        - 그리고 $weight_i / weight sum$ 의 비율을 `sched_latency` 에 곱해주어 각 Process의 실질적인 CPU 사용 시간을 계산
+        - 즉, 전체 weight 중 얼마나 weight를 많이 차지하는지를 본다는 것
+        - 그리고 `vruntime`을 실행 시간에 아까 구한 비율의 역수를 곱하여 더해줌
+        (Priority가 높을수록 vruntime 증가폭이 작아짐)
+    - Process 목록을 찾는 것도 오버헤드이므로
+        
+        → 실행 중 or 실행 가능인 Process를 Red-Black Tree 구조로 보관함
+        
+    - Sleep or Block 상태에서 돌아온 Process는 상대적으로 작은 `vruntime`으로 인해 CPU를 독점할 수 있다는 문제가 있음
+        
+        → Process가 다시 실행가능해지면, 전체 Process 중 최소 `vruntime` 값으로 설정해줘서 해결함
+        
+
+### CH10. Multiprocessor Scheduling
+
+→ 요즘은 Multicore (Multi CPUs) 가 기본이지만, 위에서 본 Scheduling 방법들은 Single CPU를 가정하였음
+
+- Cache
+    - Multiprocessor 와 Singleprocessor 구조에서의 큰 차이는 Cache 라고 함
+    - Cache는 Main Memory에서 데이터를 가져올 때 오래걸리기에, CPU에서 가까운곳에 위치시키고 자주 사용할 데이터의 복사본을 저장해두는 곳
+    - Cache는 Locality 의 이점을 살림 (따지자면 Temporal Locality)
+    - 한 CPU는 각자의 Cache를 갖게 되기에, 한 CPU가 업데이트한 Value는 그 CPU의 Cache에 업데이트됨
+    → 다른 CPU가 같은 데이터를 보게될 때, 업데이트된 데이터와 Main Memory 상의 데이터가 달라지는 문제 발생
+    - 이를 해결하기 위해 bus system 등을 사용하여 동기화를 해야함
+- Multiprocessor Scheduling Architecture
+    - Process 실행 시 Cache도 교체해야 하기 때문에, Scheduling 시 Process는 같은 CPU에 두도록 고려하는 것이 좋음 (Cache Affinity)
+    - SQMS (Single Queue Multiprocessor Scheduling)
+        - 가장 간단한 방법
+        - 그냥 Queue 하나로 처리해버림
+        - 하지만, 여러 개의 CPU가 하나의 Queue를 공유하기에 당연히 Lock을 사용하며 이건 CPU 수가 증가할수록 성능 감소를 심하게 함
+        - 또한, Cache Affinity를 고려하기 힘듦
+    - MQMS (Multi Queue Multiprocessor Scheduling)
+        - CPU마다 각자 독립적인 Queue를 갖도록 함
+        - 처음 Process가 들어오면, 정해둔 규칙에 의해 한 Queue에 배정함
+        (규칙은 RR 등 정하기 나름)
+        - 하지만, Queue 마다 다 다른 Process가 독립적으로 존재하기에 모든 Process가 동일하게 자원을 사용하지 못하게 됨 (Load Imbalance)
+        - 이를 해결하기 위해, Migration 이라는 전략이 추가됨
+            - 말 그대로, 부하가 싶한 Queue (CPU) 에서 적은 Queue로 Process를 옮김
+            - 하지만 OS가 언제 Migration할지 어떻게 알까?
+            - Work Stealing이라는 기술이 기본적으로 사용됨
+            - Process가 적은 Queue가 다른 Queue들의 사이즈를 보면서 Process를 가져옴
+    - 현재까지도 국룰인 방법은 없다고 함
+    - Linux에서는 3가지를 가장 대표적으로 사용한다고 함
+        - O(1) Scheduler → Multiple Queue 사용
+            - Priority-based
+        - CFS → Multiple Queue 사용
+        - BFS (그 BFS 아님) → Single Queue 사용
+            - Earliest Eligible Virtual Deadline First 라는 방식이라고 함..
