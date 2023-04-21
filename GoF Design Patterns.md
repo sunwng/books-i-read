@@ -1,6 +1,8 @@
 > 추가 Ref: [https://github.com/RameshMF/gof-java-design-patterns](https://github.com/RameshMF/gof-java-design-patterns)
-실습: [https://github.com/sunwng/gof-design-patterns-impl](https://github.com/sunwng/gof-design-patterns-impl)
-이 책을 읽는 이유: 팩토리 패턴, 빌더 패턴 등 개발하며 알게된 다양한 객체지향 패턴을 체계적으로 습득하기 위함
+> 
+> 실습: [https://github.com/sunwng/gof-design-patterns-impl](https://github.com/sunwng/gof-design-patterns-impl)
+> 
+> 이 책을 읽는 이유: 팩토리 패턴, 빌더 패턴 등 개발하며 알게된 다양한 객체지향 패턴을 체계적으로 습득하기 위함
 > 
 
 ### CH01. 서론
