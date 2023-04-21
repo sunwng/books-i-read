@@ -268,3 +268,40 @@
         - CFS → Multiple Queue 사용
         - BFS (그 BFS 아님) → Single Queue 사용
             - Earliest Eligible Virtual Deadline First 라는 방식이라고 함..
+
+### CH13. The Abstraction: Address Spaces
+
+→ 이제는 Memory를 Virtualization하는 방법에 대해 시작
+
+- 옛날 얘기
+    - Time sharing에 대한 필요가 시작했을 즈음에는
+    - 여러 Process를 실행시키기 위해, Switching때마다 관련 모든 데이터를 Disk에 저장하고 한 Process가 Memory 전부를 점유했음
+    - 당연히도 이건 너무 느렸음
+    - 그래서 메모리는 공유하되, Register-level 의 정보만 교체하기로 하였음
+    - 빨라지긴 했으나, 실행 중인 Process가 다른 Process의 정보 (Memory에 있는)에 접근할 수 없게 만들어야했음
+- Address Space
+    - 위의 문제를 해결하고 메모리를 관리하기 위해 사용되기 시작
+    - 시작 부분에 프로그램의 코드가 올라감 (Code 영역)
+        - 수정될일이 없는 정적인 데이터이므로 올리기 쉽고 변하지 않는 크기이므로
+    - 이후에는 프로그램 실행 중 동적으로 크기가 변하는 Heap 과 Stack 영역이 존재함
+    - Heap은 Code영역 끝나는 지점부터, Stack은 Address Space가 끝나는 지점부터 시작함
+    - 당연히 Heap의 주소 영역은 Positive하게 커질 것이고, Stack의 주소 영역은 Negative하게 커질 것
+- 이 Address Space를 Process마다 독립적으로 갖고 있게 하는 것이 Memory Virtualization
+- 이를 위해서는, Process가 명령하는 Address Space 상에서의 Address 를 Physical Memoty 상의 Address 로 변환이 가능해야함
+- Memory Virtualization에서 중요한 것?
+    - Transparency; Process는 자신의 Address Space가 Virtualization되었다는 것을 몰라야함
+    - Efficiency; 이것으로 인해 Process가 느려지거나, Memory를 많이 사용하게 되면 안됨
+    - Protection; Process가 다른 Process의 Address Space를 침범하면 안됨 
+    (OS의 Address Space 역시 보호되어야함)
+
+### CH14. Interdule: Memory API
+
+- Types of Memory
+    - Stack
+        - Compiler에 의해 할당되고 해제됨
+        - 함수가 실행되고, 그 내부에 지역 변수가 선언된다면 자동으로 Stack에 메모리가 할당됨
+        - 그리고 해당 함수가 종료되면, 그 안에 있던 변수들이 모두 Stack 메모리에서 해제됨
+    - Heap
+        - 사용자에 의해 할당되고 해제됨
+        - C 에서는 `malloc()` 을 사용하여 할당
+        - 마찬가지로 `free()` 로 해제
