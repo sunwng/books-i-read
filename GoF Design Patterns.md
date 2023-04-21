@@ -42,7 +42,7 @@
         
     - 구조:
         
-        ![Untitled](https://sunwng.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb60c5bb5-90dd-462c-8e3c-aa77779681cb%2FUntitled.png?id=9e7655c7-adf2-4b3c-8fdb-bcd8a2091cde&table=block&spaceId=e44a26ef-329f-4598-9429-3f4078727a56&width=1150&userId=&cache=v2)
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b60c5bb5-90dd-462c-8e3c-aa77779681cb/Untitled.png)
         
         - ProductA와 ProductB 라는 클래스를 주로 사용한다고 가정
         - 그리고 각 클래스는 1, 2 처럼 집단이 있는 상황임 (ProductA1, ProductB1 같이 사용)
@@ -50,7 +50,7 @@
         - 이를 위해 Factory의 Factory인 AbstractFactory를 만들어주고
         - 상황에 맞는 ConcreteFactory들을 AbstractFactory를 상속 받아 만들어주고 사용함
         - 예를 들어, ~1 클래스들을 사용해야한다면 ConcreteFactory1을 사용
-    - 구현 [[Link](https://sunwng.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fad94ae71-e4a0-4377-a39a-b12ba9d3970a%2FUntitled.png?id=b41cff2f-1d3b-49ef-be24-2c6156f1eaaf&table=block&spaceId=e44a26ef-329f-4598-9429-3f4078727a56&width=1150&userId=&cache=v2)]
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/9ecebbd0ac083d9d440be01a8230c18035c8bd4e)]
         - Kingdom 이라는 서비스의 구성요소가 King / Army / Castle 이라고 할 때
         - 서비스의 상황에 따라 Elf / Orc 에 맞게 구성요소가 변경될 수 있음
         - 이럴 때, KingdomFactory 라는 큰 추상 팩토리 클래스를 만들어주고
