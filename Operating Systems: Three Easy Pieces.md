@@ -305,3 +305,51 @@
         - 사용자에 의해 할당되고 해제됨
         - C 에서는 `malloc()` 을 사용하여 할당
         - 마찬가지로 `free()` 로 해제
+
+### CH15. Mechanism: Address Translation
+
+- CPU Virtualization과 마찬가지로 Efficiency와 Control을 핵심 개념으로 설게됨
+- Address Translation
+    - 한 Process가 자신의 Address Space를 온전히 잘 사용할 수 있도록 도움
+    - Virtual Address를 Pyhysical Address로 변환함
+- Dynamic Relocation
+    - 변환하는 Mechanism
+    - Base Register와 Bounds Register 를 필요로 함 (각각 각 프로세스의 Address Space의 시작 위치와 크기) → CPU 의 도움을 필요로 한다는 뜻
+    - Physical Adress = Virtual Adress + Base 이기 때문
+    - Bound Register는 Address Translation 전, 접근의 유혀성을 검증하여 다른 Process의 Address Space를 보호함
+    - Base / Bounds Register를 포함한 Address Translation을 위한 요소를 Memory Management Unit (MMU) 라고 퉁쳐서 부르기도 함
+- 여기서 궁금한점, 멀티 코어의 경우 모든 CPU가 하나의 MMU를 공유하는 것인가?
+    - ChatGPT에게 물어본 결과 일반적으로는 아니라고함
+    - CPU의 각 코어는 각자의 MMU를 사용하여 각자의 Memory를 관리함
+    - 공유 Memory를 활용한다면, 이 Space를 위한 MMU 추가적으로 필요
+- 그렇다면 OS의 역할은?
+    - MMU에 의해 Out of Bound Exception 발생 시 처리 (보통 해당 Process 종료)
+    - Program이 실행되어 Process가 생성될 때, 비어있는 Memory Space를 찾고 할당해야함
+        
+        → 이를 위해 Free List 라는 자료구조를 사용
+        
+    - 또한 종료된 Process의 Memory를 해제해야 함
+    - 그리고 위에서 본대로 코어마다 MMU가 다르고, 그 뜻은 Base / Bounds Pair 값이 다르다는 것이므로 Context Switching 시 해당 Process의 Base / Bounds Pair 값을 위해 이 Pair 를 그때 그때 Memory에 저장해야함
+
+### CH16. Segmentation
+
+- 전에 본 구조에는 한계점이 존재함
+    - 각 Process의 Address Space가 연속적으로 존재한다는 가정이 있었음
+    - 여기서 만약 한 Process가 사용하지 않는 Memory는 놀게 되는데 꼭 존재해야 하나?
+    - 또한, 이로 인해 새로 생성되는 Process의 Address Space가 할당될 연속적인 Space가 없다면?
+- Segmentation
+    - 위의 한계를 극복하기 위해 제안된 개념
+    - Physical Memory 에 Address Space를 쪼개서 저장 (Code / Heap / Stack 으로)
+    - 각 Segment는 각자의 최대 Size (Bounds)를 가진채로 따로 저장되며, 할당될수록 Size는 커져감
+    - 이렇게 하면 하나의 Base / Bounds Pair 만으로 구현이 어렵기때문에 각각의 Segment에 대한 Base / Bounds Pair를 MMU는 저장해야함
+    - 또한, Virtual Address 역시 수정되어야함
+        - 어떤 Segment에 있는지 알려주는 구간과 해당 Segment에서 얼마나 떨어져있는지를 알려주는 Offset을 포함하도록
+    - 그리고 Stack 의 경우, 반대 방향으로 채워지는데 이것 역시 고려되어야함
+- Support for Sharing
+    - Code의 경우, 다른 Process의 Code들과 함께 공간에 존재해도 됨 (Read-only 라면)
+    → Memory Space 효율 증가
+    - 이를 위해 Protection Bit를 사용하여 Read-only인지를 판단하게 함
+- 이 경우, 각 Segment들이 제각각 다른 Size로 존재하기 때문에 External Fragmentation 문제가 발생
+    - 중간 중간 Free Space가 Hole로 존재하는데, Hole의 총합은 새로운 Process에게 할당하기에 or Heap/Stack 이 커지기에 충분하지만 연속적이지 않아 할당하지 못하는 문제
+- 이거는 주기적으로 Memory Space를 Compact하면 해결되지만, 이 작업의 오버헤드는 꽤나 큼
+- 결국, Free List Management 알고리즘을 잘 사용하는 방법이 그나마 모든 문제를 줄일 수 있음
