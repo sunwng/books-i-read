@@ -353,3 +353,61 @@
     - 중간 중간 Free Space가 Hole로 존재하는데, Hole의 총합은 새로운 Process에게 할당하기에 or Heap/Stack 이 커지기에 충분하지만 연속적이지 않아 할당하지 못하는 문제
 - 이거는 주기적으로 Memory Space를 Compact하면 해결되지만, 이 작업의 오버헤드는 꽤나 큼
 - 결국, Free List Management 알고리즘을 잘 사용하는 방법이 그나마 모든 문제를 줄일 수 있음
+
+### CH17. Free-Space Management
+
+- 가변적인 크기로 Memory를 나누는 경우 (Segmentation), External Fragmentation 문제를 피할 수 없었음
+- 어떻게 하면 External Fragmentation 문제를 최소화할 수 있을까? → Free-Space Management
+- Splitting and Coalescing
+    - Free-Space Management의 가장 기본적인 메커니즘
+    - Heap 에 Memory 할당 요청이 오면, Free Region을 쪼갬
+    - Memory 해제 요청이 오면, Free Region을 합침
+- Free List
+    - Memory의 Free Region을 알고 있기 위한 Data Structure
+    - Free Region의 시작 Address와 Size를 갖고 있으며 Linked List 형태로 쭉 나아감
+- Basic Strategies for Allocation
+    - Best Fit
+        - 요청한 Memory Size보다 크거나 같은 Size를 갖는 Free Region 을 Free List 에서 전부 다 찾고
+        - 가장 Size가 작은 Region에 할당 후 남는 공간만큼 Free Region으로 체크
+        - 검색 오버헤드 발생
+    - Worst Fit
+        - 요청한 Memory Size보다 크거나 같은 Size를 갖는 Free Region 을 Free List 에서 전부 다 찾고
+        - 가장 Size가 큰 Region에 할당 후 남는 공간만큼 Free Region으로 체크
+        - 검색 오버헤드 발생
+    - First Fit
+        - 요청한 Memory Size보다 크거나 같은 Size를 갖으며 Free List에서 처음 등장하는 Free Region 을 찾고
+        - 할당 후 남은 공간만큼 Free Region으로 체크
+    - Next Fit
+        - 가장 마지막으로 찾았던 Free Region의 주소부터 시작해서 처음 등장하는 Free Region을 찾음
+
+### CH18. Paging: Introduction
+
+- OS가 Space-Management 문제를 해결하는 방법은 크게 두가지로 나뉨
+    - 가변 사이즈로 나누기 → Segmentation
+    - 고정된 사이즈로 나누기 → Paging
+- Paging
+    - Segmentation보다 나은 점
+        - Flexibility
+            - Address Space를 더 효율적으로 추상화 가능
+            - 예를 들어, Heap과 Stack의 확장 방향 등을 고려할 필요가 없음
+        - Simplicity
+            - Free-Space Management 방법이 훨씬 간단해짐
+    - Page라고 불리우는 고정된 사이즈의 단위로 나눔 (Virtual Address)
+    - 그리고 그 Page를 Physical Address와 Mapping (Frame)
+    - Page - Frame (Virtual Address - Physical Address) Mapping 정보를 저장하기 위해 Page Table 사용
+- Page Table
+    - Page Table은 Process마다 갖고 있음
+        - Context Switching 시, OS가 Page Table을 해당 Process의 것으로 교체함
+    - Page Table의 주역할은 Address Translation
+        - Process가 갖고 있는 Virtual Address를 두 파트로 분리
+            - Virtual Page Number (VPN) + Offset
+            - 즉, 어떤 Page에서 (해당 Page의 시작점으로부터) 얼마나 떨어져있는지
+        - Page Table을 참고하여 VPN을 Physical Frame Number (PFN)으로 Translate
+    - 모든 Process의 Page Table 다 합하면 꽤 크기 때문에, 그냥 Memory의 어딘가에 저장함
+    - Page Table Entry (PTE)
+        - Page Table의 한 요소 (Mapping 하나)
+        - Valid Bit: 현재 Process에서 사용하는 곳인지 / 아닌지
+        - Protection Bit: 권한 관리를 위함 (읽기 / 쓰기 / 실행 …)
+        - Present Bit: Physical Memory에 있는지 / 없는지 (Swap Memory와 관련)
+        - Dirty Bit: 수정된 이력이 있는지
+        - Reference Bit: 접근된적이 있는지 (어떤 Page를 많이 사용하는지 판별 가능하게 해줌)
