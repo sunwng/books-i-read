@@ -411,3 +411,75 @@
         - Present Bit: Physical Memory에 있는지 / 없는지 (Swap Memory와 관련)
         - Dirty Bit: 수정된 이력이 있는지
         - Reference Bit: 접근된적이 있는지 (어떤 Page를 많이 사용하는지 판별 가능하게 해줌)
+
+### CH19. Paging: Faster Translations (TLBs)
+
+- 기존 Paging의 단점
+    - 오버헤드가 크다는 점 (Memory 까지 갔다오고 연산 과정)
+    - 또한 관련 데이터 클 수 밖에 없음
+- Translation Lookaside Buffer (TLB)
+    - 늘 그래왔듯, OS의 동작을 빠르게 하기 위해 하드웨어의 힘을 빌림
+    - MMU의 한 부분임
+    - Virtual-to-Physical Address Translation을 위한 하드웨어 Cache
+    - Page Table에 접근하기 전, TLB를 먼저 접근하여 찾아봄
+    - 이걸 통해서 높은 속도 향상을 이뤘다고 함
+- Basic Algorithm
+    - Virtual Address 에서 VPN 추출
+        
+        → TLB에서 해당 VPN의 PFN이 존재하는지 확인
+        
+        → 있다면? 와! TLB Hit!
+        
+        → PFN 가져와서 Offset 더함
+        
+    - TLB Miss 라면?
+        
+        → 하드웨어는 Exception을 발생시킴
+        
+        → Kernel mode로 변경되고 Trap Handler에게 넘어감
+        
+        → Trap Handler는 Page Table을 사용하여 PFN를 찾고 TLB를 업데이트 시킴
+        
+        → Exception 발생되었던 명령을 재실행 (TLB가 업데이트되었기 때문에 TLB Hit)
+        
+- 즉, 같은 VPN 일수록 (PFN이 같을 수록) TLB Hit이 많아짐 (Spatial Locality를 활용할수록)
+    - 경험적인 예로, 일반적으로 자바에서 ArrayList가 LinkedList보다 좋은 성능을 내는 이유
+    - noSQL을 사용할 때 RDB에 비해 정규화를 고려하지 않고 한번에 모든 데이터를 저장하는 것이 좋은 성능을 내는 이유
+- Context Switching 시의 문제
+    - 다른 Process가 각각 같은 VPN에 다른 PFN이 Mapping 되어 있는 경우, MMU는 어떤 VPN이 어떤 Process의 것인지 알 수 없음
+    - 가장 쉬운 방법은 Context Switch 때마다 TLB를 Flush 시키는것
+    - 하지만, 이 경우 Context Switch 직후에는 모든 VPN에 대해서 TLB Miss기 때문에 비효율적일 수 있음
+    - 그래서 TLB는 그대로 두고, Address Space Identifier (ASID) 필드를 Entry에 추가하여 Process를 특정할 수 있게도 함
+
+### CH20. Paging: Smaller Tables
+
+→ TLB (Cache)를 통해 속도는 해결했으니 Table 크기를 한번 줄여보자
+
+- 단순한 방법
+    - Page의 단위 크기를 키움
+    - 예를 들어, 단위 크기를 4배하면 VPN은 4배 줄음 → Page Table의 크기도 4배 줄음
+    - 하지만 이렇게 되면 Internal Fragmentation의 문제가 발생
+- Hybrid Approach
+    - Paging과 Segmentation 둘 다 사용
+    - 각 Process는 Code / Heap / Stack 에 대한 Segment를 가짐
+    - 그리고 Page Table은 각 Segment 영역 내에서만 정의됨
+    - Virtual Address 의 Segment Number
+        
+        → Page Table의 Base Address Get
+        
+        → 몇번째 Page인지 Base Address에 더함
+        
+        → Page Offset 더함
+        
+    - 각 Segment 별로 Page Table을 갖게됨
+    - Page Table의 크기는 작아짐 (해당하는 Segment의 Page에 대한 정보만 갖고 있으면 되기 때문)
+    - 하지만 Segmentation 의 단점들이 다시 발생..
+- Multi-level Page Tables
+    - 대부분의 현대 OS에서 채택하는 방식
+    - Page Table을 쪼갬 + Page Directory 가 Page Table을 관리
+    - Page Directory Entry (PDE) 는 Valid bit 와 PFN 로 구성
+        - Valid bit는 해당 Page Table 내의 PTE 가 하나라도 Valid 면 Valid
+    - Virtual Address 구성
+        - Page Directory Index → PDE 특정
+        - Page Table Index → PDE 내부에서 PTE 특정
+        - Offset → 더해줌
