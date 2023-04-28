@@ -1,6 +1,7 @@
 > Reference
 > - [https://blog.jamesdbloom.com/JVMInternals.html#operand_stack](https://blog.jamesdbloom.com/JVMInternals.html#operand_stack)
 > - [https://d2.naver.com/helloworld/1230](https://d2.naver.com/helloworld/1230)
+> 
 > 이 문서를 읽는 이유: JVM 내부 동작에 대해 어렴풋이 알고 있었는데, 자세히 들여다보기 위함
 > (앞으로 Java, Scala, Kotlin 등 JVM 위에서 작동하는 언어와 오래 볼 것 같음)
 > 
