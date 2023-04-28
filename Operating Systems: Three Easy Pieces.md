@@ -483,3 +483,41 @@
         - Page Directory Index → PDE 특정
         - Page Table Index → PDE 내부에서 PTE 특정
         - Offset → 더해줌
+
+### CH21. Beyond Physical Memory: Mechanisms
+
+→ 여태까지는 Virtual Address Space 와 Physical Address Space 의 크기가 같다고 가정하였음
+
+⇒ But, 현대의 OS는 Physical 보다 큰 Virtual Address Space를 제공하면서 각 Process에게 Memory Size의 부담을 줄여주었음
+
+- Swap Space
+    - Disk (HDD or SSD) 의 도움을 필요로 함
+    - Disk에 Swap Space를 설정하고 Memory에 없는 Page의 정보를 저장 (like Page Table)
+    - Page 내의 데이터는 Memory와 Disk 사이를 왔다갔다 함 (물론 Unit은 Page size임)
+    - Present bit를 사용하여 Page가 Physical Memory에 있는지, Disk에 있는지 확인함
+        - Present bit가 1이라면, 기존의 알고리즘대로 봄
+        - Present bit가 0이라면, Page Fault가 발생 (당연히 이때는 TLB Miss 임)
+            
+            → OS의 Page Fault Handler가 처리
+            
+    - Page Fault
+        - Page Fault Handler는 Disk에 있는 Page를 Memory로 옮겨야함 (Swap)
+        - Swap space를 통해 Disk에서의 주소를 가져옴
+        - Disk로부터 Page정보를 가져와서 Memory로 옮기고
+        - Present bit와 PFN(이제는 Physical Adress Space 주소)을 업데이트
+    - 만약 Physical Memory가 꽉차있다면?
+        - Page Replacement Policy에 의해 Page를 Disk로 내보내야함
+    - 하지만 항상 꽉차있을 때까지 유지한다면 계속해서 Page Fault가 발생할 때마다 Replacement Policy가 수행되어야함
+        
+        → 이걸 해결하기 위해 대부분의 OS는 Memory의 작은 부분을 항상 비워둠
+        
+    - 언제 비우느냐!
+        - High Watermark (HW) 와 Low Watermark (LW) 사용함
+        - Free 상태의 Page 수가 LW 아래로 떨어진다면
+            
+            → Swap daemon or Page daemon 이라고 불리는 Background Thread가 Page 를 Swap Space를 Evict함
+            
+            → 언제까지? Free Page 수가 HW와 같아질 때까지
+            
+    - 그리고 하나하나의 Page를 일일히 옮기면 오버헤드가 커지므로
+        - Page들을 Cluster or Group 으로 함께 관리하여 한번에 옮김
