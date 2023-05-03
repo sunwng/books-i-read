@@ -521,3 +521,84 @@
             
     - 그리고 하나하나의 Page를 일일히 옮기면 오버헤드가 커지므로
         - Page들을 Cluster or Group 으로 함께 관리하여 한번에 옮김
+
+### CH22. Beyond Physical Memory: Policies
+
+→ Page Replacement Policy에 대해 살펴보자
+
+- Optimal Replacement Policy
+    - 가장 최적의 Policy는 교체 시, 가장 먼 미래에 쓰일 Page를 Disk로 보내는 것
+    - 하지만, 실제 환경에서는 절대 알 수 없음
+    - 해당 Policy를 비교 대상으로 사용
+- Simple Policy: FIFO
+    - 그냥 단순하게 먼저 Memory 에 할당된 Page를 내보냄
+- Using History: LRU
+    - 최근에 접근한 Page라면 가까운 미래에도 접근할 것으로 가정
+    - 그래서 마지막으로 접근된 Page를 교체함
+- 그렇다면 어떻게 History를 관리할까?
+    - 또 하드웨어의 도움을 받아 페이지의 time field를 접근되는 시간으로 업데이트
+- 하지만 Memory 기술이 발전하며 점점 커져갔고 수백/수천만 개의 Page의 time field를 매번 비교하는건 생각보다 오버헤드가 심해졌음
+- 그래서 LRU와 유사하게 만들게 됨
+    - 일단 time field가 아닌 use bit를 사용 (사용되었다면 1, 아니면 0)
+    - 그리고 Page List를 Circular List로 관리
+    - 알고리즘은 Page List의 특정 인덱스를 가르키며, Page 교체가 필요하면 가르키고 있는 인덱스의 use bit를 체크
+        
+        → 1이라면 0으로 교체하고 다음 Page
+        
+        → 0이라면 교체
+        
+- Dirty Page에 대한 고려
+    - 만약 교체 대상인 Page가 수정된 이력이 있다면, Disk 에 새로 써야함 (덮어쓰기)
+    - 만약 없다면? 그냥 Memory에서만 없애면 됨
+    - 그렇기 때문에 Dirty한 Page보다 Clean한 Page가 교체 우선순위를 높게 체크
+    - 이 알고리즘에 사용되는게 바로 dirty bit
+- Page Replacement 만큼 Page Selection 역시 중요
+    - 현대의 OS는 대부분 Demand Paging Policy를 사용
+    - 메모리에 한번에 올리는게 아니라, 필요할 때 올린다는 전략
+- Thrashing
+    - Page Fault Rate이 증가하여 Page 교체 작업이 빈번해져 성능이 감소하는 현상
+
+### CH23. Complete Virtual Memory Systems
+
+- Linux Virtual Memory System
+    - Linux Address Space
+        - 일단 크게 User Space와 Kernel Space로 나뉨
+        - User Space: User prgoram code, stack, heep 등 포함
+        - Kernel Space: Kernel code, stacks, heep 등 포함
+            - Kernel Logical Address
+                - 일반적으로 생각하는 Address Space
+                - Page Table, Per-Process Kernel Stacks 등이 위치함
+                - Disk로 Swap되지 않음
+                - Virtual Address가 Physical Address로 직접적으로 맵핑됨
+                    
+                    (e.g. `0xC000000` → `ox000000`)
+                    
+                    - 이렇게되면 Virtual 상에서 연속되어있다면 Physical 에서도 연속적임
+                    - Disk로 Swap되지 않기에 가능한 방법이라고 생각됨
+            - Kernel Virtual Address
+                - 여기는 Physical에 연속적으로 맵핑되지 않음
+                    
+                    → 큰 사이즈의 메모리를 필요로 해서 연속할당이 힘든 경우에 사용됨
+                    
+                - 또한, Swap됨 → 좀 더 큰 양의 메모리를 처리할 수 있게 해줌
+        - Context Switch 시에, User Space가 교체됨
+    - Page Table Structure
+        - 64 bit 시스템의 경우, Four-Level Tabled을 가짐
+        - 즉, Virtual Address는
+            
+            P1 (Table 1 인덱스) + P2 (Table 2 인덱스) + P3 (Table 3 인덱스) + P4 (Table 4 인덱스) + Offset 으로 구성됨
+            
+    - Large Page Support
+        - 기본인 4KB 이상 (e.g. 2MB, 1GB, …) 으로 Page Size를 설정할 수 있음
+        - Page 사이즈는 TLB 성능에 큰 영향을 끼침
+        - 초기엔 DBMS 와 같은 Application 에서만 이러한 필요성을 얘기했지만, 이후 많은 Application에서도 Large Page를 필요로 했고 이를 지원하게 됨
+    - Page Cache [[참고](https://brunch.co.kr/@alden/25)]
+        - Disk 로 부터 읽었던 데이터를 Memory 에 Caching해둠
+        - dirty 해졌다면 (수정되었다면) Persistent Storage (주로 Disk)에도 덮어씀
+    - Page Replacement Policy
+        - 2Q Algorithm 을 적용
+        - Inactive List 와 Active List를 사용함
+        - 처음 메모리에 올라오면 Inactive List에 넣고
+        - 이후 다시 참조되면 Active List로 옮김
+        - 이후 교체해야할 때 Inactive List에서 먼저 찾음
+        - 그리고 Active List의 크기를 전체 Page Cache 사이즈의 2/3 크기로 유지함
