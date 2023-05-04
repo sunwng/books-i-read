@@ -602,3 +602,42 @@
         - 이후 다시 참조되면 Active List로 옮김
         - 이후 교체해야할 때 Inactive List에서 먼저 찾음
         - 그리고 Active List의 크기를 전체 Page Cache 사이즈의 2/3 크기로 유지함
+
+---
+
+# Part 2. Concurrency
+
+### CH26. Concurrency: An Introduction
+
+- Thread, 왜 써야할까?
+    - Parallelism
+        - 작업의 병행성을 챙기고 싶었음
+        - Multi-Process 로 구성하면 된다고 생각할 수 있음
+            
+            → 이 경우, 자원을 공유하는 것에 대한 Overhead가 더 클 수 있음
+            
+        - 즉, 같은 자원을 쉽게 공유하면서 병행적으로 작업을 처리하고 싶기에 사용하게 됨
+- Thread
+    - 하나의 Process가 여러개의 Program Counter를 갖게 해줌
+    - 즉, 여러 실행점을 갖게 함
+    - Thread 간에도 Context Switching은 필요함 → Thread Control BLock (TCB)에 Thread 정보 (Register 정보 등)을 저장
+    - Process의 Context Switching과의 차이점은 Address Space를 교체할 필요가 없다는 것
+        - 하지만 나는 이건 Single Processor 일때의 이야기라고 생각함
+        - 현대의 하드웨어는 Multi Processor 이며, JVM 기준 여러 Thread를 Thread Scheduling 알고리즘에 따라 여러 코어에서 동시에 실행시킴
+        - 이렇게 되면 한 프로그램의 여러 Thread가 각각 다른 Processor에서 실행되는 것인데 Context Switching Overhead가 적다는 이점이 계속 존재할까?
+        - 만약 같은 Processor (코어)에서 Thread 여러개를 실행시킨다면 이득일텐데, 그게 보장되나?
+        - 라는 의문이 존재함
+        - [StackOverflow 링크](https://stackoverflow.com/questions/41759261/how-jvm-thread-scheduler-control-threads-for-multiprocessors) 를 보면, JVM은 Thread를 Kernel Level로 맵핑하고 OS Scheduler에게 스케쥴링을 맡긴다는거같음
+        - 만약 다른 코어에서 실행된다면 → Cache 도 다름 → 공유 자원 관리가 더 골치
+            
+            (그래서 CAS 알고리즘이나 Concurrent 패키지가 나왔다고 생각됨)
+            
+    - 각 Thread는 각자의 Stack Space를 가짐 (Program Counter 가 각자 다 다르니 당연히 달라야함)
+- 그렇다면 Multi-Thread 그냥 행복할까?
+    - 알다시피 절대 행복하지 않음 (공유 자원 관리가 굉장히 까다로움)
+    - Race Condition
+        - 둘 이상의 Process or Thread가 공유자원에 동시에 접근하는 상태
+    - Critical Section
+        - Race Condition을 만드는 구간
+    - 이걸 해결하기 위해선 Mutual Exclusion이 필요
+        - 한번에 하나의 Process or Thread만 Critical Section에 존재하는 것을 허락
