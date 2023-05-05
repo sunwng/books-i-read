@@ -641,3 +641,42 @@
         - Race Condition을 만드는 구간
     - 이걸 해결하기 위해선 Mutual Exclusion이 필요
         - 한번에 하나의 Process or Thread만 Critical Section에 존재하는 것을 허락
+
+### CH28. Locks
+
+- Basic Idea
+    - Lock은 Critical Section의 상태를 나타내는 Variable임
+- Lock 알고리즘 평가 방법
+    - Mutual Exclusion을 확실히 수행하는가?
+    - Lock을 얻기 위한 과정이 Thread에게 공정한가?
+    - Overhead가 심하지 않은가?
+- 가장 간단한 알고리즘: Spin Lock
+    - Critical Section에 진입하는 쓰레드는 Lock 상태를 확인
+    - Lock이 있다면 바꾸면서 진입
+    - 없다면 spin-wait
+    - 이 알고리즘을 사용할 수 있을까? → 당연히 없다
+    - 첫번째 문제점
+        - Critical Section에 진입하며 Lock bit를 수정할 때 하나의 Thread만 해당 권한을 갖는다는 보장이 없음
+        
+        → Lock을 체크하고 획득하는 과정을 Hardware의 도움으로 Atomic하게 만들면 해결할 수 있음
+        
+    - 두번째 문제점
+        - 대기하는 Thread가 spin-wait한다는것이 Overhead가 큼
+        - 특히, 한 Processor에서 둘 이상의 Thread가 존재하면 굉장히 낭비임
+        
+        → 대기 시작 시마다 Processor 사용을 포기 (yield) 하게 함으로써 해결
+        
+    - 세번째 문제점
+        - Thread가 Lock 대기 후 얻는 과정에서 공정함을 보장하지 않음
+        
+        → Ticket Lock 이라는 대기 순서를 정하는 방법을 통해 해겴
+        
+- Compare-And-Swap
+    - Hardware의 도움임
+    - 주소에 있는 값이 예상하는 값과 같다면 원하는 값으로 수정하고 다르다면 아무것도 하지않는 Hardware가 제공하는 기능을 사용하여 Lock 확인 및 진입
+- Yield 방법의 문제점
+    - Spinning은 하지않지만, 불필요한 Context Switching이 존재함
+- Queue Lock
+    - 이를 해결하기 위해
+    - Critical Section에 진입하지 못하면, Thread가 Sleep되며, Queue에 추가됨
+    - Critical Section에서 빠져나오는 Thread가 Queue의 가장 앞에 있는 Thread를 깨움
