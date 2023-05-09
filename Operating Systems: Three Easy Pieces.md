@@ -749,12 +749,12 @@
             ```java
             Thread 1::
             void init() {
-            		mThread = PR_CreateThread(mMain, ...);
+            	mThread = PR_CreateThread(mMain, ...);
             }
             
             Thread 2::
             void mMain(...) {
-            		mState = mThread->State;
+            	mState = mThread->State;
             }
             ```
             
@@ -805,8 +805,8 @@
     
     ```java
     while (1) {
-    		events = getEvents();
-    		for (e in events) processEvent(e);
+    	events = getEvents();
+    	for (e in events) processEvent(e);
     }
     ```
     
