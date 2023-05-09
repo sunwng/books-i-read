@@ -1,6 +1,5 @@
-> 추가 Ref: [https://github.com/RameshMF/gof-java-design-patterns](https://github.com/RameshMF/gof-java-design-patterns)
-> 
-> 실습: [https://github.com/sunwng/gof-design-patterns-impl](https://github.com/sunwng/gof-design-patterns-impl)
+> 추가 Ref & 실습: [https://product.kyobobook.co.kr/detail/S000200311846](https://product.kyobobook.co.kr/detail/S000200311846)
+> (저 책은 너무 오래된 책이라서 꽤 어려워서 책 하나를 더 참고함)
 > 
 > 이 책을 읽는 이유: 팩토리 패턴, 빌더 패턴 등 개발하며 알게된 다양한 객체지향 패턴을 체계적으로 습득하기 위함
 > 
@@ -52,11 +51,16 @@
         - 이를 위해 Factory의 Factory인 AbstractFactory를 만들어주고
         - 상황에 맞는 ConcreteFactory들을 AbstractFactory를 상속 받아 만들어주고 사용함
         - 예를 들어, ~1 클래스들을 사용해야한다면 ConcreteFactory1을 사용
-    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/9ecebbd0ac083d9d440be01a8230c18035c8bd4e)]
-        - Kingdom 이라는 서비스의 구성요소가 King / Army / Castle 이라고 할 때
-        - 서비스의 상황에 따라 Elf / Orc 에 맞게 구성요소가 변경될 수 있음
-        - 이럴 때, KingdomFactory 라는 큰 추상 팩토리 클래스를 만들어주고
-        - Elf / Orc 에 맞는 Factory를 만들고 사용해주면 됨
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/8feb8ccea029964d322dc89b3fd349610bc5afb3)]
+        - 한 Page를 만들 때, Link / Tray 를 Element로 사용한다고 가정
+        - 이 때, 페이지를 List 형식으로도 구성할 수 있고 Div 형식으로 구성할 수도 있음
+        - 그 형식에 맞게 Link / Tray 를 생성해야함
+        - 이를 위해, Link / Tray 를 생성하는 추상 Factory 를 만들고 형식에 맞게 Factory 를 정의 하고 사용하면 깔끔함
+    - 내가 생각하는 사용해야 하는 이유
+        - 한 서비스에서 주로 사용해야 하는 객체가 50개라고 할 때
+        - 만약 그 내부에서 10가지의 유형에 따라 50개 객체가 일괄적으로 조금씩 다르다면
+        - 이 패턴을 사용하여 관리하는 것이 편할 것 같음
+        - 또한, 새로운 유형이 추가될때 그 유형에 대한 구현체만 만들어주면 되므로 확장에 열려있게 됨
 - **Builder Pattern**
     - 의도: 복잡한 객체의 생성을 편하게 하기 위해 생성하는 클래스를 분리함
     (Argument 가 길어질수록 생성자 코드가 복잡해지고 or 생성 시 필요없는 정보가 있을 수 있음)
@@ -78,6 +82,13 @@
         - 개발을 하면서 두 상황에서 빌더패턴을 자주 사용했음 (롬복을 사용해서)
             - 생성자에 넣을 입력값이 5개 이상일 때 → 생성자가 길어지는데, 이러면 어떤 필드에 어떤 변수가 잘 들어가는지 보기가 어려움 → 롬복을 사용해주면 `.필드명()` 으로 보기 편하게 사용할 수 있음
             - 객체 생성 시, 모든 필드에 대한 정보를 알지 못할 때 → 빌더를 사용하여 차근차근 넣어주고 다 넣어졌을 때 객체를 만들어주었음
+    - 내가 생각하는 사용하는 이유
+        - 객체 생성 시, 아직 생성자에 넣을 인자가 없을 수도 있고 생성자 자체가 복잡할 수도 있음
+        - 이럴 때 쓰면 좋을 듯함
+        - 이럴 때만 사용하는 것이 아니었음
+        - 예를 들어 한 인터페이스를 구현하는 다른 여러 구현체가 있다고 가정
+        - 그때 그때 상황에 맞게 해당 객체를 생성해야하는데, 빌더 패턴을 사용하여서 하나의 메소드로 다양한 종료의 구현체를 만들수 있음
+        - 즉 빌더패턴을 통해 DI를 이뤄낼 수 있음
 - **Factory Method Pattern**
     - 의도: 객체를 생성하기 위한 인터페이스를 정의하지만, 어떤 클래스의 인스턴스를 생성할 지에 대한 결정은 하위 클래스가 내리도록 함
     (즉 Factory Pattern을 통해 객체를 생성할 것인데, Factory 클래스의 하위 클래스를 각 생성될 객체에 맞게 정의후 하위클래스에서 생성)
