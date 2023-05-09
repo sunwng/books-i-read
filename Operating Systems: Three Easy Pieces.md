@@ -680,3 +680,142 @@
     - 이를 해결하기 위해
     - Critical Section에 진입하지 못하면, Thread가 Sleep되며, Queue에 추가됨
     - Critical Section에서 빠져나오는 Thread가 Queue의 가장 앞에 있는 Thread를 깨움
+
+### CH31. Semaphores
+
+- Semaphores
+    - `sem_wait()` 와 `sem_post()` 두 함수를 사용하여 공유 자원을 관리하는 방법
+        - `sem_wait()`
+            - semaphore가 양수라면 1 감소시키고 Critical Section에 진입
+            - semaphore가 음수라면 wait
+        - `sem_post()`
+            - semaphore를 1 증가시키고 Critical Section에서 탈출
+            - wait 상태의 Thread가 있다면 wake
+- Binary Semaphores (Locks)
+    - Semaphore value를 1로 설정하는 경우 = Mutex
+    - Thread Ordering에도 사용 가능
+        - 예를 들어, Parent Thread가 Child Thread를 만들고 Child Thread가 특정 작업을 완료한 후 Parent Thread가 다시 작업하길 원한다고 하자
+        - 이 때, Semaphore value를 0으로 설정 후
+        - Child Thread생성 후 Parent Thread가 `sem_wait()` 호출 → sleep되고 wait queue에 들어갈 것임
+        - Child Thread가 작업 완료 후 `sem_post()` 호출 → sleep 중이던 Parent Thread wake
+    - Bounded Buffer (Producer/Consumer) 문제도 해결 가능
+        - Full / Empty Semaphore 두개를 만들어 사용
+            - Full Value는 0 으로, Empty Value 는 Buffer Size로 초기화
+        - Producer는 Buffer에 데이터를 Put 전, Empty Semaphore를 감소시키고 진입
+        - 탈출 시 Full Semaphore를 증가시키고 Full 이 0이여서 대기중이던 Consumer Thread wake
+        - Consumer의 경우 반대로
+- Reader-Writer Lock
+    - 데이터를 읽는 경우에는 모든 Thread가 동시에 접근해도 문제가 없음 + 성능 향상됨 → 이를 고려
+    - 마찬가지로 두개의 Semaphore 를 사용 (`writelock`, `readlock`)
+    - readlock 을 얻기 위해선 writelock이 free 해야함
+    - writelock을 얻기 위해선 writelock과 readlock이 free 해야함
+- Throttling
+    - Thread Throttling 관리에도 Semaphore value를 원하는 Max Thread 수로 정하여 사용할 수 있음
+
+### CH32. Common Concurrency Problems
+
+→ MySQL, Apache, Mozilla, OpenOffice 에서 발견되고 고쳐졌던 Concurrency Problem을 살펴보자
+
+- Non-Deadlock Bugs
+    - Atomicity-Violation Bugs
+        - “The desired serializability among multiple memory accesses is violated”
+            - 즉, Atomic함을 의도하고 작성한 코드가 실행 환경에서 강제되지 못해서 생기는 버그
+        - MySQL Case
+            
+            ```java
+            Thread 1::
+            if (thd->proc_info) {
+            		fputs(thd->proc_info, ...);
+            }
+            
+            Thread 2::
+            thd-> proc-Info = NULL;
+            ```
+            
+            - 뭐가 문제였을까?
+                
+                → Thread 1이 사용하는 코드가 Atomic 하지 못했음
+                
+            - proc_info 값이 존재하는지 체크한 후, interrupt에 의해 Thread 2로 넘겨진다면 `NullPointerException`이 발생할 것임
+            - 어떻게 고쳤을까?
+                
+                → 공유 자원 (proc-info)에 접근하는 구간 (critical section) 앞뒤로 Lock 을 걸어줌
+                
+    - Order Violation Bugs
+        - “The desired order between two memory accesses is flipped”
+            - 즉, 의도한 메모리 접근 순서가 지켜지지 않았을 때 생기는 버그
+        - Bug Case
+            
+            ```java
+            Thread 1::
+            void init() {
+            		mThread = PR_CreateThread(mMain, ...);
+            }
+            
+            Thread 2::
+            void mMain(...) {
+            		mState = mThread->State;
+            }
+            ```
+            
+            - 뭐가 문제였을까?
+                
+                → Thread 2 는 `mThread`가 초기화되었다고 가정하고 있음
+                
+            - 어떻게 고쳤을까?
+                
+                → Condition 체크 변수를 Lock 과 함께 사용
+                
+- Deadlock Bugs
+    - 가장 자주 발생하고 해결하기 복잡한 버그임
+    - 자원을 점유하면서 다른 자원을 기다리고 있는 Thread가 많을 때, 더이상 진행되지 않는 상황
+    - 발생 조건
+        - Mutual Exclusion: 상호배제
+        - Hold-and-Wait: 점유대기
+        - No preemption: 비선점
+        - Circular wait: 원형대기
+    - Prevention
+        - Circular Wait 방지
+            - 가장 실용적인 방법 → Lock 순서를 체크
+        - Hold-and-Wait 방지
+            - 다수의 Lock을 얻어야한다면, 동시에 Atomic하게 얻게 함으로써 해결
+        - No Preemption 방지
+            - Lock 점유 시도 실패 시, 점유하던 모든 Lock을 해제하고 다시 시도하게 함
+            - LiveLock 이라는 문제가 발생할 수 있지만, try에 딜레이를 거는 등의 방법으로 해결
+        - Mutual Exclusion 방지
+            - 흠… Critical Section을 정의하고 Lock 을 만들고 한게 다 Mutual Exclusion 을 위한것인데 이걸 방지한다는게 모순임
+            - 즉, 이 방법은 Lock 자체를 사용하지 않겠다는 방법임
+        - Scheduling 을 통한 방법
+            - Thread들의 공유 자원 점유 계획을 보고 Deadlock이 발생하지 않게 Scheduling함
+                
+                → 너무 이상적인 그래서 불가능할 것만 같은 방법으로 생각됨
+                
+        - Detect and Recover
+            - 주기적으로 Deadlock이 존재하는지 확인하고 자원 할당 그래프를 통해 복구하는 방법
+
+### CH33. Event-based Concurrency
+
+- Thread를 사용하는 것만이 Concurrency를 활용할 수 있는 방법이 아님!
+- Event-based Concurrency
+    - 등장 배경
+        - Multi Thread 구조를 완벽하게 제어하는 시스템을 구성하기 까다로움
+        - Multi Thread 구조는 개발자가 Scheduling 제어의 권한을 갖지 않음 (OS가 가짐)
+- Event Loop
+    - 가장 간단한 방법
+    
+    ```java
+    while (1) {
+    		events = getEvents();
+    		for (e in events) processEvent(e);
+    }
+    ```
+    
+    - Event가 발생하길 기다리고 발생하면 그에 맞는 handler로 넘기게 됨
+- Lock 을 사용하지 않아도 되서 좋은 것
+- 하지만 I/O 요청과 같은 Blocking을 유발하는 event의 경우 Single Thread이므로 매우 비효율적임
+    
+    → 이를 해결하기 위해 Async I/O System call 을 사용
+    
+- 이럼에도 불구하고, 멀티코어 CPU를 사용하는 현재 시대에는 이 자체만으론 굉장히 비효율적임
+    - 결국 여러 코어를 활용해야 성능이 올라가는데
+    - 이렇게 하려면 결국 또 동시성 문제가 찾아옴
