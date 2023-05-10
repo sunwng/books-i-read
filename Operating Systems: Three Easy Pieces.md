@@ -819,3 +819,55 @@
 - 이럼에도 불구하고, 멀티코어 CPU를 사용하는 현재 시대에는 이 자체만으론 굉장히 비효율적임
     - 결국 여러 코어를 활용해야 성능이 올라가는데
     - 이렇게 하려면 결국 또 동시성 문제가 찾아옴
+
+---
+
+# Part 3. Persistence
+
+### CH36. I/O Devices
+
+- System Architecture
+    - 일반적으로 CPU는
+        - Memory와는 Memory Bus로
+        - 디스플레이와 같은 High-Performance I/O device와는 PCI로
+        - Disk와 같은 저장장치와는 Peripheral Bus로
+        - 연결됨
+- Canonical Protocol
+    - Device Interface는 간단하게 세 종류의 Register로 구성됨
+        - Status Register → Device의 상태 체크
+        - Command Register → Device에게 명령
+        - Data Register → Device와 데이터 교환
+- Interrupt
+    - 기존에는 Device의 상태가 Available 일때까지 Status Register 를 호출하며 기다렸음 → 자원낭비
+    - 이를 해결하기 위한 기술이 Interrupt
+    - Device에게 일을 맡기고 해당 Process or Thread 는 Sleep
+        
+        → Device가 작업을 완료하면 Interrupt 발생
+        
+        → Interrupt Handler가 알맞게 처리
+        
+    - Interrupt 를 사용하게되면, Handling 과 Context Switching 의 비용을 고려해야함
+        - 해당 비용과 Polling했을 때의 비용을 고려하여 사용
+        - 무조건 좋은것은 아님
+- DMA (Direct Memory Access)
+    - Disk I/O 의 경우, CPU가 중요한 연산 등의 작업을 하는 것이 아님
+    - DMA는 CPU로 부터 지시를 받고 Memory - Disk 사이의 I/O 작업을 대신함
+
+### CH37. Hard Disk Drives
+
+- Hard Dist Drive
+    - 512 byte 사이즈의 n 개의 Block 으로 이루어짐 → n 개의 Sector
+        
+        → Address Space는 n 개의 Sector의 주소를 포함
+        
+    - 읽는건 4KB이상 한번에 가능하지만 쓰기는 보통 한 블럭에 atomic함
+    - Cache (Track Buffer)
+        - Disk는 작은 Memory를 갖고있음
+        - Sector를 읽을 때 해당 Sector의 모든 데이터를 Cache에 올림
+            
+            → 같은 Sector에 연속적으로 들어오는 Read 속도를 빠르게함
+            
+        - Write시에도 마찬가지로, Cache에 올려두고 실제로 기록함
+- Disk Scheduling
+    - I/O Request가 많을 때, OS가 맡아서 함
+    - I/O task의 예상 소요 시간은 충분히 예측할 수 있음 → SJF 사용
