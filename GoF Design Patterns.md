@@ -144,3 +144,29 @@
         - 그리고, 그 객체 내부의 필드 변수들을 모두가 공유한다면 더욱 이득
         - 하지만 멀티 스레딩 환경이라면? → 해당 객체에 접근하기 위한 Race Condition이 무조건 발생
         - 이럴 때는, 객체 내부에 공유하는 필드 or 메소드에 대해서 Syncrhonized 나 Concurrent 자료구조를 사용하여 처리를 해줘야 할 듯
+
+### CH04. 구조 패턴 (Structural Pattern)
+
+- 더 큰 구조를 형성하기 위해 어떻게 클래스와 객체를 합성하는지에 대한 패턴
+- **Adapter Pattern**
+    - 의도: 클래스의 인터페이스를 사용자가 기대하는 인터페이스 형태로 변환시킴
+        
+        (서로 일치하지 않는 인터페이스를 갖는 클래스들을 함께 동작시킴)
+        
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/49d5f21c-3758-44ec-917c-82cb82ff80bb/Untitled.png)
+        
+        - 기존에 만들어진 클래스는 Adaptee
+        - Adapter 클래스에서 Adaptee를 사용하고
+        - 사용자가 원하는 메소드는 Adapter에서 구현
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/7cf437109232316d206c04ffa8664696df37ec68)]
+        - 입력된 String에 괄호를 씌우는 method와 *를 씌우는 method가 있다고 하자
+            
+            (`showWithParen()`, `showWithAster()`)
+            
+        - 하지만 Client는 해당 method를 다른 인터페이스를 통해 (`printWeak()`, `printStrong()`) 사용하고 싶어함
+        - 이럴 때, 로직을 수행하는 클래스를 Client가 사용하는 클래스 내에 선언 후 인터페이스에 맞게 method를 만들어줌
+    - 내가 생각하는 사용 이유
+        - 이미 만들어져있던 클래스를 재사용하고 싶지만, 인터페이스가 다를 때 필요할 듯
+        - 마찬가지로, legacy system을 유지하고 활용하기 위해서도 사용
