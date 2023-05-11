@@ -871,3 +871,57 @@
 - Disk Scheduling
     - I/O Request가 많을 때, OS가 맡아서 함
     - I/O task의 예상 소요 시간은 충분히 예측할 수 있음 → SJF 사용
+
+### CH38. Redundant Arrays of Inexpensive Disks (RAIDs)
+
+- Disk에게 바라는 것들
+    - 더 빨랐으면…
+    - 더 컸으면…
+    - 더 안정적이었으면…
+- 이를 위해 제안된 것이 RAID System임
+    - 여러개의 Disk를 묶어서 관리
+    - 병렬로 작업하기 때문에 Performance가 상승함
+    - 또한 Capacity 역시 상승함
+    - 같은 데이터를 여러 Disk에 중복 저장하는 방법을 통해 Reliability도 챙길 수 있음
+- Fault Model
+    - Disk Fault를 탐지하고 복구하기 위해 설계됨
+- RAID Level 0: Striping
+    - 데이터 중복 저장을 하지 않음
+    - 하지만 그대신, 최고의 Performance와 Capacity를 보장함
+    - N 개의 Disk 를 같은 사이즈의 Block으로 나누고, Block Number는 Disk 마다 RR을 돌며 할당
+        
+        (같은 Row에 있는 Block의 경우, Disk가 바뀔때마다 Sequential하게 Block Number 증가)
+        
+        → 같은 Row에 있는 Block들을 Stripe라고 함
+        
+    - Chunk Size
+        - 하나의 Stripe 몇개의 Row로 구성할지 정하는 Parameter
+        - Chunk Size가 작으면? → Parallelism 증가 / Positioning Time 증가
+        - Chunk Size가 크면? → Parallelism 감소 / Positioning Time 감소
+        - 그래서 최적의 Chunk Size를 찾는 것이 어렵지만 중요함
+- RAID Level 1: Mirroring
+    - Mirrored System이 적용됨 (1개 이상 복사본을 생성)
+    - 그리고 복사본은 당연히 다른 Disk에 저장됨
+    - 하지만 만약 복사본 저장 직전 RAID System 에 문제가 생긴다면? → Atomic하지않게되고 정합성이 깨짐
+    - 이를 해결하기 위해 write-ahead log 라는 것을 사용함
+    - Disk에 Write하는 명령을 logging하고 순서대로 작업, 문제가 생기면 재실행시 log에서 실행한된 것을 실행시킴
+- RAID Level 4: Saving Space With Parity
+    - Mirrored System에서는 모두 복사하므로 Capacity가 좋지 않은데 이걸 Parity로 해결
+    - Block 들의 각 Bit들의 1 수가 홀수인지 짝수인지 판단하는 Parity Bit를 저장하고 이를 통해 Failure발생 시 복구함
+
+### CH39. Interlude: FIles and Directories
+
+→ 이제는 OS가 어떻게 Persistent Device를 제어하는지 살펴보자, 즉 어떻게 Storage를 Virtualization하는지!
+
+- Files and Directories
+    - File
+        - 읽고 쓸 수 있는 Byte의 선형적인 배열임
+        - 각 File은 Inode Number라고 하는 Low-level의 이름을 가짐
+    - Directory
+        - 마찬가지로 Inode Number를 가짐
+        - `(user-readable name, low-level name)` Pair의 List를 가짐 (File or Directory)
+        - 즉, 해당 Directory에 존재하는 File or Directory의 이름을 List로 갖고있다는 것
+    - Directory의 시작은 Root Directory (UNIX기반에서는 `/`)
+    - File에 접근하기 위해서는 System Call (open())을 사용해서 OS로부터 권한을 체크받아야함
+        - 권한이 있다면, File Descriptor라는 자료구조를 리턴받음
+    - File Descriptor는 Process마다 독립적으로 갖게 되는 객체임
