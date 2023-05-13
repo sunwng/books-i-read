@@ -925,3 +925,42 @@
     - File에 접근하기 위해서는 System Call (open())을 사용해서 OS로부터 권한을 체크받아야함
         - 권한이 있다면, File Descriptor라는 자료구조를 리턴받음
     - File Descriptor는 Process마다 독립적으로 갖게 되는 객체임
+
+### CH40. File System Implementation
+
+- File System은 CPU와 Memory의 Virtualization과는 다르게 Hardware의 도움은 없는 Pure Software임
+- 중점을 두고 생각해볼 것
+    - Data Structure → 어떻게 Disk위의 데이터를 표현할것인가
+    - Access Methods → 어떻게 Method를 통해 위의 Data Structure에 접근하게 할 것인가
+- 일단 Disk를 Block으로 쪼갬
+    - Block 영역에는 Data Region 이라고하는 사용자의 데이터가 저장되는 영역이 존재
+    - 이 데이터들의 Metadata를 저장하는 Inode라는 Data Structure가 존재
+        
+        → Inode Table 영역
+        
+    - Data Region과 inode Table영역을 체크하기 위한 Data Structure 역시 필요
+        
+        → Inode Bitmap & Data Bitmap 으로 관리
+        
+    - 마지막으로 File System 관리를 위한 Superblock으로 구성됨
+- Inode
+    - Index Node의 줄임말임
+    - 가르키고 있는 File의 type, size, block의 수, protection information, time information 등을 포함
+    - Block Address Pointer는 큰 파일의 Block Address를 관리하기 위해 Multi Level로 구성함
+- Directory
+    - `(entry name, inode number)` pair의 list로 표현
+    - Directory 역시 Inode를 가지는 하나의 File로 취급하여 관리됨
+- Free Space Management
+    - 새로운 File (Directory 포함) 생성 시, Inode Bitmap을 체크하여 사용 가능한 inode space를 확보
+    - On-Disk Bitmap 도 체크한 후, Data Block에 추가
+- File에 접근하는 과정
+    
+    → Path를 통해 Inode를 찾음
+    
+    - Root Directory부터 찾으며, Root Directory의 Inode는 Default로 2임
+    - Root Directory의 Inode가 가르키는 Data Block Pointer를 순회하며 찾고자하는 다음 Path의 Inode를 찾음
+    - 찾고자 하는 Inode의 Data Region에 속하는 Block을 메모리에 올림
+- Caching and Buffering
+    - File에 접근하는 과정은 많은 I/O를 포함하므로 성능이 저하됨
+        
+        → System Memory를 사용하여 Block 정보를 Caching
