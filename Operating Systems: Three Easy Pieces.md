@@ -964,3 +964,25 @@
     - File에 접근하는 과정은 많은 I/O를 포함하므로 성능이 저하됨
         
         → System Memory를 사용하여 Block 정보를 Caching
+
+### CH41. Locality and The Fast File System
+
+- 이전 챕터에서 본 구조는 굉장히 간단했음, 하지만 성능이 좋지 않았음
+    - Free Space Management가 너무 Rough하게 설계되어있어서 데이터가 분산되어 저장되는 경우가 많았음
+    - Block의 작은 사이즈로 인해 Disk에서 Block을 옮길 때 Overhead가 굉장히 컸음
+- Fast File System
+    - 위의 문제를 비롯한 기존의 간단한 System을 개선하기 위해 제안됨
+        
+        → 이를 위해 Disk의 Mechanism을 이해하고 이를 File System 설계에 녹여냄
+        
+    - On-Disk Structure 변경
+        - 한 Platter에 대해 중심으로부터 일정한 거리를 기준으로 Track 설정
+        - N개의 Platter에 대해, 중심으로부터 같은 거리에 위치한 Track들을 Cylinder라는 단위로 묶음
+        - N개의 Cylinder를 Cylinder Group으로 묶음
+    - 그리고 File을 Group 단위로 저장함
+        - 각 Group은 독립된 영역을 할당 받음
+        - Super Block, Inode Bitmap, Data Bitmap, Inode Region, Data Region …
+            - Super Block은 복사본을 따로 추가로 저장함
+    - File과 Directory 할당 방법
+        - 한 Directory 에 있는 File들은 같은 Group에 할당함 → Locality 향상
+    - 큰 File의 경우, 한 Group에 모두 저장하면 다른 File이 같은 Group에 저장되는 것을 막기 때문에 일정량이 초과되면 다른 Group에 저장됨
