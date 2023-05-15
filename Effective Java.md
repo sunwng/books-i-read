@@ -47,9 +47,9 @@
         
         ```java
         public class Elvis {
-        	public static final Elvis INSTANCE = new Elvis();
-        	private Elvis() {}
-       		public void leaveTheBuilding() {}
+            public static final Elvis INSTANCE = new Elvis();
+            private Elvis() {}
+            public void leaveTheBuilding() {}
         }
         ```
         
@@ -62,10 +62,10 @@
         
         ```java
         public class Elvis {
-        	private static final Elvis INSTANCE = new Elvis();
-        	private Elvis() {}
-       		public static Elvis getInstance() { return INSTANCE; }
-       		public void leaveTheBuilding() {}
+            private static final Elvis INSTANCE = new Elvis();
+            private Elvis() {}
+            public static Elvis getInstance() { return INSTANCE; }
+            public void leaveTheBuilding() {}
         }
         ```
         
@@ -77,8 +77,8 @@
         
         ```java
         public enum Elvis {
-        	INSTANCE;
-        	public void leaveTheBuilding() {}
+            INSTANCE;
+            public void leaveTheBuilding() {}
         }
         ```
         
