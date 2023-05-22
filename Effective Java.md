@@ -84,3 +84,107 @@
         
         - 직렬화에 편함
         - 하지만 상속을 구현해야한다면 사용 못함
+
+- **인스턴스화를 막으려거든 private 생성자를 사용하라**
+    - 정적 멤버와 정적 메소드만을 담은 Utility 클래스는 인스턴스를 만들기 위해 설계된 것이 아님
+        
+        → private 생성자를 추가하여 인스턴스화를 막자
+        
+- **자원을 직접 명시하지 말고 의존 객체 주입을 사용하라**
+    - 다른 객체에 의존하는 경우, 직접 명시하여 의존하게 하면 유연성이 떨어짐
+        
+        ```java
+        public class SpellChecker {
+        	private final Lexicon dictionary = new SampleDictionary();
+        	...
+        }
+        ```
+        
+        - 이 경우, `SampleDictionary` 만을 사용할 수 있게됨
+    - 생성자를 통해 인스턴스 생성시 의존성을 주입받도록 하면 유연성이 증가함
+        
+        ```java
+        public class SpellChecker {
+        	private final Lexicon dictionary;
+        
+        	public SpellChecker(Lexicon dictionary) {
+        		this.dictionary = Objects.requireNonNull(dictionary);
+        	}
+        }
+        ```
+        
+    - 스프링에서 이를 굉장히 잘 활용하고 있음을 다시 한번 생각해보자
+- **불필요한 객체 생성을 피하라**
+    - 불변하는 객체가 계속해서 생성된다면 지속적으로 GC의 대상이 되고 좋지 않은 성능을 보일 수 밖에 없음
+    - 예를 들어
+        
+        ```java
+        static boolean isRomanNumeral(String s) {
+        	return s.matches("대충 정규표현식");
+        }
+        ```
+        
+        - 이 메소드는 s가 요구하는 정규표현식에 맞는지 체크함
+        - `String.matches` 는 input으로 들어오는 정규표현식에 대해 `Pattern` 이라는 객체를 항상 새로 만드는 로직을 포함하고 있음
+        - 즉, 위 메소드는 매번 변하지 않는 `Pattern` 객체를 새로 만들고 있다는 것
+        
+        ```java
+        public class RomanNumerals {
+        	private static final Pattern ROMAN = Pattern.compile("대충 정규표현식");
+        	static boolean isRomanNumeral(String s) {
+        		return ROMAN.matcher(s).matches();
+        	}
+        }
+        ```
+        
+        - 위처럼 수정해주면 `Pattern`객체를 매번 새로 만들지 않고 재사용하게 함으로써 성능 상승을 이룰 수 있음
+    - AutoBoxing도 이러한 문제를 보일 수 있음
+        
+        ```java
+        private static long sum() {
+        	Long sum = 0L;
+        	for (long i = 0; i < Integer.MAX_VALUE; i++) {
+        		sum += i;
+        	}
+        }
+        ```
+        
+        - 여기서 Primitive type `long`인 `i`를 Wrapper type인 `Long`으로 AutoBoxing 시, 매번 `Long` 인스턴스가 만들어지게 됨
+        - `sum`을 `Long`이 아닌 `long`으로만 바꿔줘도 성능 향상이 됨
+- **다 쓴 객체 참조를 해제하라**
+    - 다 쓴 객체를 `null`로 처리해주면 참조가 해제되어 메모리 관리에 이점이 있음
+- **finalizer와 cleaner 사용을 피하라**
+    - finalizer와 cleaner는 GC 대상이 될 때 실행됨
+    - 따라서 개발자가 원하는 시기에 실행되지 않음 → 이로 인해 문제가 많으므로 사용을 지양해야함
+    - 이 둘의 대안으로는 `AutoCloseable`를 구현하여 클래스를 만드는 방법이 있음
+        
+        (인스턴스 사용 후 `close` 메소드 호출)
+        
+    - 그러면 저 둘은 왜 존재하는가?
+        
+        → 중요하지 않은 자원 회수용으로는 사용하면 좋음 (즉 안정망 용도임)
+        
+- **try-finally보다는 try-with-resources를 사용하라**
+    - `InputStream`, `OutputStream`, `java.sql.Connection` 등은 `close` 메소드를 직접 호출해 닫아줘야함
+    - 이를 위해 기존에는 `finally` 영역에 `close` 메소드를 추가해주었음
+        
+        → 코드도 복잡해지고 실수로 호출하지 않는 경우가 많았음
+        
+        → 또한 에러 스택 트레이스가 누락되기도 함
+        
+        → 또한 `finally` 영역에서 다른 객체에 의해 `Exception`이 발생하면 `close` 메소드가 누락되기도 함
+        
+    - 이를 해결하기 위해 `try-with-resources`가 추가되었음
+        - `AutoCloseable` 클래스를 구현하는 객체라면 자동으로 `close` 메소드를 호출함
+        - 아래는 사용 예시
+            
+            ```java
+            public static void main(String args[]) throws IOException {
+                try (FileInputStream is = new FileInputStream("file.txt"); BufferedInputStream bis = new BufferedInputStream(is)) {
+                    int data;
+                    while ((data = bis.read()) != -1) {
+                        System.out.print((char) data);
+                    }
+                }
+            }
+            ```
