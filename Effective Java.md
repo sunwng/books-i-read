@@ -188,3 +188,51 @@
                 }
             }
             ```
+### CH03. 모든 객체의 공통 메소드
+
+- **equals는 일반 규약을 지켜 재정의하라**
+    - 애매하게 재정의하면 오히려 혼돈을 초래할 수 있음
+    - 그렇기에 아래의 상황에서는 왠만하면 재정의하지 않는 것을 권장함
+        - 각 인스턴스가 본질적으로 고유함
+            - 예를 들면 Thread
+        - 인스턴스의 ‘논리적 동치성 (logical equality)’를 검사할 일이 없음
+            - 예를 들어 Map.equals는 내부의 key - value 를 검사하도록 재정의되었음 → 논리적 동치성을 검사하는 것임
+        - 상위 클래스에서 재정의한 equals가 하위 클래스에도 딱 들어맞음
+        - 클래스가 private이거나 package-private이고 equals 메소드를 호출할 일이 없음
+            
+            ```java
+            @Override
+            public boolean equals(Object o) {
+            	throw new AssertionError(); 
+            }
+            ```
+            
+            - 이런식으로 호출하지 못하게 해두면 됨
+    - 그러면 언제 정의해야할까? (이미 위에서 대충 정답이 나왔음)
+        
+        ⇒ 객체 식별성 (두 객체가 물리적으로 같은지) 이 아닌 논리적 동치성을 확인해야하는데, 상위 클래스에서 equals를 그렇게 재정의하지 않았을 때!
+        
+    - 따라야하는 일반 규약
+        - 반사성 (Flexibility): `null`이 아닌 모든 참조 값 `x`에 대해, `x.equals(x)`는 `true`
+        - 대칭성 (Symmetry): `null`이 아닌 모든 참조 값 `x`, `y`에 대해, `x.equals(y)`가 `true`라면 `y.equals(x)`도 `true`
+        - 추이성 (Transitivity): `null`이 아닌 모든 참조 값 `x`, `y`, `z`에 대해, `x.equals(y)`가 `true`면서 `y.equals(x)`도 `true` 라면, `x.equals(z)`도 `true`
+        - 일관성 (Consistency): `null`이 아닌 모든 참조 값 `x`, `y`에 대해, `x.equals(y)`를 반복해서 호출하면 항상 `true`를 반환하거나 항상 `false`를 반환
+        - null-아님: `null`이 아닌 모든 참조 값 `x`에 대해, `x.equals(null)`은 `false`
+    - 이를 지키기 위한 팁
+        - `==` 연산자를 사용해 입력이 자기 자신의 참조인지 확인
+            
+            → 자신이라면 `true` 반환
+            
+        - `instanceof` 연산자로 입력이 올바른 타입인지 확인
+        - 입력을 올바른 타입으로 형변환
+        - 입력 객체와 자기 자신의 대응되는 핵심 필드들이 모두 일치하는지 하나씩 검사
+- **equals를 재정의하려거든 hashCode도 재정의하라**
+    - `equals`가 두 객체를 같다고 판단했다면, 두 객체의 hashCode는 똑같은 값을 반환해야 함
+    - 그래야 `HashMap`, `HashSet` 등의 Collection의 원소로 사용할 수 있음
+- **toString을 항상 재정의하라**
+    - 일반적으로 우리가 원한 적합한 문자열을 반환하는 경우는 거의 없음
+        
+        (보통 객체의 클래스 이름 + 16진수로 표시된 해시코드 를 반환함)
+        
+    - 객체가 간단하다면 객체를 설명하는 자세한 String을 반환하도록 오버라이드하고
+    - 객체가 복잡하다면 객체를 요약하여 설명하는 String을 반환하도록 오버라이드함
