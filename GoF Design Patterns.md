@@ -199,3 +199,24 @@
         - 또한 구현이 달라질 때에는 구현 계층에서만 작업해주면 됨 (Interface는 같기 때문)
         - 해당 패턴을 통해 상속을 통한 결합이 아닌 위임을 통한 결합을 가능하게 함 (의존성이 낮아짐)
             - 상속을 통한 결합은 의존도가 너무 높아지기에 유연하지 못함
+- **Composite Pattern**
+    - 의도: 부분과 전체의 계층을 표현하기 위해 겍체들을 모아 트리 구조로 구성
+        
+        → 사용자로 하여금 개별 객체와 복합 객체를 모두 동일하게 다룰 수 있도록 함
+        
+        (내용물과 그릇이 있을 때, 그릇은 내용물과 그릇 모두를 담을 수 있게하고 내용물과 그릇을 하나의 객체 타입으로 사용할 수 있게 함!)
+        
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5091fec7-7c58-46d0-bc9e-7e9f112504b0/Untitled.png)
+        
+        - Leaf: 내용물 클래스
+        - Composite: 내용물을 담을 수 있는 클래스 (Composite 도 담을 수 있음)
+        - Component: Leaf와 Composite를 동일시 하기 위한 상위 클래스
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/e63a10744f6d71416594a68400ba60256d9fb54b)]
+        - File System을 생각해보자
+        - `File` 과 `Directory`가 있는데, `Directory` 안에는 `File`과 `Directory`가 들어갈 수 있으며
+        - `File`과 `Directory` 모두 하나의 `Entry`로 취급되는 것이 편함
+    - 내가 생각하는 사용 이유
+        - 재귀적으로 탐색해야할 때, 여러 클래스를 하나의 타입으로 취급하고 싶을 수 있음
+        - 이 때 사용해야한다고 생각
