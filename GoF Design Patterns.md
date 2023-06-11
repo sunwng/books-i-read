@@ -220,3 +220,31 @@
     - 내가 생각하는 사용 이유
         - 재귀적으로 탐색해야할 때, 여러 클래스를 하나의 타입으로 취급하고 싶을 수 있음
         - 이 때 사용해야한다고 생각
+
+- **Decorator Pattern**
+    - 의도: 객체에 동적으로 새로운 책임을 추가할 수 있게 함
+        
+        (기능을 추가할 때, 서브클래스 생성보다 융통성 있는 방법을 제공함)
+        
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9ae1d623-509c-4e07-8ad9-d242f51c5790/Untitled.png)
+        
+        - Component: 기능을 추가할 때 핵심이 되는 역할 (인터페이스만 정의)
+        - ConcreteComponent: Component의 구현체
+        - Decorator: 장식하는 기능의 API를 정의 + 장식할 대상 객체를 가짐
+        - ConcreteDecorator: 구현된 Decorator
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/ec78b842df58abaedc618d34467a0f59ae083446)]
+        - `Display` 클래스를 Component로 정의
+        - ConcreteComponent는 `StringDisplay`
+        - `StringDisplay`를 장식하기 위한 `Border` 타입의 클래스들 (`SideBorder`, `FullBorder`) 존재
+    - 내가 생각하는 사용 이유
+        - ConcreteComponent와 Decorator가 같은 Component 클래스를 구현하는 것이 특징이라고 생각함
+        - 이것의 이점이 무엇일까?
+            
+            → Decorator를 통해 ConcreteComponent를 감싼 클래스가 ConcreteComponent와 같은 인터페이스를 갖기 때문에 편함
+            
+            → Decorator 클래스의 확장이 편리함
+            
+        - 또한 여러가지 Decorator를 ConcreteComponent에 조합해줄 수 있음
+        - 하지만 구현 예제의 `b4` 객체처럼 지저분해질 수 있음…
