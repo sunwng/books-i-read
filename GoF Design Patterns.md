@@ -248,3 +248,42 @@
             
         - 또한 여러가지 Decorator를 ConcreteComponent에 조합해줄 수 있음
         - 하지만 구현 예제의 `b4` 객체처럼 지저분해질 수 있음…
+
+- **Facade Pattern**
+    - 의도: 한 서브시스템 내의 인터페이스 집합에 대한 획일화된 하나의 인터페이스를 제공하는 패턴
+        
+        (서브시스템을 사용하기 쉽도록 사위 수준의 인터페이스를 정의)
+        
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/07310a14-61fd-4d72-b354-aa1fda7011b2/Untitled.png)
+        
+        - Facade: 여러 클래스를 활용하여 복잡한 로직을 간단한 API로 제공
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/b55c8bc19f1af49175ba091a1216eb7e0a6920de)]
+        - PageMaker 클래스가 Facade역할을 수행
+            - 복잡한 로직을 간단한 API 호출로 수행 가능하게 함
+    - 내가 생각하는 사용 이유
+        - API 호출 순서가 복잡한 경우 or 너무 어려운 경우
+            
+            → 사용자에게 간단한 API를 제공해줄 수 있게 함
+            
+- **Flyweight Pattern**
+    - 의도: 객체의 공유 or 재활용을 통해 객체들을 효율적으로 관리할 수 있게 함
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/877385e2-0963-488f-af63-faa55ccc4cc0/Untitled.png)
+        
+        - Flyweight: 공유 or 재활용 대상 클래스
+        - FlyweightFactory: Flyweight 관리 클래스
+        - ConcreteFlyweight: 공유 속성
+        - UnsharedConcreteFlyweight: 공유되면 안되는 속성
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/79d1a3db0378f4f3159d27abc92ba05510dd0504)]
+        - `BigCharFactory` 클래스가 객체의 재활용 (or 공유) 를 제어함
+        - `BigChar` 클래스는 무거운 클래스의 예시 → 재활용 or 공유의 대상
+        - 객체 (인스턴스)를 가져오는 함수에서 경합이 발생할 수 있으므로 `synchronized` 처리
+    - 내가 생각하는 사용 이유
+        - 불변할 객체 or 공유해야하는 객체 라면 새로운 인스턴스를 매번 만드는 것은 메모리 낭비임
+            
+            → 이를 해결
+            
+        - 메모리 뿐만 아니라, 만약 DB I/O 나 DIsk I/O 가 포함되어있다면 전반적인 리소스를 감소시킬 수 있음
