@@ -324,3 +324,58 @@
     - 하지만 디폴트 메소드의 추가조차도 런타임 에러를 유발할 수 있음
         
         (충돌할 수 있기 때문인듯)
+
+- **인터페이스는 타입을 정의하는 용도로만 사용하라**
+    - 예를 들어, 상수 인터페이스는 인터페이스를 잘못 사용한 안티패턴임
+        - 왜냐?
+        - 인터페이스를 구현하는 것은 내부 구현을 클래스의 API로 노출하는 행위임
+        - 그리고 상수는 내부 구현과 관련되어있음
+- **태그 달린 클래스보다는 클래스 계층구조를 활용하라**
+    - 태그 달린 클래스의 예시
+        
+        ```java
+        class Figure {
+        	enum Shape { RECTANGLE, CIRCLE }
+        	final Shape shape;
+        	// for RECTANGLE
+        	double length;
+        	double width;
+        	// for CIRCLE
+        	double radius;
+        	
+        	Figure(double length, double width) {
+        		shape = Shape.RECTANGLE;
+        		this.length = length;
+        		this.width = width;
+        	}
+        
+        	Figure(double radius) {
+        		shape = Shape.CIRCLE;
+        		this.radius = radius;
+        	}
+        	
+        	double area() {
+        		switch(shape) {
+        			case RECTANGLE:
+        				return length * width;
+        			case CIRCLE:
+        				return Math.PI * (radius * radius);
+        			default:
+        				throw new AssertionError(shape);
+        		}
+        	}
+        	...
+        }
+        ```
+        
+        - 이런식으로 한 객체의 타입을 Enum으로 태깅하고 그에 맞는 로직을 수행시킴
+    - 첫번째 단점, enum, 태그 필드, switch 문 등 쓸데없는 코드가 많이 필요함
+    - 두번째 단점, 여러 구현이 한 클래스에서 이루어지므로 가독성이 나쁨
+    - 세번째 단점, 관련 없는 필드끼리 종속적이게 됨
+    - 이를 해소하기 위한 하나의 방법은 클래스 계층구조를 적용하는 것
+    - area() 와 같은 공통 인터페이스를 제공하는 root 클래스를 만들고
+    - 이를 상속 받아서 세부 클래스를 구현
+- **멤버 클래스는 되도록 static으로 만들라**
+    - 멤버 클래스에서 바깥 인스턴스에 접근할 일이 없다면 무조건 `static`으로 만드는게 좋음
+    - 그리고 바깥 클래스에서만 사용하고 싶으면 `private`으로 만들어주면 됨
+- **톱 레벨 클래스는 한 파일에 하나만 담으라**
