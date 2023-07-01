@@ -342,3 +342,100 @@
         → 이것 또한 적절한 자료구조를 사용해서 해결해야 함.. (e.g. java.time)
         
 - 데이터에 대한 진실의 원천을 하나만 가져가야 한다
+
+### CH08. 코드를 모듈화하라
+
+- 모듈화의 주된 목적은?
+    - 코드는 어떻게된 변경되거나 재구성될 가능성이 있음
+        
+        → 변경과 재구성이 용이한 코드가 필요하고 모듈화를 통해 이게 쉬워질 수 있음
+        
+
+⇒ 하위 문제에 대한 해결책의 자세한 세부 사항들이 독립적이고 밀접하게 연관되어있지 않게 함
+
+- 의존성 주입의 사용을 고려하라
+    - 하드코딩된 의존성은 문제가 될 수 있음
+        
+        ```java
+        class RoutePlanner {
+        	private final RoadMap roadMap;
+        
+        	RoutePlanner() {
+        		this.roadMap = new NorthAmericaRoadMap();
+        	}
+        
+        	...
+        }
+        
+        interface RoadMap {
+        	List<Road> getRoads();
+        	List<Junction> getJunctions();
+        }
+        ```
+        
+        - 위처럼 생성자에서 의존성을 선언하여 갖게되는 경우, `RoadMap`의 다른 구현을 사용하고자 할때 이 코드를 무조건 수정해야 함
+        - 또는 `RoadMap`의 생성자가 변경되었을 떄에도 영향을 받게 됨
+        - `RoutePlanner`의 생성이 쉽다는 장점이 있기는 함
+    - 의존성을 주입받도록 고쳐보자
+        
+        ```java
+        class RoutePlanner {
+        	private final RoadMap roadMap;
+        
+        	RoutePlanner(RoadMap roadMap) {
+        		this.roadMap = roadMap;
+        	}
+        
+        	...
+        }
+        ```
+        
+        - 이렇게 되면 `RoutePlanner`는 `RoadMap`의 구현체가 어떻게 바뀌던 수정될 필요가 없어졌음
+- 인터페이스에 의존하라
+    - 구현체가 변경될 가능성이 있다면 → 인터페이스 타입으로 주입받게 하는 것이 편함
+- 클래스 상속을 주의하라
+    - 상속보다는 Composite Pattern을 활용하여 필드로 갖고있게 하는 것이 좋을 때가 많음
+    - 상속은 추상화에 방해가 될 수 있음
+    - 상위 클래스의 수정이 이를 상속 받는 모든 하위클래스들에게 영향을 미침
+    - 진정한 is-a 관계여도 신중히 고려해보자
+- 클래스는 자신의 기능에만 집중해야 한다
+    - 다른 클래스와 지나치게 연관되게 하면 안됨
+        
+        ```java
+        class Book {
+        	private final List<Chapter> chapters;
+        
+        	int wordCount() {
+        		return chapters.map(getChapterWordCount).sum();
+        	}
+        
+        	private static int getChapterWordCount(Chapter chapter) {
+        		return chapter.getPrelude().wordCount() + chapter.getSections().map(section -> section.wordCOunt)).sum();
+        	}
+        
+        	...
+        }
+        
+        class Chapter {
+        	TextBlock getPrelude() { ... }
+        	
+        	List<TextBlock> getSections() { ... }
+        
+        	...
+        }
+        ```
+        
+        - 여기서 잘못된 점은?
+        - `Book` 클래스가 `Chapter`의 단어 수를 세는 로직을 갖고 있음
+        - `Book` 클래스는 `Chapter`에 대한 세부 로직을 갖고 있을 이유가 전혀 없음
+        - `Book` 클래스에 관한 함수들은 `Book` 클래스의 메소드로 옮겨주자
+    - 디미터의 법칙
+        - 한 객체가 다른 객체의 내용이나 구조에 대해 가능한 한 최대로 가정하지 않아야 함
+        - 예를 들어 잘못된 코드를 보면 `Book` 클래스는 `Chapter` 클래스와 상호관계를 하지만 내부에서 `TextBlock` 클래스와도 상호작용을 하고 있음
+    - 관련 있는 데이터는 함께 캡슐화하라
+        - 외부에서 매개변수로 받을 필요가 없는 데이터의 경우, 내부 필드로 존재하는 것이 옳은 방향임
+    - 반환 유형에 구현 세부 정보가 유출되지 않도록 주의하라
+        - 전용 DTO를 만들어 사용하자
+        - 또는 적절한 기본 자료구조를 사용하자
+    - 예외 처리 시 구현 세부 사항이 유출되지 않도록 주의하라
+        - 그에 맞는 Exception 클래스를 정의하여 사용
