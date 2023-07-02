@@ -287,3 +287,29 @@
             → 이를 해결
             
         - 메모리 뿐만 아니라, 만약 DB I/O 나 DIsk I/O 가 포함되어있다면 전반적인 리소스를 감소시킬 수 있음
+
+- **Proxy Pattern**
+    - 의도: 다른 객체에 대한 접근을 제어하기 위한 대리자 또는 자리채움자 역할을 하는 객체를 활용함
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8224d441-19eb-49c0-bac8-8884fb0aacba/Untitled.png)
+        
+        - Subject: Proxy와 RealSubject를 동일시하기 위한 API가 정의된 인터페이스
+            
+            → Client가 Proxy와 RealSubject의 차이를 인지하지 못하게 함
+            
+        - Proxy: Client의 요청을 최대한 처리하고 RealSubject가 필요한 경우에 맡김
+        - RealSubject: Proxy가 처리할 수 없는 실제 로직을 수행
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/9f5b44326af0220972e61ce8ff2331ce2127afd1)]
+        - `Printable` 인터페이스가 Subject 인터페이스의 역할을 함
+        - `Printer` 클래스는 객체가 생성될 때 intensive 작업으로 인해 오래걸린다는 가정이 있음
+        - `PrinterProxy` 에서 `Printer` 클래스의 객체가 생성되지 않아도 되는 로직들을 대신 처리해주고
+        - 필요한 경우에만 객체를 생성함
+    - 내가 생각하는 사용 이유
+        - 초기화 시 (객체 생성 시) 오래걸리는 클래스가 있다면 유용할 듯 (진짜 필요할 때만 객체가 생성되므로)
+        - 가장 잘 알려진 Proxy Pattern의 예시는 Spring의 AOP임
+            
+            → 왜?
+            
+            - AOP는 대상이 되는 로직에 영향 없이, 로직 전 or 중간 or 후 or 전반에 걸친 다른 로직이 수행되게 함
+            - 여기서 대상이 되는 로직을 감싸고 AOP 로직을 대상 로직과 독립적으로 실행되게끔 함
