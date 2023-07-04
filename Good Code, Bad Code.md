@@ -439,3 +439,111 @@
         - 또는 적절한 기본 자료구조를 사용하자
     - 예외 처리 시 구현 세부 사항이 유출되지 않도록 주의하라
         - 그에 맞는 Exception 클래스를 정의하여 사용
+
+### CH09. 코드를 재사용하고 일반화할 수 있도록 하라
+
+풀고자 하는 하위 문제에 대해 다른 개발자가 미리 해결한 코드가 있을 수 있음
+
+→ 하지만 항상 재사용하기 좋은 것은 아님, 그럼 어떻게 재사용 가능한 코드를 만들 수 있을까?
+
+- 가정을 주의하라
+    - 가정을 하면 개발은 훨씬 쉬워짐, 하지만 활용도가 낮아지고 재사용하기 어려워짐
+    - 이러한 가정을 잘 모르고 재사용하게 되면 당연히 버그가 발생하게 됨
+        
+        ```java
+        class Articcle {
+        	private List<Section> sections;
+        	...
+        	List<Image> getAllImages() {
+        		for (Section section in sections) {
+        			if (section.containsImages()) {
+        				// 기사 내에 이미지를 포함하는 섹션은 최대 하나만 있다. [가정]
+        				return section.getImages();
+        			}
+        		}
+        	}
+        }
+        ```
+        
+        - Method명만 보면 모든 이미지를 가져온다고 생각할 수 있으나, 사실 가정에 의해 한 섹션의 이미지만 가져옴
+    - 해결책1: 가정을 제거하자
+        
+        ```java
+        class Articcle {
+        	private List<Section> sections;
+        	...
+        	List<Image> getAllImages() {
+        		List<Image> images = new ArrayList<>();
+        		for (Section section in sections) {
+        			images.addAll(section.getImages());
+        		}
+        		return images;
+        	}
+        }
+        ```
+        
+        - 모든 Section의 이미지를 찾게 로직을 수정한다고 해도 성능의 큰 차이가 나지는 않음
+    - 해결책2: 가정이 필요하면 강제적으로하자
+        
+        ```java
+        class Articcle {
+        	private List<Section> sections;
+        	...
+        	Section? getImageSection() {
+        		// 기사 내에 이미지를 포함하는 섹션은 최대 하나만 있다. [가정]
+        		return sections.filter(section -> section.containsImages()).first();
+        	}
+        }
+        ```
+        
+        - 이러면 Method명에서도 일단 알 수 있고
+        - Return type이 nullable 한 것에서도 확인할 수 있음
+        - 하지만 이미지를 두 개 이상 갖고 있는 Section을 처리할 때 사용할 수 있는 오해는 아직 남아있음
+        
+        ```java
+        class Articcle {
+        	private List<Section> sections;
+        	...
+        	Section? getOnlyImageSection() {
+        		List<Section> imageSections = sections.filter(section -> section.containsImages());
+        		assert(imageSections.size() <= 1, "기사가 여러 개의 이미지 섹션을 갖는다.");
+        		return imageSections.first();
+        	}
+        }
+        ```
+        
+        - 이렇게 아예 검증을 추가하고 오류를 발생시키게 해야함
+- 전역 상태를 주의하라
+    - 전역변수 (자바에서는 static)는 프로그램 내의 모든 컨텍스트에 영향을 미치므로 해당 코드를 다른 목적으로 재사용(수정)하지 않을 것이라는 암묵적인 가정을 전제함
+    - 전역 상태를 갖는 코드는 재사용하기에 안전하지 않을 수 있음
+    
+    ```java
+    class ShoppingBasket {
+    	private static List<Item> items = new ArrayList<>();
+    		
+    	static void addItem(Item item) {
+    		items.add(item);
+    	}
+    
+    	static List<Item> getItems() {
+    		return List.copyOf(items);
+    	}
+    }
+    ```
+    
+    - 이 코드의 문제는 뭘까?
+    - 장바구니를 클라이언트가 아닌 서버가 관리한다면, 사용자당 인스턴스를 하나씩 만들어야 저 코드의 가정이 이루어짐
+    - 장바구니 저장 기능이 추가된다면? → 재사용 불가
+    - 다른 물건에 대한 장바구니가 필요하다면? → 재사용 불가
+    - 어떻게 해결하지?
+        
+        → 정적 클래스를 인스턴스화하고 사용 시에 의존성 주입을 받아 사용하도록 하자
+        
+- 기본 반환값을 적절하게 사용하라
+    - 낮은 층위의 코드의 기본 반환값은 재사용성을 해칠 수 있음
+        - 결국 기본 반환값은 하드코딩되는 값이므로 높은 수준의 코드에서 처리해줄수록 재사용성이 증가함
+        - 예를 들어, 기본 반환값으로 `null`을 반환하면 이를 사용하는 상위 코드에서 알맞게 처리해주면 됨
+- 함수의 매개변수를 주목하라
+    - 필요 이상으로 매개변수를 받는 함수는 재사용하기 어려울 수 있음
+- 제네릭의 사용을 고려하라
+    - 다른 클래스를 참조하지만, 여러 클래스가 가능하다면 제네릭을 쓰자
