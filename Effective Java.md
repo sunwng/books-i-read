@@ -379,3 +379,65 @@
     - 멤버 클래스에서 바깥 인스턴스에 접근할 일이 없다면 무조건 `static`으로 만드는게 좋음
     - 그리고 바깥 클래스에서만 사용하고 싶으면 `private`으로 만들어주면 됨
 - **톱 레벨 클래스는 한 파일에 하나만 담으라**
+
+### CH05. 제네릭
+
+- **raw type은 사용하지 말라**
+    - 안티패턴: Collection raw type
+        
+        ```java
+        private final Collection stamps = ...;
+        stamps.add(new Coin());
+        ```
+        
+        - `stamps`를 `Stamp`객체를 담는 `Collection`으로 만들었을지라도 raw type을 사용하게되면 `Coin`객체를 넣을 때 컴파일 에러가 발생하지 않음
+    - 안티패턴: Iterator raw type
+        
+        ```java
+        for (Iterator i = stamps.iterator(); i.hasNext(); ) {
+        	Stamp stamp = (Stamp) i.next();
+        	stamp.cancel();
+        }
+        ```
+        
+        - `Iterator`객체를 `Stamp`객체로 변환이 불가하기에 런타임에 `ClassCastException`이 발생
+    - 제네릭으로 만들고 타입을 명시해주면 말끔히 해결됨
+        
+        ```java
+        private final Collection<Stamp> stamps = ...;
+        ```
+        
+    - raw type이 존재할 수 밖에 없는 이유는, 제네릭이 나오기 이전 자바 코드들과의 호환성 때문
+    - List<Object> 처럼 임의 객체를 허용하는 매개변수화 타입은 괜찮다고 함
+        - 나는 그렇게 생각하지는 않음 → 이것도 안티패턴이라고 생각
+        - 이유: Object 를 매번 형변환해줘야함, 코드 사용자 입장에서 분명하지 못함
+    - 제네릭을 쓰고 싶지만, 실제 타입 매개변수가 무엇인지는 신경 쓸 필요가 없다면?
+        
+        → 와일드카드 타입 (`<?>`)을 사용
+        
+- **비검사 경고를 제거하라**
+    - 제네릭을 사용하기 시작하면 많은 컴파일 경고와 에러를 만나게 됨 → 잘 지우자
+    - 경고는 `@SuppressWarnings`로 무시하게 처리할 수 있음
+        
+        → 왠만해선 쓰지말자 (내생각)
+        
+- **배열보다는 리스트를 사용하라**
+    - 첫번째 이유
+        
+        ```java
+        Object[] objectArr = new Long[1];
+        objectArr[0] = "어쩌고 저쩌고";
+        ```
+        
+        - 위 코드는 컴파일은 성공하조 런타임에서 `ArrayStoreException`이 발생함
+        - 컴파일 시점에 에러가 나오는것이 논리적으로 맞음
+        
+        ```java
+        List<Object> objectList = new ArrayList<Long>();
+        objectList.add("어쩌고 저쩌고");
+        ```
+        
+        - `List`로 처리해주면 컴파일 에러를 던짐
+    - 두번째 이유
+        - 배열은 런타임에서 타입 정보를 체크하지만
+        - 리스트는 컴파일 타임에만 체크함
