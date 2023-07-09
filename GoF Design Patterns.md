@@ -318,3 +318,48 @@
                 - Proxy Pattern → Proxy의 접근 제한을 살리기 위함
                 - Decorator → Proxy의 부가 기능을 살리기 위함
             - 찾아보니 두 패턴이 모두 사용되었다고 볼 수 있다고 함
+
+### CH05. 행동 패턴 (Behavioral Pattern)
+
+- 어떤 처리의 책임을 어느 객체에게 맡기는 것이 좋은지에 대한 패턴임
+- 클래스들 간의 교류 방법에 대한 패턴임
+- **Chain of Responsibility Pattern**
+    - 의도: 메시지를 보내는 객체와 이를 받아 처리하는 객체들 간의 결합도를 없애기 위한 패턴
+        
+        (하나의 요청에 대한 처리가 반드시 한 객체에서만 되는 것이 아니라 여러 객체에게 처리 기회를 부여)
+        
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d13a41a2-fbd7-4afb-8b5f-696cc04c5080/Untitled.png)
+        
+        - Handler: 요구를 처리하는 API 정의 (추상 클래스 or 인터페이스)
+        - ConcreteHandler: 요구를 구체적으로 처리하는 클래스
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/3b1264e287c57fb373b92c78ef942750f5543bc8)]
+        - Support가 Handler 이고 여러 Support (ConcreteHandler)가 존재
+        - Client가 요청을 할 때마다, Handler가 자신이 처리할 수 있는지 판단하고 처리할 수 없다면 다음 Handler에게 넘김
+    - 내가 생각하는 사용 이유
+        - 요구하는 쪽 (Client) 와 처리하는 쪽 (Handler) 의 결합을 약하게 함
+            - 어떻게? → Client는 어떤 Handler에게 요청해야하는지 신경 안쓰고 그냥 처음 Handler를 호출하면 됨
+        - SRP 원칙을 잘 지킬 수 있음 → 자신의 능력 밖의 일이라면 다른 객체에게 위임
+        - 하지만, Handler끼리 결합이 생기게 되는 건 어쩐담? (순서도 문제인데)
+- **Command Pattern**
+    - 의도: 요청 자체를 캡슐화하여 요청이 서로 다른 사용자를 매개변수로 만들고, 요청을 대기시키거나 되돌릴 수 있는 연산을 지원하게 함
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1fa26299-c4d6-4527-a18a-4ad4afba2120/Untitled.png)
+        
+        - Command: 명령의 인터페이스
+        - ConcreteCommand: 명령의 구체 클래스
+        - Reciever: 명령을 실행할 대상
+        - Client: 명령을 생성하고 Reciever에게 전달
+        - Invoker: 명령을 실행시킴
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/43b75a51e592207e382d2249b2512409e2a1f6aa)]
+        - Command를 구현하는 두 클래스는 명령의 내용을 저장함
+            
+            = 요청 자체를 객체화
+            
+        - MacroCommand와 같은 history command를 사용하여 요청 내역 관리 가능
+    - 내가 생각하는 사용 이유
+        - 요청 (명령) 을 객체로 남기는 것이 좋은 경우를 생각해보자
+            - 예를 들어 Transaction
+        - 요청의 생명 주기가 길다면 객체화하여 주기적으로 상태를 체크하고 이력을 관리해야한다면 필요하다고 생각
