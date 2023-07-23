@@ -363,3 +363,60 @@
         - 요청 (명령) 을 객체로 남기는 것이 좋은 경우를 생각해보자
             - 예를 들어 Transaction
         - 요청의 생명 주기가 길다면 객체화하여 주기적으로 상태를 체크하고 이력을 관리해야한다면 필요하다고 생각
+- **Interpreter Pattern**
+    - 의도: 어떤 언어에 대해, 그 언어의 문법에 대한 표현을 정의하면서 그 표현을 사용하여 해당 언어로 기술된 문장을 해서하는 해석자를 함께 정의
+        - 우리가 어떠한 문법을 정의하고 클라이언트가 이를 사용하게 할 때, 그에 맞게 처리하는 패턴임
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/88377a82-096b-4db6-919d-0891334f3845/Untitled.png)
+        
+        - AbstractExpression: 해석하는 노드들의 공통 API
+        - TerminalExpression: 문법에 맞는 종료 해석 방법
+        - NonterminalExpression: 문법에 맞는 행동
+        - Context: 해석할 구문에 대한 정보
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/730d49ec9193d140392629fdc65909ca9373a33e)]
+        - `Node`는 AbstractExpression으로 공통 API를 정의
+        - `PrimitiveCommandNode`는 TerminalExpression 역할
+        - `ProgramNode`, `CommandNode`, `RepeatCommandNode`, `CommandListNode` 는 NonTerminalExpression 역할
+    - 내가 생각하는 사용 이유
+        - 상위 수준의 패턴임
+        - 우리가 어떤 API (커맨드 or 문법) 을 제공할 때 고민해야하는 영역임
+        - 사용하는 예시를 찾자면, DBMS의 엔진이 SQL을 파싱하는 것?
+- **Iterator Pattern**
+    - 의도: 내부 표현부를 노출하지 않고 어떤 집합 객체에 속한 원소들을 순차적으로 접근할 수 있는 방법을 제공
+        
+        → 반복을 외부에서 노출하지 않고 내부에서 반복하도록 하겠다
+        
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/74cb67e7-7f62-49fa-986c-f684299b5839/Untitled.png)
+        
+        - Iterator: `hasNext()`, `next()` API를 제공하는 인터페이스 (`Iterator<E>`)
+        - ConcreteIterator: Iterator를 구현한 클래스
+        - Aggregate: `iterator()` (Iterator객체를 생성하는) API를 제공하는 인터페이스
+        - ConcreteAggregate: Aggregate를 구현한 클래스
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/8177fe7f30582dbcca544c46970030190aedf6ba)]
+        - BookShelf 를 통해 명시적 Iterator 활용 / 확장 for문 활용 모두 살펴봄
+    - 내가 생각하는 사용 이유
+        - 자바에서 많이 접해봤음
+        - 내부 반복자를 사용하는 것은 여러모로 장점이 많음
+- **Mediator Pattern**
+    - 의도:
+        
+        한 집합에 속해있는 객체의 상호작용을 캡슐화하는 객체를 정의함
+        
+        객체들이 서로를 직접 참조하지 않도록 하여 객체 사이의 loose coupling을 촉진시킴
+        
+        개발자가 객체의 상호작용을 독립적으로 다양화시킬 수 있게 함
+        
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/957a2de8-3060-49f6-952d-888eb7c9df63/Untitled.png)
+        
+        - Colleague: 하나의 시스템을 이루는 여러 컴포넌트에 해당하는 클래스들
+        - Mediator: 여러 Colleague가 서로 상호작용하기에는 복잡하니 그들을 중재해주는 클래스들 (이 클래스를 거쳐야함)
+    - 구현 → 재미없어서 생략
+    - 내가 생각하는 사용 이유
+        - Facade 패턴과 유사함
+        - 하지만, Facade 는 단방향 (Facade 는 호출만함) 이지만, Mediator는 Colleague 클래스들과 양방향으로 상호작용함
+        - 즉, 객체들간의 복잡한 관계를 쉽게 풀어내고 싶을 때 사용하기 좋다고 생각함
