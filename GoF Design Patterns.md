@@ -420,3 +420,33 @@
         - Facade 패턴과 유사함
         - 하지만, Facade 는 단방향 (Facade 는 호출만함) 이지만, Mediator는 Colleague 클래스들과 양방향으로 상호작용함
         - 즉, 객체들간의 복잡한 관계를 쉽게 풀어내고 싶을 때 사용하기 좋다고 생각함
+
+- **Memento Pattern**
+    - 의도: 캡슐화를 위배하지 않은 채 어떤 객체의 내부 상태를 잡아내고 실체화시켜 둠으로써, 이후 해당 객체가 그 상태로 되돌아올 수 있도록 함
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/283e462a-7a34-442e-b01f-6d3132c5b445/Untitled.png)
+        
+        - Originator: 원할 때 자신의 상태를 Memento로 만들고 + 이전 Memento로 복원
+        - Memento: Originator의 내부 정보를 저장하지만 public하게 공개하지 않음
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/fc8924be00bb30fcdc3495a3c45654ce2d72d608)]
+        - `Memento`는 현재 `Gamer`의 상태를 저장함
+        - 중요한 건, `Memento`의 생성자와 메소드들은 같은 패키지 내에서만 호출 가능함 (`Gamer`만 호출 가능)
+        - 특정 시점마다 `Gamer`는 자신의 상태를 `Memento`에 저장하고, `Gamer`는 `Memento`에 저장된 상태로 복원될 수 있음
+    - 내가 생각하는 사용 이유
+        - 객체의 상태에 대한 스냅샷을 주기적으로 찍고, 원할 때 되돌려야하는 상황에서 써야할 듯
+- **Observer Pattern**
+    - 의도: 객체 사이에 일 대 다의 의존 관계를 정의해 두어, 어떤 객체의 상태가 변할 때 그 객체에 의존성을 가진 다른 객체들이 그 변화를 통지받고 자동으로 갱신될 수 있게 만듦
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/aeec9df9-7aae-4f4d-ae77-e4aaedc0aea1/Untitled.png)
+        
+        - Subject: 관찰 대상자 (전파 시키는 객체)
+        - Observer: 관찰자 (전파 받는 객체)
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/ca8cf3ea62330a1cc493018046418b1052cc2a38)]
+        - `NumberGenerator` 내부에 서 `Observer` 리스트를 관리함
+        - `NumberGenerator` 내부 상태에 변화가 생겼을 때 `notifyObservers()`를 통해 `Observer`에게 전파시킴
+    - 내가 생각하는 사용 이유
+        - 객체간의 상호작용을 위해??
+        - 너무 무의식중에 자주 사용하던 방식인 것 같음
+        - 이게 더 나아가서 event-driven 방식으로 진화했을 것 같음
