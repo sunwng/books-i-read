@@ -450,3 +450,19 @@
         - 객체간의 상호작용을 위해??
         - 너무 무의식중에 자주 사용하던 방식인 것 같음
         - 이게 더 나아가서 event-driven 방식으로 진화했을 것 같음
+
+- **State Pattern**
+    - 의도: 객체의 내부 상태에 따라 스스로 행동을 변경할 수 있게 허가하는 패턴으로, 이렇게 하면 객체가 마치 자신의 클래스를 바꾸는 것처럼 보이게 함
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/887e1399-6c84-43ad-991f-c5a623826c70/Untitled.png)
+        
+        - State: 상태를 나타냄, 상태마다 다르게 동작하는 API를 정의함
+        - ConcreteState: 구체적인 상태
+        - Context: 현재 상태를 나타내는 ConcreteState를 가짐
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/81122ad8692d9072f3cc1b4f143e057c401135c0)]
+        - 예제에서 낮/밤 에 다른 동작 (구현) 을 해야하는 두 상태가 있다고 하자
+        - 이 때, if 문으로 상태를 확인하는게 아니라 State 인터페이스를 구현하는 두 클래스를 만들고
+        - Context 에서 시간에 따라 ConcreteState를 바꿔주고 공통 API를 호출해줌
+    - 내가 생각하는 사용 이유
+        - 상태에 따른 다른 구현이 필요하고 이 구현을 사용하는 클래스가 있을 때 분기처리를 보다 객체지향적으로 (유지보수가 쉬운 방향으로) 할 수 있게 함
