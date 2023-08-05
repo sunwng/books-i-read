@@ -466,3 +466,65 @@
         - Context 에서 시간에 따라 ConcreteState를 바꿔주고 공통 API를 호출해줌
     - 내가 생각하는 사용 이유
         - 상태에 따른 다른 구현이 필요하고 이 구현을 사용하는 클래스가 있을 때 분기처리를 보다 객체지향적으로 (유지보수가 쉬운 방향으로) 할 수 있게 함
+
+- **Strategy Pattern**
+    - 의도:
+        - 동일 계열의 알고리즘군을 정의하고, 각 알고리즘을 캡슐화하며, 이들을 상호교환이 가능하도록 만듦
+        - 알고리즘을 사용하는 클라이언트와 상관없이 독립적으로 알고리즘을 다양하게 변경할 수 있게 함
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/78b6c70b-9646-47c7-a392-8df2924b4197/Untitled.png)
+        
+        - Strategy: 공통 전략 인터페이스 (API)
+        - ConcreteStrategy: 구체적인 구현이 반영된 (알고리즘, 작동 방식 등이 정해진) Strategy
+        - Context: ConcreteStrategy 를 주입 받지만, Strategy에 정의된 API만 호출
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/cf4931b71af3dc745e19044258d031e76bed7035)]
+        - 가위바위보를 진행할 때 두가지 Strategy가 존재할 수 있음 → Strategy 인터페이스를 구현
+        - Player에서 적당한 Strategy의 구현체를 주입 받아 사용
+    - 내가 생각하는 사용 이유
+        - 같은 인터페이스 (API) 를 공유할 수 있지만, 구현 세부사항이 달라야 하는 많은 경우 이러한 패턴을 사용함
+        - 이를 통해서 분기 처리를 모든 곳에서 해주지 않게 리팩토링이 가능해짐
+- **Template Method Pattern**
+    - 의도:
+        - 객체의 연산에는 알고리즘의 뼈대만을 정의하고 각 단계에서 수행할 구체적 처리는 서브클래스 쪽으로 미룸
+        - 알고리즘의 구조 자체는 그대로 놔둔 채, 알고리즘 각 단계 처리를 서브클래스에서 재정의할 수 있게 함
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5a649b2a-84b8-4483-bb46-f32bbe14c746/Untitled.png)
+        
+        - AbstractClass: 템플릿 메소드를 구현하고, 그 메소드에서 사용할 추상 메소드를 정의함
+        - ConcreteClass: 추상 메소드를 알맞게 구현함
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/d5691407ef7b82cf16d3c94c2da56fc0f0954638)]
+        - 템플릿 메소드는 `display()` 함수임
+        - 저 함수 안에는 많은 추상 메소드가 존재하고, 상속하는 하위 클래스에서 추상 메소드를 구현해야함
+    - 내가 생각하는 사용 이유
+        - 다른 구현들을 활용하여 공통된 API를 제공해야할 때 사용
+        - 이전에 본 Strategy Pattern과 매우 유사함
+            - Strategy Pattern에서는 공통 API의 호출을 사용 클래스에서 함 (위임시킴)
+            - Template Method Pattern에서는 해당 클래스에서 호출함
+            - 그리고 Template Method Pattern은 상속을 활용하기에 더욱 주의해야함
+
+⇒ Strategy Pattern & Template Method Pattern 관련 좋은 글 [[Link1](https://meetup.nhncloud.com/posts/94)] [[Link2](https://engineering.linecorp.com/ko/blog/templete-method-pattern)] [[Link3](https://velog.io/@inust33/%ED%85%9C%ED%94%8C%EB%A6%BF-%EB%A9%94%EC%84%9C%EB%93%9C-%ED%8C%A8%ED%84%B4-%EC%A0%84%EB%9E%B5-%ED%8C%A8%ED%84%B4-%EC%9C%84%EC%9E%84%EB%90%9C-%ED%8C%A9%ED%86%A0%EB%A6%AC-%EA%B7%B8%EB%A6%AC%EA%B3%A0-%EC%B6%94%EC%83%81-%ED%8C%A9%ED%86%A0%EB%A6%AC-%EB%A9%94%EC%84%9C%EB%93%9C-%ED%8C%A8%ED%84%B4)]
+
+- **Visitor Pattern**
+    - 의도:
+        - 객체 구조를 이루는 원소에 대해 수행할 연산을 표현함
+        - 연산을 적용할 원소의 클래스를 변경하지 않고도 새로운 연산을 정의할 수 있게 함
+    - 구조:
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5acce775-75ad-4d92-b10e-e7f1978522a7/Untitled.png)
+        
+        - Visitor: 방문 대상 데이터마다 visit 메소드를 정의해두는 인터페이스
+        - ConcreteVisitor: Visitor의 구현
+        - Element: 방문 대상 데이터의 인터페이스
+        - ConcreteElement: Element의 구현
+        - ObjectStructure: Element 집합을 관리
+    - 구현 [[Link](https://github.com/sunwng/gof-design-patterns-impl/commit/80fb72d8efc85d89fb920bca3a1db4a3c3fdc31c)]
+        - 재미없어서 설명 생략
+    - 내가 생각하는 사용 이유
+        - 왜 이렇게 visit 하고 aceept 하는 구조인지 궁금함
+            
+            → 데이터에 대한 처리를 데이터 구조와 분리하기 위함이라고 함
+            
+        - 기존에 작성된 데이터 구조의 코드 수정을 최소화할 수 있다고 하는데…
+        - 아직 경험이 부족해서 확 와닿지는 않음
