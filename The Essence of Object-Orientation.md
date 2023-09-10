@@ -62,8 +62,8 @@
         
         ```jsx
         class Alice() {
-        	fun drink(beverage: Beverage, amount: Int) {
-        		beverage.amount -= amount
+            fun drink(beverage: Beverage, amount: Int) {
+        	    beverage.amount -= amount
         	}
         }
         ```
