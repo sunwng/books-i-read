@@ -63,13 +63,8 @@
         ```jsx
         class Alice() {
             fun drink(beverage: Beverage, amount: Int) {
-<<<<<<< HEAD
-        	    beverage.amount -= amount
-        	}
-=======
         	beverage.amount -= amount
             }
->>>>>>> 32bee2fb8565f0aad0cacaa2186a3c01b31b9deb
         }
         ```
         
@@ -82,7 +77,6 @@
             }
         }
         ```
-        
     
     = 캡슐화 (객체가 외부에 노출하는 것은 행동뿐이다)
     
