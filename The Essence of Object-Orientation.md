@@ -63,8 +63,13 @@
         ```jsx
         class Alice() {
             fun drink(beverage: Beverage, amount: Int) {
+<<<<<<< HEAD
         	    beverage.amount -= amount
         	}
+=======
+        	beverage.amount -= amount
+            }
+>>>>>>> 32bee2fb8565f0aad0cacaa2186a3c01b31b9deb
         }
         ```
         
@@ -72,9 +77,9 @@
         
         ```jsx
         class Alice() {
-        	fun drink(beverage: Beverage, amount: Int) {
-        		beverage.decrease(amount)
-        	}
+            fun drink(beverage: Beverage, amount: Int) {
+        	beverage.decrease(amount)
+            }
         }
         ```
         
@@ -95,10 +100,10 @@ sample.doSomething()
 
 class Sample() {
 ...
-	fun doSomething() {
-		if (getStatus == false) return;
-		...
-	}
+    fun doSomething() {
+	if (getStatus == false) return;
+	...
+    }
 }
 ```
 
