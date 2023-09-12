@@ -33,3 +33,8 @@
     - Expression → 값을 만들어낼 수 있음
         - 코틀린에서의 `if-else` 에는 `return` 이 필요 없음
         - `when` 에도 필요 없음
+- 스마트캐스트
+    - `is` 를 통해 instance 타입을 검사하면 자동으로 그 인스턴스 타입으로 변환해줌
+- Exception → 코틀린의 Exception은 Unchecked Exception임
+
+## CH03. 함수 정의와 호출
