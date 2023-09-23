@@ -2,7 +2,9 @@
 > 
 > - https://jmgarridopaz.github.io/content/articles.html
 > 
-> 이 문서를 읽는 이유: DDD의 정수 아키텍쳐를 익혀보자
+> Objective: To know the concept and the way to implement of hexagonal architecture
+>
+> By obtaining this knowledge, I think i can make my domain system rigid
 > 
 
 ## Ports and Adapters Pattern
@@ -39,3 +41,29 @@
         - Actor → Port → Adapter → Hexagon 의 흐름은 잘못된 흐름이다!
             - Port 는 Hexagon의 일부임
             - Actor → Adapter → (Port) Hexagon 이 맞음
+
+## Hexagonal Architecture, An Implementation Guide
+
+- remember the main goal → allow users (application, batch, …) to drive the application in isolation from real world technologies
+- need to realize the dependencies b/w components (who knows of whom)
+- Application Design
+    1. Identify Actors
+        - Draw an hexagon, and check which ones are located at outside of the hexagon
+        - At this step, don’t care the exact technology, just abstract the actors
+        - Also can identify primary actors (driving) or secondary actors (driven)
+    2. Identify Ports
+        - Actors interact with the hexagon only through ports
+        - Driver ports
+            
+            → What purpose does the driver actor want the application for?
+            
+            (the answer will be the name of the port)
+            
+        - Driven ports
+            
+            → What purpose does the application want the the driven actor for?
+            
+            (the answer will be the name of the port)
+            
+    3. Add adapters
+        - add proper adapter to each port
