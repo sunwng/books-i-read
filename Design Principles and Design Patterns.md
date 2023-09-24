@@ -49,13 +49,13 @@
     
     ```kotlin
     enum class Modem {
-    	hayes, courrier, ernie;
+        hayes, courrier, ernie;
     }
     
     fun logOn(modem: Modem) {
-    	if (modem == Modem.hayes) doSomethingForHayes()
-    	else if (modem == Modem.courrier) doSomethingForCourrier()
-    	else if (modem == Modem.ernie) doSomethingForErnie()
+        if (modem == Modem.hayes) doSomethingForHayes()
+        else if (modem == Modem.courrier) doSomethingForCourrier()
+        else if (modem == Modem.ernie) doSomethingForErnie()
     }
     ```
     
@@ -78,7 +78,7 @@
     
     fun logOn(modem: Modem) {
         ..
-    	modem.doSomething()
+        modem.doSomething()
         ..
     }
     ```
