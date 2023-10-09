@@ -126,3 +126,18 @@
         - Validation step must be difficult → will pollute sacred business codes
 - Different output models for different use cases
     - return as little as possible
+
+## CH05. Implementing a Web Adapter
+
+- Dependency Inversion
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/6010b76c-2534-44fc-84b9-3b9ae4a54214/Untitled.png)
+    
+    - Web adapter → “driving” or “incoming” adapter
+        - takes requests from the outside and translates them into calls to application core
+    - Adapters can interact w/ application core only through ports (dependency inversion)
+- Responsibilities of a Web Adapter
+    - Transform input model of the web adapter into the input model of the use cases
+    - Call a certain use case w/ the transformed input model
+- Create a separate controller, potentially in a separate package for each operation
+    - name the methods and classes as close to our use cases as possible
