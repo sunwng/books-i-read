@@ -141,3 +141,23 @@
     - Call a certain use case w/ the transformed input model
 - Create a separate controller, potentially in a separate package for each operation
     - name the methods and classes as close to our use cases as possible
+
+## CH06. Implementing a Persistence Adapter
+
+- Dependency Inversion
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/41cc558b-e639-4286-8278-088bef18e4c4/Untitled.png)
+    
+    - Persistence adapter is a “driven” or “outgoing” adapter
+- input model to the persistence adapter lies within the application core
+- Slicing Port Interfaces
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/4e50f4bf-6441-478e-b9f0-de2a73ca1a6e/Untitled.png)
+    
+    - Broad port interface makes unnecessary dependencies
+    - need to adapt ISP (Interface Segregation Principle)
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/400182f2-4e05-4c12-a27d-606f9d722b39/Untitled.png)
+    
+- Slicing Persistence Adapters
+    - One persistence adapter per aggregate (domain) → good foundation
