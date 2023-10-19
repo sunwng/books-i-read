@@ -161,3 +161,42 @@
     
 - Slicing Persistence Adapters
     - One persistence adapter per aggregate (domain) → good foundation
+
+## CH07. Testing Architecture Elements
+
+- The Test Pyramid
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/70bd3b2c-4bfb-4395-a376-956e2635872d/Untitled.png)
+    
+    - Need high coverage of fine-grained tests, which are cheap to build, easy to maintain, fast-running, and stable → Unit Test
+    - Unit Test
+        - is the base of the pyramid
+        - dependencies are replaced with mocks
+    - Integration Test
+        - instantiates a network of multiple units
+    - System Test
+        - spins up the whole network of objects that make up the application
+- Unit Tests of Domain entity in hexagonal architecture → easy (no dependency)
+
+## CH08. Mapping Between Boundaries
+
+- ‘No Mapping’ Strategy
+    - All layers share the domain model
+- ‘Two-Way’ Mapping Strategy
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/59e9fe3e-2389-460e-87e9-49b4e8041a01/Untitled.png)
+    
+    - Only inner layers know their own model
+    - Usually makes a lot of boilerplate code
+    - Incoming/Outgoing ports use domain objects as input parameters and return values
+- ‘Full’ Mapping Strategy
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/350a8699-189c-4320-af0f-ecf0ee55ddd7/Untitled.png)
+    
+    - Uses a separate input/output model per operation
+- ‘One-Way’ Mapping Strategy
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/d6878191-a26f-40bc-b297-380f3a321679/Untitled.png)
+    
+    - Models in all layers implement the same interface
+    - Domain model can implement a rich behavior
