@@ -24,3 +24,20 @@
             - define the rules for how a system should be constructed
         - design principles
             - guideline for developing a system
+- Expectations of an Architect
+    - Make architecture decisions
+        - guide technology decisions (not choose a specific technology)
+    - Continually analyze the architecture
+        - continually analyze the architecture and current technology environment
+        - then recommend solutions for improvement
+    - Keep current with latest trends
+        - understanding and following key trends helps the architect prepare for the future and make the correct decision
+    - Ensure compliance with decisions
+    - Diverse exposure and experience
+    - Have business domain knowledge
+        - w/o knowing business domain, it is difficult to make a decision
+    - Possess interpersonal skills
+    - Understand and navigate politics
+- Laws of Software Architecture
+    - Everything in software architecture is a “trade-off”
+    - Why is more important than how
