@@ -41,3 +41,83 @@
 - Laws of Software Architecture
     - Everything in software architecture is a “trade-off”
     - Why is more important than how
+
+## CH02. Architectural Thinking
+
+- Architectural thinking is much more than just thinking about the architecture
+- Need to
+    - know the difference b/w architecture and design
+    - have a wide breadth of technical knowledge while still maintaining a certain level of technical depth
+    - understand, analyze, and reconcile tradeoffs b/w various solutions and technologies
+    - understand the importance of business drivers
+- Architecture vs Design
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/3ed3449a-237c-4f1e-87ee-cf2c3ef6fb2b/Untitled.png)
+    
+    - in traditional view, it is the unidirectional arrow from architect to developer
+    - this causes a lot of problems
+        - because of virtual and physical barriers
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/87128a37-4ffd-4267-8e38-c6be4f7073fe/Untitled.png)
+    
+    - need to brake the barriers down, and make it bidirectional
+    
+    ⇒ there is no boundary b/w architecture and design
+    
+    (both part of the circle of life within a software project)
+    
+- Technical Breadth
+    - There are three sections of knowledge
+        - Stuff I know → developer’s early career focuses on this section
+        - Stuff I know I don’t know → architect needs to know this section (broadly)
+        - Stuff I don’t know I don’t know → the largest part
+    - A large part of the value of an architect is a brad understanding of technology
+        - and how to use it to solve particular problems
+- Analyzing Trade-offs
+    - Thinking like an architect is all about seeing trade-offs in every solution
+    - and analyze those trade-offs to determine what is the best solution
+- Understanding Business Drivers
+    - understanding the business drivers leads to know the requirements for the success of the system
+
+## CH03. Modularity
+
+- There is little that said about how to achieve modularity
+- and, it’s hard to define
+- Modularity is an organizing principle
+    - usually describes a logical grouping of related code
+- Architects must be aware of how developers package things
+    
+    (because, tightly coupled packages are difficult to be reused)
+    
+- Measuring Modularity
+    - Cohesion → what extent the parts of a module should be contained within the same module
+        - Cohesive module is one where all the parts should be packaged together
+            
+            (breaking them into smaller would require coupling)
+            
+        - Functional cohesion
+            
+            : Every part of the module is related to the other
+            
+        - Sequential cohesion
+            
+            : Tow modules interact, where outputs of one becomes the input for the other
+            
+        - Communicational cohesion
+            
+            : Two modules form a communication chain
+            
+        - Procedural cohesion
+            
+            : Two modules must execute code inn a particular order
+            
+        - Temporal cohesion
+            
+            : Modules are related based on timing dependencies (e.g. startup)
+            
+    - Coupling 
+    → Can be measured with Abstractness, Instability, Distance from the Main Sequence
+    - Connascence
+    → Two components are connascent if a change in one would require the other to be modified in order to maintain the overall correctness of the system
+        - Static connascence: source-code-level coupling
+        - Dynamic connascnece: run-time-level coupling
