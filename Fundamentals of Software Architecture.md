@@ -121,3 +121,33 @@
     → Two components are connascent if a change in one would require the other to be modified in order to maintain the overall correctness of the system
         - Static connascence: source-code-level coupling
         - Dynamic connascnece: run-time-level coupling
+
+## CH04. Architecture Characteristics Defined
+
+- Architecture characteristic meets three criteria
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/787ced00-094e-4d4e-84d6-4bc24c2320ee/Untitled.png)
+    
+    - Specifies a non-domain design consideration
+    - Influences some structural aspect of the design
+    - Is critical or important to application success
+- Operational Architecture Characteristics
+    
+    → cover capabilities
+    
+    - Availability, Continuity, Performance, Recoverability, Reliability, Robustness, Scalability, …
+- Structural Architecture Characteristics
+    
+    → code structure
+    
+    - Configurability, Extensibility, Installability, Leverageability, Localization, Maintainability, Supportability, Upgradeability, …
+- Cross-Cutting Architecture Characteristics
+    - Accessibility, Archivability, Authentication, Authorization, Legal, Privacy, Security, Supportability, Usability, …
+
+## CH05. Identifying Architectural Characteristics
+
+- To identify these, it requires to not only understand the domain problem, but also collaborate with the problem domain stakeholders
+- Extracting Architecture Characteristics from Domain Concerns
+    - it needs to translate from domain concerns to characteristics “properly”
+- Extracting Architecture Characteristics from Requirements
+- “There are no wrong answers in architecture, only expensive ones”
