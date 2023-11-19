@@ -151,3 +151,12 @@
     - it needs to translate from domain concerns to characteristics “properly”
 - Extracting Architecture Characteristics from Requirements
 - “There are no wrong answers in architecture, only expensive ones”
+
+## CH06. Measuring and Governing Architecture Characteristics
+
+- Difficult points of measuring architecture characteristics
+    - They aren’t physics
+    - Wildly varying definitions
+    - Too composite
+- Operational measures → Statistical analysis (better approach)
+- Structural measures → Cyclomatic Complexity
