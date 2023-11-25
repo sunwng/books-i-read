@@ -160,3 +160,29 @@
     - Too composite
 - Operational measures → Statistical analysis (better approach)
 - Structural measures → Cyclomatic Complexity
+
+## CH07. Scope of Architecture Characteristics
+
+- Need to re-define coupling and connascence (in a larger scale, b/w microservices)
+    - Static Connascence
+    - Dynamic Connascence
+        - Synchronous → Synchronous calls create dynamic connascence
+        - Asynchronous
+- Architecture Quantum
+    - An independently deployable artifact with high functional cohesion and synchronous connascence
+- To know architecture characteristics, it is necessary to know the domain as perfect as I can
+
+## CH08. Component-Based Thinking
+
+- Component scope
+    - library, layer, service, …
+- Partitioning
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/91c3aa1f-2039-4d3a-b263-2e6f3fc5fe39/Untitled.png)
+    
+    - Technical partitioning → partitioned by technology (layer)
+        - suits well w/ MVC pattern
+        - higher degree of global coupling
+    - Domain partitioning → partitioned by interest
+        - modeled more closely toward how the business functions rather than an implementation detail
+        - generates a lot of boiler-plate codes
