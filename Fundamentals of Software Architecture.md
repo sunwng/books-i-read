@@ -186,3 +186,26 @@
     - Domain partitioning → partitioned by interest
         - modeled more closely toward how the business functions rather than an implementation detail
         - generates a lot of boiler-plate codes
+
+## CH09. Foundations
+
+- Fundamental Patterns
+    - Big Ball of Mud
+        - absence of any discernible architecture structure
+        - lack of structure makes change increasingly difficult
+    - Unitary Architecture
+    - Client/Server
+- Monolithic vs Distributed Architectures
+    - Monolithic → Layered, Pipeline, Microkernel
+    - Distributed → Service-based, Event-driven, Space-based, Service-oriented, MSA
+    - Distributed architecture styles have significant trade-offs to get more powerful performance than monolithic
+        - Fallacy #1: The network is reliable
+            - networks still remain generally unreliable
+        - Fallacy #2: Latency is zero
+            - latency is always greater than local in-memory method call
+        - Fallacy #3: Bandwidth is infinite
+        - Fallacy #4: The network is secure
+        - Fallacy #5: The topology never changes
+        - Fallacy #6: There is only one administrator
+        - Fallacy #7: Transport cost is zero
+        - Fallacy #8: The network is homogeneous
