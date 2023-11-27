@@ -206,6 +206,9 @@
         - Fallacy #3: Bandwidth is infinite
         - Fallacy #4: The network is secure
         - Fallacy #5: The topology never changes
+            - network topology can be easily changed
         - Fallacy #6: There is only one administrator
         - Fallacy #7: Transport cost is zero
+            - the cost of maintaining distributed architecture
         - Fallacy #8: The network is homogeneous
+    - Distributed transactions → can be managed by transactional sagas
