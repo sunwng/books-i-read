@@ -212,3 +212,26 @@
             - the cost of maintaining distributed architecture
         - Fallacy #8: The network is homogeneous
     - Distributed transactions → can be managed by transactional sagas
+
+## CH10. Layered Architecture Style
+
+- a.k.a n-tiered architecture → the most common architecture style
+- Topology
+    - usually four standard layers; presentation, business, persistence, and database
+    - business layer and persistence layer are sometimes combined into a single business layer
+- Separation of concerns concept makes it easy to build effective roles and responsibility models
+- Trade-off of this benefit is a lack of overall agility
+- Layers of Isolation
+    - Each layer can be either closed or open
+        - Closed: request cannot skip any layers
+        - Open: can skip
+    - Which one is better?
+        - Layers of Isolation → changes made in one layer don’t impact components in other layers
+        - To support this concept, each layer should be closed
+- Adding Layers
+    - When we want to protect some components from other layers, then we can add a new layer and protect them
+        
+        ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/09d07526-d725-4eda-9e9c-5548e3cb66e3/Untitled.png)
+        
+- Other considerations
+    - Layered architecture is a good starting point when it is not know yet exactly which architecture style will be used
