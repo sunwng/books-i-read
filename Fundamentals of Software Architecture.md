@@ -235,3 +235,47 @@
         
 - Other considerations
     - Layered architecture is a good starting point when it is not know yet exactly which architecture style will be used
+
+## CH14. Event-Driven Architecture Style
+
+- Popular distributed asynchronous architecture style
+- Is made up of decoupled event processing components
+- Two primary topologies
+    - Broker Topology → high degree of responsiveness and dynamic control over the processing of an event
+    - Mediator Topology → control over the workflow of an event process
+- Broker Topology
+    - There is no central event mediator
+    - use a lightweight message broker (e.g. RabbitMQ, …)
+    - Four primary architecture components
+        - Initiating event
+            - Initial event that starts the entire event flow
+        - Event broker
+            - Initiating event is sent to an event channel in the event broker
+        - Event processor
+            - Accepts the initiating event from the event broker and begins the processing of the event
+        - Processing event
+            - Asynchronously advertises what it did
+    - There is no control over the overall workflow associated w/ the initiating event
+        - No one knows when the business transaction ends
+        - No one is aware of a crash if a failure occurs
+- Mediator Topology
+    - Addresses some of the shortcomings of the broker topology
+    - Five primary architecture components
+        - Initiating event
+            - Starts the whole eventing process
+        - Event queue
+            - Initiating event is sent to an initiating event queue
+        - Event mediator
+            - Only knows the steps involved in processing the event
+            - Generates corresponding processing events that are sent to dedicated event channels
+        - Event channels
+        - Event processors
+            - Listen to the dedicated event channels, and process the event
+            - Respond back to the mediator that it has completed its work
+    - There are multiple mediators, usually associated w/ a particular domain
+        - We can use Spring Integration
+    - Mediator can maintain event state and manage error handling, recoverability and restart capabilities
+    - Not as highly decoupled as with the broker topology
+- Asynchronous Capabilities
+    - A unique characteristic over other architecture styles is that it relies solely on asynchronous communication
+    - The main issue w/ asynchronous communications is error handling
