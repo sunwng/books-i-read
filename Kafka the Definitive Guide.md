@@ -44,3 +44,29 @@
         → commits the messages to storage on disk
         
         → responds to fetch requests from consumers
+
+## CH03. Kafka Producers: Writing Messages to Kafka
+
+- Overview
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/6b4b080b-0a45-4e65-a1bb-1db85f98abff/Untitled.png)
+    
+    - Starts with generating an instance of `ProducerRecord`
+        - target topic and value are necessary
+        - key and target partition are optional
+    - Call `Send()` API
+        - serializes the data to byte array
+    - `Partitioner` decides a target partition to send
+        - adds a record to a batch of records that will also be sent to a same topic and partition
+    - Another separate thread sends the batch to a Broker
+- Constructing a Kafka Producer
+    - Three mandatory properties
+        - bootstrap.servers
+            - lists of `host:port` of broker
+            - no need to know the whole lists
+        - key.serializer
+        - value.serializer
+- Three primary methods of sending messages
+    - Fire and forget → Don’t care whether the message successfully arrives or not
+    - Synchronous send → Wait until the message arrives or not
+    - Asynchronous send → Use callback function, which is triggered when it receives a response from a Broker
