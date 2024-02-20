@@ -49,7 +49,7 @@
 
 - Overview
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/e44a26ef-329f-4598-9429-3f4078727a56/6b4b080b-0a45-4e65-a1bb-1db85f98abff/Untitled.png)
+    ![Untitled](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*BMsNAGvTkaLoeD7X819N1A.png)
     
     - Starts with generating an instance of `ProducerRecord`
         - target topic and value are necessary
@@ -70,3 +70,50 @@
     - Fire and forget → Don’t care whether the message successfully arrives or not
     - Synchronous send → Wait until the message arrives or not
     - Asynchronous send → Use callback function, which is triggered when it receives a response from a Broker
+- Sending a message synchronously
+    - A thread must wait until it gets response from a broker
+    
+    ⇒ not common
+    
+- Sending a message asynchronously
+    - can use a callback method to handle errors from a broker
+        
+        → implement `org.apache.kafka.clients.producer.Callback`
+        
+        → pass the implementation to `send()` method
+        
+- Configuring Producers
+    - client.id
+        
+        ⇒ to distinguish producers
+        
+    - acks
+        
+        ⇒ determine the number of partition replica that receives the record
+        
+        - `acks=0` : Don’t care whether any replica receives the record or not
+        - `acks=1` : Count as success when the a leader replica receives the record
+        - `acks=all` : Count as success when all in-sync replicas receive the record
+    - message delivery time
+        - two sections of it
+            - calling of send() ~ returning of result
+            - returning of result ~ call of callback
+        
+        ![Untitled](https://www.conduktor.io/kafka/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fo12xgu4mepom%2F18IoNzy4ocy0kMdyE5I4AE%2F023857fec700bdf8ff59d8971e5ce499%2FKafka_Producer_Retries_Delivery_Timeout_Process.png&w=3840&q=75)
+        
+        - `max.block.ms` : Determines maximum time that the producer can be blocked
+        - `delivery.timeout.ms` : Determines maximum time between after returning of send() and before receiving a response from a broker
+            
+            → delivery.timeout.ms ≥ linger.ms + request.timeout.ms
+            
+        - `request.timeout.ms` : Determines maximum time to wait the response from the broker
+        - `retries` : Determines maximum number to retry sending to the broker
+        - `retry.backoff.ms` : Determines waiting time between retries
+        - `linger.ms` : Determines waiting time before sending the batch
+        - `buffer.memory` : Determines maximum size of memory of waiting buffer
+        - `batch.size` : Determines the size (byte) of batch
+        - `max.in.flight.requests.per.connection` : Determines the maximum number of messages that can be sent even before receiving a response from a broker
+        - `enable.idempotence=true` : Guarantees the idempotence of records
+            - `max.in.flight.requests.per.connection` ≤ 5
+            - `retries` ≥ 1
+            - `acks = all`
