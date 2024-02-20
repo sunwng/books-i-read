@@ -117,3 +117,14 @@
             - `max.in.flight.requests.per.connection` ≤ 5
             - `retries` ≥ 1
             - `acks = all`
+- Partition
+    - If key is null, pick random partition, which is available now
+    - If there is a key, default partitioner uses hash of key to pick a specific partition
+        - same key → same partition
+        - but, when we increase the number of partition, it can not be guaranteed
+    - Keep balance with round robin algorithm
+    - We can use custom partitioner by implementing `org.apache.kafka.clients.producer.Partitioner`
+- Interceptor
+    - make it possible to add some features without modifying client codes
+    - `ProducerInterceptor.onSend` → Called just before serialization
+    - `ProducerInterceptor.onAcknowledgement` → Called after the producer receives a response from a broker
