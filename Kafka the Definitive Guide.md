@@ -128,3 +128,60 @@
     - make it possible to add some features without modifying client codes
     - `ProducerInterceptor.onSend` → Called just before serialization
     - `ProducerInterceptor.onAcknowledgement` → Called after the producer receives a response from a broker
+
+## CH05. Kafka Consumers: Reading Data from Kafka
+
+- Concept
+    - Consumer & Consumer Group
+        - Consumer is a part of Consumer Group
+        - Each consumer fetches its own partition
+            - Rule of assigning the partition → Implementation of `PartitionAssignor`
+        - If # of consumers > # of partitions → there are idle consumers
+        - Different consumer groups read all messages of topic independently from each other
+    - Consumer Group & Partition Rebalance
+        - When does rebalance occur?
+            - New consumer added to the group
+            - Topic changed (Partition added)
+        
+        ⇒ Reassign a partition to another consumer
+        
+        - Eager Rebalance (Default before ver 2.4)
+            
+            ![Untitled](https://cdn.confluent.io/wp-content/uploads/eager-rebalancing-protocol.jpg)
+            
+            - When the rebalance starts, all consumers stop reading, relinquish its ownership on the partition, rejoin to the group, and are assigned to a new partition
+            - Causes Stop-The-World
+        - Cooperative Rebalance (Default after ver 3.1)
+            
+            ![Untitled](https://cdn.confluent.io/wp-content/uploads/ideal-rebalance-protocol.jpg)
+            
+            - Consumer Group Leader picks the partitions, which need to be reassigned
+            - Only consumers related to reassignment target partitions relinquish its ownership and are assigned to a new partition
+- Consumer can read various topics (more than one)
+- Polling Loop
+    - `consumer.poll(timeout)`
+        - `timeout` → maximum time of blocking when there is no data in consumer buffer
+    - When a consumer first calls `poll()` → Find GroupCoordinator, participate in to the group, and is assigned to a partition
+    - If `poll()` is not called for `max.poll.interval.ms` → Consider this consumer dead
+- One Consumer, One Thread
+    - Using multi-thread to process the messages 
+    → refer https://www.confluent.io/blog/kafka-consumer-multi-threaded-messaging/
+- Configuring Consumers
+    - `fetch.min.bytes` → Minimum byte size of fetching records (If a size of records is less than this, it waits)
+    - `fetch.max.wait.ms` → Maximum time to wait fetching
+    - `fetch.max.bytes` → Maximum byte size of fetching records (considering memory of client server)
+        - but, if the batch from broker exceeds this value, broker ignores this value and send the records
+    - `max.poll.records` → Maximum number of records per polling
+    - `session.timeout.ms` → Maximum time the group coordinator considers the consumer dead when no heartbeat comes from the consumer
+    - `heartbeat.interval.ms` → Time of iteration of sending heartbeat
+    - `max.poll.interval.ms` → Maximum time the group coordinator considers the consumer dead when no polling comes from the consumer
+    - `request.timeout.ms` → Maximum time that consumer waits response from a broker
+    - `auto.offset.reset`
+        
+        → latest (default): If there is no valid offset, consumer reads from the latest
+        
+        → earliest (default): If there is no valid offset, consumer reads from the earliest
+        
+    - `enable.auto.commit` → Determine whether the consumer commits offset automatically or manually (default: true)
+    - partition.assignment.strategy → Determine partition assignment strategy
+        - Range / RoundRobin / Sticky / Cooperative Sticky
