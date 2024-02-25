@@ -129,7 +129,7 @@
     - `ProducerInterceptor.onSend` → Called just before serialization
     - `ProducerInterceptor.onAcknowledgement` → Called after the producer receives a response from a broker
 
-## CH05. Kafka Consumers: Reading Data from Kafka
+## CH04. Kafka Consumers: Reading Data from Kafka
 
 - Concept
     - Consumer & Consumer Group
@@ -185,3 +185,26 @@
     - `enable.auto.commit` → Determine whether the consumer commits offset automatically or manually (default: true)
     - partition.assignment.strategy → Determine partition assignment strategy
         - Range / RoundRobin / Sticky / Cooperative Sticky
+
+- Offset & Commit
+    - Offset Commit → update current cursor in the partition
+        - it commits the last message, not separately
+        - After rebalance, the consumer starts reading from the last committed offset
+    - Automatic Commit
+        - Every `auto.commit.interval.ms`, consumer commits the offset of the last message
+        - There is a chance to find duplicated consuming
+            
+            ![Untitled](https://www.oreilly.com/api/v2/epubs/9781491936153/files/assets/ktdg_04in06.png)
+            
+    - Commit Current Offset
+        - To reduce the number of duplicated message caused by rebalancing, we want to control the time to commit
+        - `commitSync()` → commits the last offset when polling is successful
+        - if `commitSync()` called before processing is done to prevent duplicated consuming, there is a chance to find message loss
+    - Asynchronous Commit
+        - Manual commit blocks the application until a consumer receives a response from a broker
+        - To avoid the blocking, we can use `commitAsync()`
+        - `commitAsync()` does not retry
+    - Combining Synchronous and Asynchronous Commits
+        - To make consuming robust, we can call both before consumer closes
+    - Committing a Specified Offset
+        - `commitSync(currentOffsets)` or `commitSync(currentOffsets)`
