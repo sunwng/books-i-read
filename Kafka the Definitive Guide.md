@@ -208,3 +208,15 @@
         - To make consuming robust, we can call both before consumer closes
     - Committing a Specified Offset
         - `commitSync(currentOffsets)` or `commitSync(currentOffsets)`
+- Rebalance Listener
+    - We can use callback methods to execute when the consumer is about to close or the rebalancing is about to start → `ConsumerRebalanceListener`
+    - `onPartitionAssigned` → After a partition is reassigned and before a consumer starts to read message from the partition
+    - `onPartitionRevoked` → After a partition is unassigned from a consumer
+        
+        (At here, the offset should be committed)
+        
+    - `onPartitionsLost` → On exceptional rebalancing situation that a given partition is already assigned to another consumer
+- Consuming Records with Specific Offsets
+    - `seekToBeginning` → From the first offset
+    - `seekToEnd` → From the last offset
+    - `seek` → Find specific offset
