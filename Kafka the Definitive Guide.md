@@ -220,3 +220,38 @@
     - `seekToBeginning` → From the first offset
     - `seekToEnd` → From the last offset
     - `seek` → Find specific offset
+
+## CH06. Kafka Internals
+
+- Cluster Membership
+    - Utilize Apache Zookeeper to keep the list of brokers
+- Controller
+    - one broker in a cluster acts as a controller
+    - In charge of electing the leader of partition
+    - When the controller realizes any broker has left the cluster, it assigns new brokers to partitions that the broker was assigned as a leader
+- Replication
+    - Essence of kafka architecture
+    - Leader Replica
+        - Write request is given to the leader
+    - Follower Replica
+        - replicates new messages from leader
+    - Follower replicas send read requests to a leader to sync with the leader
+        - gets the messages with offsets and also in order
+    - If a follower replica does not send any read request for 10s → consider it as out-of-sync replica
+        - opposite is in-sync replica
+- Request Processing
+    - Clients know where to request by fetching metadata
+        - includes lists of topics, number of partitions, information of replicas, which is a leader, …
+    - Directly read or write the messages using above information (cached)
+    - Write request
+        - Consumers (clients) only can read the messages, which are written successfully in all in-sync replicas
+- Physical Storage
+    - Default unit is a partition replica
+    - Partition Assignment
+        - Distribute replicas uniformly through brokers
+        - Each replica in a same partition should be assigned to different brokers
+    - File Management
+        - we can set retention period of each topic
+            - Kafka doesn’t store data ‘eternally’ and also doesn’t wait for consumers to read before deleting
+    - Uses index to search messages with specific offsets
+        - maps offsets to locations in the storage
