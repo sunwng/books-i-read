@@ -3,8 +3,6 @@
 > Kotlin + Spring 으로 개발하고 있는데, 내 코드는 Java 스타일인 것 같다
 > 
 
-## CH01. 코틀린이란 무엇이며, 왜 필요한가?
-
 - 코틀린의 주요 특징
     - 정적 타입 지정 언어임 (컴파일된다는 뜻)
     - 타입 추론을 지원하기 때문에 변수 타입을 직접 명시할 필요가 없음
@@ -23,9 +21,6 @@
         
     - 안전성: NPE 에 대한 안정성을 높였음 + `ClassCastException`도
     - 상호운용성: 자바의 기존 라이브러리를 사용할 수 있음
-
-## CH02. 코틀린 기초
-
 - Statement (문) vs Expression (식)
     - Statement → 값을 만들어낼 수 없다 (return 불가)
         - 그래서 자바에서의 `if-else` 에는 `return` 이 필요함
@@ -36,5 +31,5 @@
 - 스마트캐스트
     - `is` 를 통해 instance 타입을 검사하면 자동으로 그 인스턴스 타입으로 변환해줌
 - Exception → 코틀린의 Exception은 Unchecked Exception임
-
-## CH03. 함수 정의와 호출
+- 컬렉션
+    - 자바 컬렉션을 재활용함
