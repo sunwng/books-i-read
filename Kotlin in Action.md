@@ -33,3 +33,19 @@
 - Exception → 코틀린의 Exception은 Unchecked Exception임
 - 컬렉션
     - 자바 컬렉션을 재활용함
+- Class, Interface
+    - 기본적으로 public, final
+    - 내부 클래스가 외부 클래스의 필드를 참조하고 싶으면 inner class 로 선언
+    - primary constructor
+        
+        ```kotlin
+        class Sample (val name: String, val value: Int)
+        ```
+        
+    - secondary constructor: `constructor() : this() {}`
+    - 순서: primary constructor → initializer (`init {}`) → secondary constructor
+    - static → Object
+- Lambda
+    - 객체 형태의 함수
+    - 컬렉션 연산에 편함
+    - 자바는 람다 안에서 외부의 final 변수에만 접근 가능하지만 코틀린은 다 접근 가능
