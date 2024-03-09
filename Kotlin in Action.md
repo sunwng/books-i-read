@@ -50,3 +50,12 @@
     - 컬렉션 연산에 편함
     - 자바는 람다 안에서 외부의 final 변수에만 접근 가능하지만 코틀린은 다 접근 가능
     - 자바 스트림처럼 sequence 로 돌아다니게 할 수 있음 (.asSequence())
+- Types
+    - `?.` → compatible with null
+    - `?:` → call something when it is null
+    - `as?` → instead of generate `ClassCastException`, returns null
+    - `!!` 를 여러번 중첩하지 말자
+    - `lateinit` → 지연 초기화
+    - `Any` → 자바의 Object
+    - `Unit` → 자바의 Void
+    - concurrent 패키지 (e.g. `ConcurrentHashMap`) 은 자바 타입을 사용
