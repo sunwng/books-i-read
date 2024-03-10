@@ -255,3 +255,39 @@
             - Kafka doesn’t store data ‘eternally’ and also doesn’t wait for consumers to read before deleting
     - Uses index to search messages with specific offsets
         - maps offsets to locations in the storage
+
+## CH07. Reliable Data Delivery
+
+- What does kafka guarantee?
+    - Order of messages in the same partition
+    - It considers a message as committed when the message is written in all ISR
+    - Committed message would not be lost if there is at least one alive replica
+    - Consumer only can read the committed message
+- Replication
+    - All messages are written to a leader replica, and usually are read from the leader
+    - `replication.factor`
+        - number of replication for a topic
+        - needs to consider below factors
+            - availability → more replications, higher availability
+            - durability → more replications, higher durability
+            - throughput → more replications, lower throughput
+            - latency → more replications, higher latency
+            - cost → more replications, higher cost
+    - `unclean.leader.election.enable`
+        - option for whether to elect a new leader from out-of-sync replicas
+            - when all replicas are shut down
+        - default is `false`
+        - if `false`
+            - producer should wait until the leader is recovered
+        - if `true`
+            - the replica that recovered the fastest is elected as a leader
+            - can make message loss and break consistency
+    - `min.insync.replicas`
+        - determines minimum number of in-sync-replica to consider a message as committed
+- We can control a tradeoff b/w reliability and performance for each topic
+- Reliability on producer
+    - use proper `acks` configuration (`acks=1` or `acks=all`)
+    - need to handle error responses from a broker (leader)
+- Reliability on consumer
+    - check `auto.offset.reset`
+    - use proper `enable.auto.commit` , `auto.commit.interval.ms`
