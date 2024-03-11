@@ -59,3 +59,5 @@
     - `Any` → 자바의 Object
     - `Unit` → 자바의 Void
     - concurrent 패키지 (e.g. `ConcurrentHashMap`) 은 자바 타입을 사용
+- lazy
+    - `by lazy` 로 필드 초기화 지연
