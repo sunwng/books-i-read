@@ -61,3 +61,6 @@
     - concurrent 패키지 (e.g. `ConcurrentHashMap`) 은 자바 타입을 사용
 - lazy
     - `by lazy` 로 필드 초기화 지연
+- Generics
+    - `where T : UpperClassOrInterface` 로 제약 걸 수 있음
+    - T 는 nullable 하기에, not null 제약을 주고싶다면 `T : Any`
