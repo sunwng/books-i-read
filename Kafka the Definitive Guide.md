@@ -291,3 +291,18 @@
 - Reliability on consumer
     - check `auto.offset.reset`
     - use proper `enable.auto.commit` , `auto.commit.interval.ms`
+
+## CH09. Exactly Once Semantics
+
+- Consists of two key features; Idempotent producer and Transaction
+- Idempotent producer (`enable.idempotence=true`)
+    - Every message has its own Producer ID and Sequence ID
+    - Producer ID + Sequence ID = UID in a specific topic of a partition
+    - If a broker receives a message, which is processed already (can be recognized by above UID), it makes an error
+    - If a broker receives a message, which has a larger Sequence ID than expected, it also makes an error
+    - Without Transaction feature, when a producer is initialized, it gets a new Producer ID, which is generated from a broker
+    - Leader replica has recent 5 Sequence IDs of messages in memory
+    - and follower replicas not only sync messages but also update those IDs
+    - limitations
+        - it only prevents replication caused by producer’s internal logic
+        - If we call `producer.send()` with same message, it makes replication
