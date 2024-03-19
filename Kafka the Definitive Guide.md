@@ -306,3 +306,9 @@
     - limitations
         - it only prevents replication caused by producer’s internal logic
         - If we call `producer.send()` with same message, it makes replication
+- Transaction
+    - This is feature is for Kafka Streams
+        
+        e.g. Read Topic → Processing → Publish Topic
+        
+    - Need to consider isolation level of consumer (`isolation.level`)
