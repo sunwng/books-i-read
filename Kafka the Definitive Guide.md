@@ -312,3 +312,29 @@
         e.g. Read Topic → Processing → Publish Topic
         
     - Need to consider isolation level of consumer (`isolation.level`)
+
+## CH10. **Cross-Cluster Data Mirroring**
+
+- Mirroring
+    - data replication b/w clusters
+- Need to consider some trade-offs
+    - High latency
+    - Limited bandwidth
+    - Higher cost
+- Architectures
+    - Hub-and-Spokes Architecture
+        
+        ![Untitled](https://yqintl.alicdn.com/c3bcd95e96c03d73f464e9a188df61fae16fb5c0.png)
+        
+        - Applications are only able to use data stored in a same data center
+    - Active-Active Architecture
+        
+        ![Untitled](https://yqintl.alicdn.com/0c8161143c55fbaf4dca926252626ecb008064b5.png)
+        
+        - mirrors each other
+        - difficult to avoid read/write crash
+    - Active-Standby Architecture
+        
+        ![Untitled](https://yqintl.alicdn.com/8863c26821349fdc86df09371f9f390639945d75.png)
+        
+        - Only for failover
