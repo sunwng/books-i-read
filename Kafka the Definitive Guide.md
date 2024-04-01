@@ -338,3 +338,10 @@
         ![Untitled](https://yqintl.alicdn.com/8863c26821349fdc86df09371f9f390639945d75.png)
         
         - Only for failover
+        - Mirrors active cluster
+        - Inactive cluster is usually called as disaster recovery cluster
+        - Mirroring is usually asynchronous → DR cluster does not have the newest messages
+        - Determine from which offset to start reading
+            - offset topic replication
+            - timestamp-based recovery
+            - offset transformation
