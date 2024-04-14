@@ -64,3 +64,6 @@
 - Generics
     - `where T : UpperClassOrInterface` 로 제약 걸 수 있음
     - T 는 nullable 하기에, not null 제약을 주고싶다면 `T : Any`
+    - inline fun 에서는 reified 를 사용하여 런타임에 타입을 인지할 수 있도록 할 수 있음 (`<reified T>`)
+    - out → 공변성 부여 (읽기) / in → 반공변성 부여 (쓰기)
+    - star projection (`*`) 는 아직 알 수 없는 제네릭 타입임을 명시하기 위해 사용함 (`Any?` 와 다름)
