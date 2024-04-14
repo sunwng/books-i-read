@@ -345,3 +345,38 @@
             - offset topic replication
             - timestamp-based recovery
             - offset transformation
+
+## Wrap-Up
+
+- Kafka Producer Client [http://117.52.129.49/helloworld/6560422]
+    - Three parts: KafkaProducer, RecordAccumulator, Sender
+    - KafkaProducer -> `send()`
+        - can pass callback method
+        - execute Serialization, Partitioning, Compression
+        - If there is no given partitioner, it uses DefaultPartitioner
+            - has key ⇒ key → hash → choose partition
+            - no key ⇒ round-robin → choose partition
+    - RecordAccumulator
+        - saves records from `KafkaProducer.send()` → `RecordAccumulator.append()`
+        - manages records with a data structure, `batches<TopicPartition, Deque<RecordBatch>>`
+            - to prevent concurrency issue, it uses `ConcurrentMap`
+        - when it is called with append() method, it finds Deque with TopicPartition Key
+            - and check a size of last `RecordBatch`
+            - if there is a room, use it
+            - if not, create a new `RecordBatch`
+        - If there is  no room of `BufferPool` when it wants to make a new `RecordBatch`, it should wait until some of `BufferPool` get free (maximum is `max.block.ms`)
+    - Sender
+        - uses another thread
+        - sends records in RecordAccumulator
+        - uses drain() method to get targets (`Deque<RecordBatch>`)
+- Kafka Consumer Client [https://d2.naver.com/helloworld/0974525]
+    - ConsumerNetworkClient
+        - communicates with broker asynchronously using NetworkClient
+    - SubscriptionState
+        - manages consuming topics, partitions, offsets
+    - ConsumerCoordinator
+        - in charge of rebalance, offset initialization, offset commit
+    - Fetcher
+        - `poll()` call → `Fetcher.sendFetches()`
+        - check nextInLineRecords and completedFetches (in cache)
+            - if there is nothing in there, call `sendFetches()` to get records
