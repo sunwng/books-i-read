@@ -54,3 +54,45 @@
         
 - Need to consider synchronization of callers
 - Also consider synchronization of a reference that an object have as a dependency
+
+## CH05. Building Blocks
+
+- Even with delegation (e.g. using Vector), it is sometimes necessary to use client-side locking
+    - example
+        
+        ```kotlin
+        // not thread safe
+        for (int i = 0; i < vector.size(); i++)
+        	doSomething(vector.get(i));
+        ```
+        
+- Locking collection for a long time (e.g. for iteration) is not good for application
+    - it may occurs `ConcurrentModificationException`
+- Concurrent Collections
+    - Synchronized collections show low throughput (because of serialization of threads)
+    - `ConcurrentHashMap`
+        - uses lock striping mechanism (allow a greater degree of shared access)
+    - `CopyOnWriteArrayList`
+        - derives thread safety from the fact that as long as an effectively immutable object is properly published, no further synchronization is required
+    - `BlockingQueue`
+        - A thread calling `put` method blocks until space becomes available
+        - A thread calling `take` method blocks until an element is available
+- Blocking method can generate `InterruptedException`
+- Synchronizers
+    - Latches → Delays the progress of threads until it reaches terminal state
+    - FutureTask → Synchronization during async job
+    - Semaphores → Controls the number of threads it can be accessed
+    - Barriers → Waits until all threads come together at a barrier point
+
+## CH06. Task Execution
+
+- Parallelism can be met only if tasks are independent
+- Disadvantages of unbounded thread creation
+    - Thread lifecycle overhead (overhead by creating new thread)
+    - Resource consumption (More threads, more heap memory usage)
+    - Stability (Lack of memory makes application down)
+- Executor
+    - works as producer-consumer
+- Thread Pool
+    - tightly bound to work queue
+    - reuse used thread
