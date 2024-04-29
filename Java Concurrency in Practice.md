@@ -96,3 +96,15 @@
 - Thread Pool
     - tightly bound to work queue
     - reuse used thread
+
+## CH07. Cancellation and Shutdown
+
+- When InterruptedException occurs
+    - throws it to caller
+    - call `interrupt` method to stay interrupted
+- `RuntimeException` → kills its thread
+    - we can use `UncaughtExceptionHandler` to handle `RuntimeException`
+- Threads
+    - general thread → from main thread
+    - daemon thread
+        - JVM does not call finalize method in daemon thread when it shuts down
