@@ -108,3 +108,20 @@
     - general thread → from main thread
     - daemon thread
         - JVM does not call finalize method in daemon thread when it shuts down
+
+## CH08. Applying Thread Pools
+
+- If a job is executed with dependency on another job in a thread pool → possibility of deadlock
+- Size of thread pool → needs to be dynamically controlled
+- ThreadPoolExecutor
+    - arguments: corePoolSize / maximumPoolSize / keepAliveTime / workQueue (`BlockingQueue`) / threadFactory
+    - Three strategies of worker queue
+        - no size limit (`NewFixedThreadPool`, `NewSingleThreadExecutor`)
+        - has size limit
+        - not using queue (`SynchronousQueue`) ⇒ only when it has a lot of threads
+- Saturation Policy
+    - policy used when queue is full
+    - e.g. `AbortPolicy`, `CallerRunsPolicy`, …
+    - `RejectedExecutionHandler` handles this situation with given policy
+    - Default is `AbortPolicy` and it throws `RejectedExecutionException`
+- or we can use Semaphore to control size of queue
