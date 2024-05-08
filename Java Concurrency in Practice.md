@@ -125,3 +125,16 @@
     - `RejectedExecutionHandler` handles this situation with given policy
     - Default is `AbortPolicy` and it throws `RejectedExecutionException`
 - or we can use Semaphore to control size of queue
+
+## CH10. Avoiding Liveness Hazards
+
+- Deadlock
+    - multiple threads wait forever due to a cyclic locking dependency
+- Not like dbms, JVM does not help programs to resolve a deadlock
+- Lock-Ordering Deadlocks
+    - Using N locks, methods should check and get locks in a same order
+    (1st Lock, 2nd Lock , …)
+    - can occur by between objects
+- Avoiding and diagnosing deadlocks
+    - Use timeout (`tryLock`)
+    - Analyze with thread dump
