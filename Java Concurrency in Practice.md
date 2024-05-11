@@ -138,3 +138,19 @@
 - Avoiding and diagnosing deadlocks
     - Use timeout (`tryLock`)
     - Analyze with thread dump
+
+## CH11. Performance and Scalability
+
+- First make your program right, then make it fast
+- Scalability
+- : Ability to improve throughput or capacity when additional computing resources are added
+    - Many of tricks that improve performance in single-threaded program are bad for scalability
+- Costs introduced by threads
+    - Context switching
+- Memory synchronization
+    - JVM optimizes useless locks
+- Blocking
+    - JVM can implement blocking via
+        - spin waiting (repeatedly trying to acquire the lock until it succeeds)
+        → preferable for short waits
+        - suspending (needs help of OS) → preferable for long waits
