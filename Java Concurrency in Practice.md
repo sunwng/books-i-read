@@ -154,3 +154,13 @@
         - spin waiting (repeatedly trying to acquire the lock until it succeeds)
         → preferable for short waits
         - suspending (needs help of OS) → preferable for long waits
+- Reducing lock contention
+    - principal threat to scalability in concurrent applications is the exclusive resource lock
+    - two factors can affect lock contention
+        - how often the lock is requested
+        - how long it is held once acquired
+    - Narrowing lock scope → holds lock as briefly as possible
+        - e.g. use `synchronized` block instead of making a whole method synchronized
+    - Reducing lock granularity → lock splitting or lock striping 
+    (using separate locks instead of using one)
+        - e.g. use `synchronized` block with different locks
