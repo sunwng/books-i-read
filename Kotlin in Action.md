@@ -67,3 +67,13 @@
     - inline fun 에서는 reified 를 사용하여 런타임에 타입을 인지할 수 있도록 할 수 있음 (`<reified T>`)
     - out → 공변성 부여 (읽기) / in → 반공변성 부여 (쓰기)
     - star projection (`*`) 는 아직 알 수 없는 제네릭 타입임을 명시하기 위해 사용함 (`Any?` 와 다름)
+- Annotations
+    - kotlin 에서는 어노테이션 대상 함수를 지정할 수 있음 (e.g. `@get:Bar`)
+        - get → getter, set → setter, field → field, …
+    - JVM 관련
+        - `@JVMName` → 컴파일 될 때의 이름 지정
+        - `@JVMStatic` → 컴파일 될 때 정적 메소드로 노출
+        - `@JVMField` → 컴파일 될 때 getter/setter 없는 자바 필드로 지정
+    - Serialization / Deserialization 관련
+        - `@JsonExclude` → 해당 필드 무시
+        - `@JsonName` → 필드 이름 지정
