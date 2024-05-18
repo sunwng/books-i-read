@@ -164,3 +164,15 @@
     - Reducing lock granularity → lock splitting or lock striping 
     (using separate locks instead of using one)
         - e.g. use `synchronized` block with different locks
+        
+## CH12. Testing Concurrent Programs
+
+- Potential failures may be rare probabilistic occurrences
+- Testing for correctness
+    - check whether it throws `InterruptedException`
+    - use `Thread.isAlive()` to check whether it is waiting (or `Thread.isInterrupted()`)
+    - use `ExecutorService` to make a case when multiple threads are present
+    - useful classes for testing
+        - `CountDownLatch` → wait on the main thread
+        - `CyclicBarrier` → wait on each thread
+    - use `Thread.yeild()` to make context switching
