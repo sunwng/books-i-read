@@ -77,3 +77,7 @@
     - Serialization / Deserialization 관련
         - `@JsonExclude` → 해당 필드 무시
         - `@JsonName` → 필드 이름 지정
+- Reflections
+    - 런타임에 프로퍼티와 메소드에 접근하게 해줌
+    - 클래스는 `KClass` 타입으로, 메소드는 `KFunction` 타입으로, 프로퍼티는 `KProperty` 타입으로 가져옴
+    - `KProperty` 는 `KAnnotatedElement` 를 확장하고 `KAnnotatedElement` 의 `findAnnotation()` 함수를 통해 해당 프로퍼티의 어노테이션을 찾을 수 있음
