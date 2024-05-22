@@ -37,7 +37,7 @@
         println("After suspension point")
     }
     ```
-    
+    - suspendCoroutine uses caller’s Continuation (inside caller’s CoroutineContext)
 
 ## Coroutine Builder
 
