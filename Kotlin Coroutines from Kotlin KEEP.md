@@ -60,3 +60,22 @@
 
 - `Sequence{ }`, `yield{ }` for lazy executions
 - Uses different method (`createCoroutine()`) and it returns initial state of continuation (enable it to be lazy)
+
+## Continuation Passing Style
+
+- Every suspending functions and lambdas has an additional parameter (`Continuation`)
+- and suspend functions use `suspendCoroutineUninterceptedOrReturn` (from kotlin intrinsics) to access caller’s Continuation
+    - directly using Continuation can cause stack overflow
+- Manages `Continuation` in Heap space
+
+## State Machines
+
+- Compiled coroutine acts with a state machine
+    - At each suspending point, it changes variable `label`
+    - According to label, it executes corresponding block
+    - If it meets `COROUTINE_SUSPENDED` state, it returns
+
+## Coroutine Intrinsics
+
+- `suspendCoroutineUninterceptedOrReturn` (see above)
+- `intercepted` → when thread is changed, to get the context of coroutine
