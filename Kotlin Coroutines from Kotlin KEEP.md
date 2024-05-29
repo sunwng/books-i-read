@@ -43,6 +43,8 @@
 
 - Suspending functions cannot be invoked from regular functions
 - By using implementations of builder (e.g. `launch{ }`), we need to call `startCoroutine()` method of given suspend block
+- `runBlocking{}` blocks current thread
+- `coroutineScope{}` suspends itself
 
 ## Coroutine Context
 
