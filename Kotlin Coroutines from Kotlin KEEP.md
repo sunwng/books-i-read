@@ -84,3 +84,11 @@
 
 - `suspendCoroutineUninterceptedOrReturn` (see above)
 - `intercepted` → when thread is changed, to get the context of coroutine
+
+## Channel
+
+- Channel works like `BlockingQueue` in Java
+- Capacity
+    - `RENDEZVOUS` → synchronous (like `SynchronousQueue` of `BlockingQueue`)
+    - `UNLIMITED` → unlimited queue
+    - `BUFFERED` → fixed length of queue
