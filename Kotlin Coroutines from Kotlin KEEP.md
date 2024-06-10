@@ -46,6 +46,8 @@
 - `runBlocking{}` blocks current thread
     - uses `EmptyCoroutineContext` [[source](https://github.com/Kotlin/kotlinx.coroutines/blob/master/kotlinx-coroutines-core/concurrent/src/Builders.concurrent.kt#L24)]
 - `coroutineScope{}` suspends itself
+- `launch{}` works asynchronously
+    - independent from caller
 - All builders are extension of `CoroutineScope`
     - these implementations have their own `CoroutineContext`
 
