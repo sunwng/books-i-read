@@ -38,3 +38,15 @@
     - Refactor the field to not be nullable
         - use `lateinit` and `delegates.notNull()`
     - Abusing not null assertion (`!!`) is not good
+
+## Chapter 2: Readability
+
+- Item 11: Design for readability
+    - developers read code much more than they write it
+- Item 12: Operator meaning should be consistent with its function name
+    - title is description
+- Item 13: Avoid returning or operating on Unit?
+    - Using Unit? to represent logical values is misleading
+    - Can be mislead let, elvis operations
+- Item 14: Specify the variable type when it is not clear
+    - Type might be an important information both for developer and for compiler
