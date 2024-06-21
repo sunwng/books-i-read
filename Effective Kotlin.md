@@ -50,3 +50,19 @@
     - Can be mislead let, elvis operations
 - Item 14: Specify the variable type when it is not clear
     - Type might be an important information both for developer and for compiler
+- Item 15: Consider referencing receivers explicitly
+    - title is description
+- Item 16: Properties should represent state, not behavior
+    - properties in kotlin class represent accessors, not fields
+        - that is why it has custom getter and setter
+    - but, this fact can mislead us to use properties to have behavior
+    - typical situations when we should use functions instead of properties
+        - operation is computationally expensive
+        - operation involves business logic
+        - calling the member twice in succession produces different results
+        - the order of execution is important
+        - getters should not change property state
+- Item 17: Consider naming arguments
+    - it definitely increases readability
+- Item 18: Respect coding conventions
+    - title is description
