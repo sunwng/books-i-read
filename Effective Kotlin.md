@@ -66,3 +66,21 @@
     - it definitely increases readability
 - Item 18: Respect coding conventions
     - title is description
+
+## Chapter 3: Reusability
+
+- Item 19: Do not repeat knowledge
+    - business logics usually changes a lot
+    - the biggest enemy of changes is knowledge repetition
+    - but, when codes only look similar but represent different knowledge, it needs to be repeated
+    - “are they more likely going to change toghether or separately?” → most important question to decide it
+    - common algorithms are not
+    - SRP → A class should have only one reason to change
+- Item 20: Do not repeat common algorithms
+    - title is description
+- Item 21: Use property delegation to extract common property patterns
+    - use `lazy`, `by`, `Delegates.observable,` `Delegates.vetoable`
+- Item 22: Use generics when implementing common algorithms
+    - title is description
+- Item 23: Avoid shadowing type parameters
+    - title is description
