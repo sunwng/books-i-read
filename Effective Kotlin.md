@@ -84,3 +84,7 @@
     - title is description
 - Item 23: Avoid shadowing type parameters
     - title is description
+- Item 24: Consider variance for generic types
+    - use `out` and `in`
+- Item 25: Reuse between different platforms by extracting common modules
+    - title is description
