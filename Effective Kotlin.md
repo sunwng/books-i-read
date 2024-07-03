@@ -88,3 +88,21 @@
     - use `out` and `in`
 - Item 25: Reuse between different platforms by extracting common modules
     - title is description
+
+## Chapter 4: Abstraction design
+
+- Item 26: Each function should be written in terms of a single level of abstraction
+    - let us clearly see what the general flow of codes is
+    - functions should be small and have a minimal number of responsibilities
+- Item 27: Use abstraction to protect code against changes
+    - abstracting constants making them variable
+    - abstracting logics making them function
+    - abstracting functions making them class
+    - abstracting classes making them interface
+- Item 28: Specify API stability
+    - we can use annotations like `@Deprecated`
+- Item 29: Consider wrapping external API
+    - having high coupling w/ external API makes logic unstable
+    - use them w/ wrapper (e.g. port and adapter in hexagonal architecture)
+- Item 30: Minimize elements visibility
+    - title is description
