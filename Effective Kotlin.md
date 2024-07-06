@@ -106,3 +106,7 @@
     - use them w/ wrapper (e.g. port and adapter in hexagonal architecture)
 - Item 30: Minimize elements visibility
     - title is description
+- Item 31: Define contract with documentation
+    - use [Kdoc](https://kotlinlang.org/docs/kotlin-doc.html)
+- Item 32: Respect abstraction contracts
+    - title is description
