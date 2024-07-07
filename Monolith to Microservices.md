@@ -1,6 +1,23 @@
 > Objective: 
 > One of my current projects is to transform monolithic software to microservices without downtime. I want to get to know some ways to achieve it and get some advice from this book.
 
+## CH01. Just Enough Microservices
+
+- Microservices
+    - **independently deployable** services modeled around a business domain
+        - services should be loosely coupled
+    - communicate w/ each other **via networks**
+        - needs to think about latencies, transactions
+- Monolith
+    - Single Process Monolith
+    - Modular Monolith
+        - divided into modules, but needs to be deployed together
+- Coupling & Cohesion
+    - implementation coupling (technologically coupled)
+    - temporal coupling (because of synchronous communication)
+    - deployment coupling
+    - domain coupling
+
 ## CH04. Decomposing the Database
 
 - Splitting the database first, or code?
