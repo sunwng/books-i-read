@@ -18,6 +18,17 @@
     - deployment coupling
     - domain coupling
 
+## CH02. Planning a Migration
+
+- Understanding a goal
+    - There must be something to achieve by doing migration
+- Importance of incremental migration
+    
+    > *If you do a big-bang rewrite, the only thing you’re guaranteed of is a big bang.*
+    — Martin Fowler
+    > 
+    - Quick iterations are important as it makes wrong migration reversible
+
 ## CH04. Decomposing the Database
 
 - Splitting the database first, or code?
