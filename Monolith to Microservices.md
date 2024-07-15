@@ -28,6 +28,14 @@
     — Martin Fowler
     > 
     - Quick iterations are important as it makes wrong migration reversible
+- Decomposing an existing monolithic system
+    - Domain-Driven Design
+        - helps to define boundaries of services (bounded contexts)
+    - Event Storming
+        - w/ tech and non-tech stakeholders
+        - domain events ⇒ aggregates ⇒ bounded contexts
+    - Knowing dependencies b/w domains
+        - can figure out which domain is easier to extract than others
 
 ## CH04. Decomposing the Database
 
