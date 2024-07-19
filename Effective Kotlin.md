@@ -110,3 +110,20 @@
     - use [Kdoc](https://kotlinlang.org/docs/kotlin-doc.html)
 - Item 32: Respect abstraction contracts
     - title is description
+
+## Chapter 5: Object creation
+
+- Item 33: Consider factory functions instead of constructors
+    - factory functions are functions used as an alternative to constructors
+        - advantage 1: they have names
+        - advantage 2: they can return an object of any subtype of their return type
+        - advantage 3: we can control visibility
+        - advantage 4: they can construct objects which might otherwise be complicated to construct
+    - companion object factory functions
+    - extension factory functions
+    - face constructors
+    - can make interface look like it has a constructor
+- Item 34: Consider a primary constructor with named optional arguments
+    - use default arguments instead of telescoping constructor pattern and builder pattern
+- Item 35: Consider defining a DSL for complex object creation
+    - it can make creating complex object really simple
