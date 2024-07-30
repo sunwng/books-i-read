@@ -37,6 +37,12 @@
     - Knowing dependencies b/w domains
         - can figure out which domain is easier to extract than others
 
+## CH03. Splitting the Monolith
+
+- Leaving functionality in monolith gives us more options
+    - rollback point, validation, parallel implementation, …
+- Rewrite only small pieces of functionality at a time and ship it to customer regularly
+
 ## CH04. Decomposing the Database
 
 - Splitting the database first, or code?
