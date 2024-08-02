@@ -127,3 +127,28 @@
     - use default arguments instead of telescoping constructor pattern and builder pattern
 - Item 35: Consider defining a DSL for complex object creation
     - it can make creating complex object really simple
+
+## Chapter 6: Class design
+
+- Item 36: Prefer composition over inheritance
+    - only works for is-a relationship
+    - using composition can be an strong alternative
+    - it takes everything from the superclass
+    - inheritance breaks encapsulation
+- Item 37: Use the data modifier to represent a bundle of data
+    - it generates `toString`, `equals`, `hashCode`, `copy`, `componentN` functions automatically
+    - use data class instead of using tuples (`Pair`, `Triple`)
+- Item 38: Use function types instead of interfaces to pass operations and actions
+    - Single-Abstract Method
+- Item 39: Prefer class hierarchies to tagged classes
+    - sealed class instead of heavy enum
+- Item 40: Respect the contract of `equals`
+    - title is description
+- Item 41: Respect the contract of `hashCode`
+    - title is description
+- Item 42: Respect the contract of `compareTo`
+    - title is description
+- Item 43: Consider extracting non-essential parts of your API into extensions
+    - extensions need to be imported separately
+    - extensions are not listed as members in the class reference
+- Item 44: Avoid member extensions
