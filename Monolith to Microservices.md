@@ -42,6 +42,13 @@
 - Leaving functionality in monolith gives us more options
     - rollback point, validation, parallel implementation, …
 - Rewrite only small pieces of functionality at a time and ship it to customer regularly
+- Migration patterns
+    - Strangler Fig pattern
+        1. Identify a target from the existing system
+        2. Implement it in a new service
+        3. Re-route (we can call both to validate the functionality)
+        - it doesn’t work too well when the functionality to be moved is deeper inside inside the existing system
+        - we can use feature toggle to control where to route
 
 ## CH04. Decomposing the Database
 
