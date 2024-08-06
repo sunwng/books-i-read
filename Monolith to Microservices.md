@@ -49,6 +49,15 @@
         3. Re-route (we can call both to validate the functionality)
         - it doesn’t work too well when the functionality to be moved is deeper inside inside the existing system
         - we can use feature toggle to control where to route
+    - Changing behavior while migrating functionality
+        - it makes it difficult to rollback to original system
+        - migrating completely and then adding new feature is standard
+    - Branch by Abstraction pattern
+        - when the migration target is deeper inside the monolithic system
+        1. Create an abstraction for the functionality to be replaced
+        2. Change codes to use it
+        3. Create a new implementation of it to call a new microservice
+        4. Control traffic b/w them (feature toggle, parallel-running validation, …)
 
 ## CH04. Decomposing the Database
 
