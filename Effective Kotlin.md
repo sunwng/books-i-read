@@ -152,3 +152,17 @@
     - extensions need to be imported separately
     - extensions are not listed as members in the class reference
 - Item 44: Avoid member extensions
+
+## Chapter 7: Make it cheap
+
+- Item 45: Avoid unnecessary object creation
+    - use lazy, primitives
+- Item 46: Use inline modifier for functions with parameters of functional types
+    - slightly better performance
+    - non-local return is allowed
+    - cannot be recursive
+    - cannot control visibility (`internal`, `private`)
+- Item 47: Consider using inline classes
+    - title is description
+- Item 48: Eliminate obsolete object references
+    - make it `null` after using it
