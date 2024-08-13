@@ -58,6 +58,12 @@
         2. Change codes to use it
         3. Create a new implementation of it to call a new microservice
         4. Control traffic b/w them (feature toggle, parallel-running validation, …)
+    - Decorating Collaborator pattern
+        - add more functionalities on proxy
+        - it can modify the response to customer (not use same response from the monolith)
+        - it can do something more after getting response from the monolith
+    - Change Data Capture pattern
+        - it can be achieved with database trigger or using transaction log
 
 ## CH04. Decomposing the Database
 
