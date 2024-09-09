@@ -77,3 +77,7 @@
         - It is much easier to understand what data is needed by the new service
         - Can have a benefit of independent deployability
         - But, usually leave the database shared, only split the code
+- Schema Separation
+    - Make a new schema for a new service, and maintain the view (same as before) for other services to use
+- Database Wrapping Service
+    - It can be used when a schema is a hot spot from a lot of applications
