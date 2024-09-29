@@ -81,3 +81,9 @@
     - Make a new schema for a new service, and maintain the view (same as before) for other services to use
 - Database Wrapping Service
     - It can be used when a schema is a hot spot from a lot of applications
+- Split the database first, then the code
+    - number of database calls increases
+    - can break transactional integrity
+- Split the code first, then the database
+    - much easier to understand what data is needed by the new service
+        - easy to recognize bounded context b/w domains
