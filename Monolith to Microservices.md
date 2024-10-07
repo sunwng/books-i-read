@@ -87,3 +87,18 @@
 - Split the code first, then the database
     - much easier to understand what data is needed by the new service
         - easy to recognize bounded context b/w domains
+- What about transaction?
+    - Two Phase Commit (2PC)
+        - vote → commit
+        - lot of drawbacks (locks, deadlocks, transaction time, …)
+    - SAGA
+        - failure modes
+            - backward recovery
+            - forward recovery
+        - using compensatory transactions to rollback (semantic rollback)
+        - adjust the order of the process, such as moving frequently failing steps to the front
+        - types
+            - orchestrated saga
+                - high coupling b/w domains
+            - choreographed saga
+                - distribute responsibilities
