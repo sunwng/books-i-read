@@ -18,3 +18,8 @@
         - importance of data (cache is volatile)
         - expiration of data
         - consistency of data
+
+## CH02. Back-of-theE-Envelope Estimation
+
+- reading disk is still slow whereas memory is fast
+- simple compression is fast
