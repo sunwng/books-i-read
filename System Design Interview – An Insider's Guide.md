@@ -23,3 +23,12 @@
 
 - reading disk is still slow whereas memory is fast
 - simple compression is fast
+
+## CH03. A Framework for System Design Interviews
+
+1. Understand the problem and establish design scope
+    - doing right and clear questions
+    - make appropriate assumptions
+    - get information to design a system
+2. Propose high-level design and get buy-in
+3. Design deep dive
