@@ -32,3 +32,30 @@
     - get information to design a system
 2. Propose high-level design and get buy-in
 3. Design deep dive
+
+## CH04: Design a Rate Limiter
+
+- Control the rate of traffic sent by a client
+- Benefits
+    - prevent resource starvation caused by Denial of Service attack
+    - reduce cost (if use paid third party APIs)
+    - prevent servers from begin overloaded
+- Where should it be implemented?
+    - separate service => API gateway
+    - in application code
+- Algorithms
+    - Token bucket
+        - requests check if there is enough token in a bucket
+        - refiller refills tokens periodically
+        - two parameters (bucket size, refill rate) can be challenging to tune
+    - Leaking bucket
+        - uses queue instead of bucket
+        - requests are polled from the queue at regual intervals
+        - queue can be filled with old requests
+    - Fixed window counter
+        - counts requests in fixed size of time
+        - there can be a burst of traffic at the edges of time
+    - Sliding window log
+        - fixes problem of fixed window counter
+        - keeps track of request timestamps
+        - outdated timestamps based on current request are removed
