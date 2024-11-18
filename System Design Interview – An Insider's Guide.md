@@ -59,3 +59,8 @@
         - fixes problem of fixed window counter
         - keeps track of request timestamps
         - outdated timestamps based on current request are removed
+    - Sliding window counter algorithm
+        - Fixed window counter + Sliding window log
+            - uses fixed window and considers previous window
+        - Considers previous window with following formula
+            - considered requests from previous window = # of requests of previous window * (1 - time elapsed from the start line of current window / window size)
