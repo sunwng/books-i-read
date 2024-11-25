@@ -19,3 +19,24 @@
         - shared by all threads
         - constants, static variables, ...
         - runtime constant pool (strings, literals, ...)
+
+## CH03. Garbage Collector & Memory Allocation Strategy
+
+- Key Questions
+    - Which memory to collect
+    - When to collect
+    - How to collect
+- Checking whether target is dead
+    - it does not use Reference Counting Algorithm because of drawback on circular reference
+    - instead, uses Reachability Analysis Algorithm
+        - starting nodes are called GC root
+        - candidates of GC root
+            - objects that are referenced by JVM Stack
+            - objects that are referenced as a static variable
+            - objects that are used as a constant
+            - objects that are locked with synchronized keyword
+    - types of references
+        - strong reference: usual reference => not a target of gc
+        - soft reference: useful but not neccesary => can survive until memory is available
+        - weak reference: weaker than soft reference => will be collected at next gc
+        - phantom reference: the weakest reference
