@@ -40,3 +40,25 @@
         - soft reference: useful but not neccesary => can survive until memory is available
         - weak reference: weaker than soft reference => will be collected at next gc
         - phantom reference: the weakest reference
+- Garbage Collection Algorithms
+    - Generational Collection Theory
+        - modern GCs are based on this theory
+        - hypothesis
+            - weak generational hypothesis: most objects die early
+            - strong generational hypothesis: more GC iterations that objects survive, more possibilities they survive more
+            - number of references between generations (old gen, young gen) is less than references in each generation
+    - Mark and Sweep Algorithm
+        - mark objects to be collected, then collect them
+        - drawbacks
+            - efficiency is irregular (depends on the number of objects)
+            - memory fragmentation
+    - Mark and Copy Algorithm
+        - divide memory into same size of two spaces
+        - move survived objects from one space to the other space
+        - drawback
+            - memory size decreases to a half
+        - according to a research, 98% of objects in new generation could not survive
+        => use eden space (80%) and two survival spaces (each 10%)
+            - use eden space and one survival space => after gc survived objects are moved to the other survival space
+    - Mark and Compact Algorithm
+        - mark, move, collect
