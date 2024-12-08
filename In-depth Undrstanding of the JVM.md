@@ -62,3 +62,20 @@
             - use eden space and one survival space => after gc survived objects are moved to the other survival space
     - Mark and Compact Algorithm
         - mark, move, collect
+- Classic GCs
+    - Serial Collector: Single thread
+    - ParNew Collector: Uses multi-thread for collecting
+    - CMS Collector: Minimizes stop-the-world time
+        - initial mark → concurrent mark → re-mark → concurrent sweep
+        - initial mark and re-mark requires stop-the-world
+    - G1 Collector
+        - collects memory by specific region (not by all new gen, all old gen, …)
+        - uses humongous region to handle large objects
+        - purpose of each region can be changed by gc
+        - checks trash value of each region (trash value includes to-be available space of the region and expecting time to collect)
+        - collects memory of region where the trash value is the highest
+        - uses bi-directional remembered set (target it references and target it is referenced)
+        - during concurrent marki phase, new objects are allocated at a new region (higher memory address than the others)
+        - TAMS pointer handles the highest memory address
+        - initial mark → concurrent mark → re-mark → copy and sweep
+            - TAMS pointer is reassigned during initial mark phase
