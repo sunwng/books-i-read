@@ -64,3 +64,24 @@
             - uses fixed window and considers previous window
         - Considers previous window with following formula
             - considered requests from previous window = # of requests of previous window * (1 - time elapsed from the start line of current window / window size)
+
+## CH05: Design Consistent Hashing
+
+- Usually use hashing to distribute something (traffic, data, …)
+    - When the number of distribution destination is changed → difficult to handle hard coded hashing (rehashing problem)
+        - Consistent Hashing is to solve this problem
+- Consistent Hashing
+    - Make only k (number of keys) / n (number of slots) keys remapped on average when hash table needs to be resized
+    
+    (Traditional hash tables require all keys to be remapped)
+    
+- How it works
+    - Collect lower end and higher end of hash keys and make it circle
+    - Allocate slots (distribution destinationo) on the circle
+    - When a hash key is given, find the nearest slot in a clockwise manner
+    - When a slot is added or removed, only small portion of hash keys needs to be remapped
+- Problems
+    - If there was any adding or removing slot history, hash key partitions cannot be evenly distributed
+    - Also, hash keys are easy to be not evenly distributed
+    
+    ⇒ By making virtual nodes (1 distribution destination can have N nodes), these two problems can be solved
