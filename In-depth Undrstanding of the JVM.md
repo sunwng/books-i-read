@@ -79,3 +79,31 @@
         - TAMS pointer handles the highest memory address
         - initial mark → concurrent mark → re-mark → copy and sweep
             - TAMS pointer is reassigned during initial mark phase
+
+## CH06. Class File Structure
+
+- Language on JVM → Language Compiler → Bytecode (class file) → JVM reads
+- Structure
+    - types
+        - unsigned number: basic data types
+            - u1 (1 byte), u2 (2 byte), …
+        - table: composite data type, composed of several unsigned numbers and another tables
+    - class file starts with magic number of 4 bytes
+        - indicates it is jvm-allowed file (`0xCAFEBABE`)
+    - minor and major version of JDK follows
+        - 2 bytes of minor version and 2 bytes of major version
+    - next, indicates the size of constant pool (2 bytes)
+        - starts with index number 1 (index number 0 exists for reference check)
+    - access flag
+        - indecates it is class or interface or public or abstract, …
+    - class index, parent class index, interface index
+        - interface index is set of u2 data type (multi-implementation is allowed)
+    - field table
+        - explains variables in a class or interface
+    - method table
+    - attribute table
+        - code attribute
+            - body of method
+            - size of bytecode command is u1 (1 byte), which means jvm uses maximum 256 commands (now it’s around 200)
+            - default argument size of instance code is 1 (`this`)
+            - static is 0 (no need to use `this`)
