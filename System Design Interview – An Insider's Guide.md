@@ -85,3 +85,20 @@
     - Also, hash keys are easy to be not evenly distributed
     
     ⇒ By making virtual nodes (1 distribution destination can have N nodes), these two problems can be solved
+
+## CH06. Design a Key-Value Store
+
+- Single server key-value store
+    - using in memory hash table ⇒ intuitive approach
+        - fast but not scalable
+- Distributed key-value store
+    - need to consider CAP theorem
+        - Consistency, Availability, Partition Tolerance
+    - in real world, partition tolerence cannot be avoided
+    - data partition ⇒ use consistent hashing
+    - data is replacated asynchronously over N servers
+    - how to meet consistency
+        - write operation is considered successful when it is acknowledged from N replicas
+        - read operation is considered successful when it gets responses from at least N replicas
+    - needs to resolve data conflicts
+        - can be handled using vector clock
