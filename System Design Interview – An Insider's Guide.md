@@ -102,3 +102,10 @@
         - read operation is considered successful when it gets responses from at least N replicas
     - needs to resolve data conflicts
         - can be handled using vector clock
+- failure detection
+    - all to all multicasting ⇒ inefficient
+    - each node randomly checks another node’s heartbeat
+- handle temporary failures
+    - use hinted handoff (down node is temporarily replaced by another alive node)
+- handle permanent failures
+    - keep data synchronously stored in different data centers
