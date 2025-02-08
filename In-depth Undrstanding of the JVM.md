@@ -107,3 +107,20 @@
             - size of bytecode command is u1 (1 byte), which means jvm uses maximum 256 commands (now it’s around 200)
             - default argument size of instance code is 1 (`this`)
             - static is 0 (no need to use `this`)
+            
+## CH07. Class Loading Mechanism
+
+- Process
+    - Loading → Verification → Preparation → Resolution → Initialization → Using → Unloading
+        - Verification + Preparation + Resolution = Linking
+    - Start of Loading, Verification, Preparation, Initialization, Unloading must be sequential
+- Loading
+    - find and get binary byte stream exactly matching with given class
+        - there is no more guideline for this step 
+        ⇒ increased degree of freedom to implement this step
+        - loading from zip, jar, war, ...
+        - loading from network
+        - generating dynamically during runtime (dynamic proxy)
+    - transform static storage structure expressed as byte stream to runtime data structure
+    - make `java.lang.Class` object, which expresses loading target class, in heap memory
+        - application uses this object to utilize data stored in method area
