@@ -107,7 +107,7 @@
             - size of bytecode command is u1 (1 byte), which means jvm uses maximum 256 commands (now it’s around 200)
             - default argument size of instance code is 1 (`this`)
             - static is 0 (no need to use `this`)
-            
+
 ## CH07. Class Loading Mechanism
 
 - Process
@@ -124,3 +124,25 @@
     - transform static storage structure expressed as byte stream to runtime data structure
     - make `java.lang.Class` object, which expresses loading target class, in heap memory
         - application uses this object to utilize data stored in method area
+
+## CH07. Design a Unique ID Generator in Distributed Systems
+
+- Approaches
+    - Multi-master replication
+        - each database server increases next ID not by 1, but by K (K is the number of servers)
+        - Hard to scale out (multiple datacenters, multiple servers)
+        - IDs do not go up with time across servers
+    - UUID
+        - uses system-generating UUID (128 bit)
+        - does not go up with time
+        - non-numeric
+    - Ticket Server [[reference](https://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap/)]
+        - web servers use one single ticket server to get incremented ID
+        - single point of failure
+    - Twitter Snowflake Approach
+        - divides ID into several sections
+            - Sign bit
+            - Timestamp: includes miliseconds
+            - Datacenter ID
+            - Machine ID
+            - Sequence Number: increments by 1 on each machine/process and is reset to 0 every milisecond
