@@ -109,3 +109,8 @@
     - use hinted handoff (down node is temporarily replaced by another alive node)
 - handle permanent failures
     - keep data synchronously stored in different data centers
+- Additional Studies
+    - InnoDB (e.g. MySQL)
+        - auto-increment option ensures unique ID usually
+        - it uses data structure to manage uniquely incrementing ID for each table in memory
+        - earlier transaction takes lock of the data structure and uses the next incremented ID
