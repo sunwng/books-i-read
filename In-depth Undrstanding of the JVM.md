@@ -146,3 +146,37 @@
             - Datacenter ID
             - Machine ID
             - Sequence Number: increments by 1 on each machine/process and is reset to 0 every milisecond
+## CH11. Backend Compile and Optimization
+
+- Method inline
+    - remove method call and use the value directly
+        
+        e.g. `x = b.get()` → `x = b.value`
+        
+- Redundant store elimination
+    - replace call for same value to use already-allocated value
+        
+        e.g. `z = b.value` → `z = x`
+        
+- Copy propagation
+    - remove useless local variables
+        
+        e.g. `sum = x + z` → `sum = x + x`
+        
+- Dead code elimination
+- Escape analysis
+    - degree of escape
+        - GlobalEscape: an object can access another thread
+        - ArgEscape: an object is delivered or referenced by another, but do not escape globally
+        - NoEscape: an object only lives in a method
+    - decision making to choose whether it needs to allocate an object in heap or not
+        - using heap is an overhead for gc
+    - stack allocation
+        - if an object is not GlobalEscape, it does not have to use heap
+    - scala substitution
+        - substitue an object to scala form (atomic form)
+    - synchronization elemination
+- Common subexpression elimination
+    - static, already-analyzed expressions are replaced with the outcome of the analysis
+- Array bound checking elimination
+- …
