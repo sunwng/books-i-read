@@ -180,3 +180,26 @@
     - static, already-analyzed expressions are replaced with the outcome of the analysis
 - Array bound checking elimination
 - …
+
+## CH12. Java Memory Model and Thread
+
+- in hardware
+    - uses cache between processor and memory
+    - provokes cache coherence issue
+- in jvm
+    - defines own memory model to be compatible with various os and hardwares
+    - each java thread has its own task memory
+        - they can not access directly another one's task memory (must pass through main memory)
+    - methods to control between task memory and main memory
+        - lock
+        - unlock
+        - read
+        - load
+        - use
+        - assign
+        - store
+        - write
+    - volatile: uses the most recent value of variable in main memory
+        - only guarantees visibility
+        - prevents command from re-sorting
+        - but also prone to concurrency issue
