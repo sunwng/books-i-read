@@ -136,3 +136,14 @@
         - needs to check how many hash values the function must generate
     - or base62 (number + all english alphabet) conversion can work
         - unique numeric id : base64 string : logn url = 1 : 1 : 1
+
+## CH10. Design a Notification System
+
+- Notification server can be connected with multiple third-party systems (APN, FCM, SMS, Email, …)
+    - those systems can make a bottleneck (maximum cap of throughput)
+    
+    ⇒ use message queues for each system
+    
+- It needs to prevent data loss
+    - before entering message queue, persist it in a database marked with `not-processed`
+    - after sending notification, update it as `processed`
