@@ -124,3 +124,15 @@
             - counter (initialized with random value) ⇒ 3bytes
             
             = 12 bytes
+
+## CH08. Design a URL Shortener
+
+- Process
+    1. Client → (short url) → url shortner server
+    2. url shortner server → (long url with 301 or 302 status) → Client
+    3. Client → (long url) → business server
+- Method to make a short url
+    - use hash function
+        - needs to check how many hash values the function must generate
+    - or base62 (number + all english alphabet) conversion can work
+        - unique numeric id : base64 string : logn url = 1 : 1 : 1
