@@ -203,3 +203,24 @@
         - only guarantees visibility
         - prevents command from re-sorting
         - but also prone to concurrency issue
+- JVM
+    - depends on jdk version
+    - but usually uses kernel thread
+        - high context switching overhead
+    - also uses preemptive scheduling
+    - coroutine emerged, and virtual thread came up
+
+## CH13. Thread Safe and Lock Optimization
+
+- What is Thread-Safe?
+    - Doesn’t have to consider particular thread scheduling or alternative running method
+    - No need to additional synchronization method or coordination by caller
+- Degree of Thread-Safe
+    - immutable
+        - e.g. final
+    - absolute thread-safe
+        - no need to additional synchronization method by caller
+    - conditional thread-safe
+        - usual concurrent classes (e.g. Vector, ConcurrentHashMap, …)
+    - thread-compatible
+    - thread-unsafe
