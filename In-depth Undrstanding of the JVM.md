@@ -224,3 +224,17 @@
         - usual concurrent classes (e.g. Vector, ConcurrentHashMap, …)
     - thread-compatible
     - thread-unsafe
+- Mutual Exclusion
+    - mutex, semaphore ⇒ uses synchronized keyword
+        - bytecode command is `monotirenter`, `monitorend`
+        - high overhead (jvm thread : kernel thread = 1 : 1)
+    - we can optimize it with `ReentrantLock`
+- Atomic Class with CAS algorithm
+    - probability of ABA problem can be solved with `AtomicStampedReference`
+- Set one consumer in Producer Consumer Pattern
+- Lock Optimization
+    - Spin Lock ⇒ Do not make thread changed if locked time of an object is short enough, instead, waits until it is released
+    - Lock Elimination ⇒ compiler eliminates useless lock during compile time
+    - Biased Lock
+        - it lets revisiting thread do not use CAS and Lock
+        - the other threads use lightweight lock instead of heavyweight lock
