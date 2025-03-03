@@ -147,3 +147,26 @@
 - It needs to prevent data loss
     - before entering message queue, persist it in a database marked with `not-processed`
     - after sending notification, update it as `processed`
+
+## CH11. Design a News Feed System
+
+- Feed Publishing
+    - at post service, persist post in both db and cache
+    - at feed service, update related friends’ feed cache
+        - feed cache maps `user_id` to `post_id`
+    - at notification service, notify to related friends
+- Feed Building
+    - at feed service, fetch news feed cache
+- Process
+    1. Publish API
+        - uses persisting job in post service
+        - after persisting it publishes an event (published event)
+        - API returns OK
+    2. Feed service consumes the published event
+        - find related users from graph db
+        - update feed cache
+    3. Notification service consumes the published event
+        - notification flow processes
+- Cache
+    - To meet high responsiveness, needs to use various cache
+    - feed, content (hot content is seperately managed), social graph, actions, likes
