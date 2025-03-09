@@ -170,3 +170,18 @@
 - Cache
     - To meet high responsiveness, needs to use various cache
     - feed, content (hot content is seperately managed), social graph, actions, likes
+
+## CH12. Design a Chat System
+
+- Options to implement chatting
+    - Polling ⇒ a lot of useless connections
+    - Long Polling
+    - WebSocket ⇒ most simple
+- Other specs can be implemented using APIs
+- Which db is suitable for a chat history data
+    - Key-Value store
+        - fast reading
+        - horizontal scaling
+    - Data structure
+        - 1 : 1 ⇒ message_id
+        - group ⇒ channel_id + message_id
