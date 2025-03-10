@@ -185,3 +185,11 @@
     - Data structure
         - 1 : 1 ⇒ message_id
         - group ⇒ channel_id + message_id
+- What if a recipient is offline or users have multiple devices
+    - we can use current maximum id of message for each device of each user
+    - and compare between maximum id from kv store and current maximum id, then sync
+- How to deal with user disconnection
+    - network connections usually disconnect and reconnect frequently in a short time
+    - we can use hearbeat from user to check connection
+    - presence server gets hearbeat request and manages connection status of user
+- Design differs significantly depending on whether it is for a small group chat or a large group chat
