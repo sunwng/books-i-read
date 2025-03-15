@@ -193,3 +193,24 @@
     - we can use hearbeat from user to check connection
     - presence server gets hearbeat request and manages connection status of user
 - Design differs significantly depending on whether it is for a small group chat or a large group chat
+
+## CH13. Design a Search Autocomplete System
+
+- Optimal data structure & strorage
+    - key: value & RDB ⇒ inefficient for querying with like condition
+    - Trie data structure looks suitable
+        - we can find each subnode’s frequency sum
+        - Redis, Elasticsearch, ArangoDB, …
+- Services involved
+    - Data gathering service
+        - manages how many times each string is queried
+        - updating trie in real time is high load
+        - brief process
+            - read search logs periodically
+            - aggregate data of the interval
+            - update trie based on the last updated one
+        - If it needs almost-real-time trie, we can shorten the interval
+            - or adopting a streaming job (e.g. kafka streams) to replace aggregating job
+    - Query service
+        - finds top N query strings using like condition with input string
+        - we can cache the most recent result of each node
