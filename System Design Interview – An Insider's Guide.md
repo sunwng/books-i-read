@@ -214,3 +214,13 @@
     - Query service
         - finds top N query strings using like condition with input string
         - we can cache the most recent result of each node
+
+## CH14. Design Youtube
+
+- Uploading flow
+    1. Transcode video at transcoding servers
+    2. When it completes, upload to transcoded storage (cdn)
+    3. publish upload-completed event
+    4. API servers consume the event and update metadata table and cache
+- Video streaming
+    - Usually streaming needs another protocol (Microsoft Smooth Streaming, Adobe HDS, …)
