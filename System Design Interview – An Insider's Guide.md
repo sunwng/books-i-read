@@ -224,3 +224,19 @@
     4. API servers consume the event and update metadata table and cache
 - Video streaming
     - Usually streaming needs another protocol (Microsoft Smooth Streaming, Adobe HDS, …)
+
+## CH15. Design Google Drive
+
+- APIs
+    - Simple upload API (for small files)
+    - Resumable upload API (for large files, due to higher risk of network interruption)
+    - File download API
+    - Revision history query API
+- Sync conflicts
+    - Simultaneous file modifications may occur
+- Block Server
+    - Uploads blocks to cloud storage
+    - A file can be split into several blocks
+    - How to minimize network traffic during uploading?
+        - Delta sync: only modified blocks are updated
+        - Compression
