@@ -13,3 +13,5 @@
 - Read/Write Ratio
     - Reads occur more frequently than writes
         - writes only happen when business information changes
+- Database design
+    - Geohash ⇒ save seperate records (geohash, business_id)
