@@ -15,3 +15,10 @@
         - writes only happen when business information changes
 - Database design
     - Geohash ⇒ save seperate records (geohash, business_id)
+
+## CH02. Nearby Friends
+
+- The user needs to receive real-time location updates of all nearby friends
+- A WebSocket server is used to handle these updates
+    - Redis Pub/Sub is integrated to broadcast location update events
+    - As this is a stateful server, proper handling of node removal is required
