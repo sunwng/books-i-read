@@ -22,3 +22,9 @@
 - A WebSocket server is used to handle these updates
     - Redis Pub/Sub is integrated to broadcast location update events
     - As this is a stateful server, proper handling of node removal is required
+- Redis Pub/Sub
+    - 1 users - 100 nearby friends = 100 channels per user needed
+    - needs to distribute channels and sharding (based on event publishing user ID)
+- Additional Study
+    - Redis Pub/Sub does not persist event
+    - Redis Pub/Sub does not check response confirm
