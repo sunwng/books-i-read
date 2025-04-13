@@ -28,3 +28,12 @@
 - Additional Study
     - Redis Pub/Sub does not persist event
     - Redis Pub/Sub does not check response confirm
+
+## CH03. Google Maps
+
+- Navigation Algorithm
+    - Requires a graph-based data structure
+    - Use separate graphs to handle size sensitivity
+- Location Service
+    - Clients send user locations in batches
+    - High write frequency → requires a write-optimized database (e.g., Cassandra)
