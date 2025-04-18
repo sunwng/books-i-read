@@ -36,4 +36,12 @@
     - Use separate graphs to handle size sensitivity
 - Location Service
     - Clients send user locations in batches
+    - Requires high availability over consistency
     - High write frequency → requires a write-optimized database (e.g., Cassandra)
+        - Cassandra does not use an *in-place update* strategy
+        - Instead, it uses a *Log-Structured Merge Tree (LSM-Tree)*
+    - We can produce events related to updated locations, and services that use location data can consume them (e.g., via Kafka)
+- Navigation Service
+    - Needs to generate waypoints
+    - Shortest n-pathes can be found using the A* algorithm
+    - ETA can be calculated using a machine learning model trained on historical data
