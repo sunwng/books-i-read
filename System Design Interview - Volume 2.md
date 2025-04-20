@@ -45,3 +45,18 @@
     - Needs to generate waypoints
     - Shortest n-pathes can be found using the A* algorithm
     - ETA can be calculated using a machine learning model trained on historical data
+
+## CH04. Distributed Message Queue
+
+- Do not consider event streaming platform such as Kafka
+- Advantages of using message queue
+    - decoupling
+    - improved scalability
+    - improved avalability
+- Message models
+    - Point-to-point
+    - Publish-Subscribe
+- Three possible strategies
+    - At most once
+    - At least once
+    - Exactly once
