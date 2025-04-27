@@ -60,3 +60,24 @@
     - At most once
     - At least once
     - Exactly once
+- How to persist messages
+    - Heavy writes and heavy reads
+    - Using DB ⇒ hard to satisfy both write and read requirements
+    - Write-Ahead Log (WAL)
+        - pure sequential read/write ⇒ a good option
+        - rotational disks are slow only for random access
+- Producer flow
+    1. Send messages to the routing layer
+    2. Read the replication strategy from metadata storage
+    3. Routes the messages to the leader broker
+    4. The leader broker receives the messages and replica pull the data
+    5. Check whether a sufficient number of replicas have synchronized, then commit
+- Consumer flow
+    - Strategy
+        - Push
+            - low latency
+            - if the rate of consumption is below the rate of production, it will be overwhenlmed
+            - it is difficult for consumers to prepare computing resources
+        - Pull
+            - the rate of consumption is determined by consumers
+            - even though there are no messages in the broker, consumers still keep pulling, wasting resources
