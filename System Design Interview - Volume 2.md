@@ -58,8 +58,20 @@
     - Publish-Subscribe
 - Three possible strategies
     - At most once
+        - messages may be lost, but are not redelivered
+        - producer sends a message without waiting for an acknowledgement (`ACK = 0`)
+        - consumer commits the offset before its process is successfully done
+        - suitable for cases that small amount of loss is acceptable (e.g. monitoring)
     - At least once
+        - no message should be lost, but can be redelivered
+        - producer sends a message with `ACK = 1` or `ACK = all`
+            - it retries on timeout or failure
+        - consumer commits the offset after its process is successfully done
+        - suitable for cases that data duplication is not a critical issue or identifying redelivered message is possible
     - Exactly once
+        - producers need to be idempotent
+        - consumers fetch commited messages only
+        - [case of kafka](https://www.confluent.io/blog/exactly-once-semantics-are-possible-heres-how-apache-kafka-does-it/)
 - How to persist messages
     - Heavy writes and heavy reads
     - Using DB ⇒ hard to satisfy both write and read requirements
@@ -81,3 +93,16 @@
         - Pull
             - the rate of consumption is determined by consumers
             - even though there are no messages in the broker, consumers still keep pulling, wasting resources
+        
+        ⇒ Pulling strategy is usually chosen
+        
+- State storage
+    - stores
+        - mapping b/w partitions and consumers
+        - last consumed offsets of consumer groups for each partition
+    - data access patterns
+        - random and frequent read & write
+        - frequently updated, rarely deleted
+- Broker
+    - the higher the minimum number of ISRs (In-Sync Replicas), the safer
+        - but needs to consider tradeoff b/w latency and safety
