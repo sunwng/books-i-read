@@ -106,3 +106,32 @@
 - Broker
     - the higher the minimum number of ISRs (In-Sync Replicas), the safer
         - but needs to consider tradeoff b/w latency and safety
+
+## CH05. Metrics Monitoring and Alerting System
+
+- Five fundamental components
+    - Data collection
+    - Data transmission
+    - Data storage
+    - Alerting
+    - Visualization
+- Metrics collection
+    - pull vs push
+        - pull: metrics collector periodically pulls metric values from the running applications
+            - difficult to maintain in large-scale environments (servers are added and removed frequently)
+            - but, this drawback can be mitigated by using service discovery components
+            - easy to perform health checks
+        - push: applications sends metrics directly to metrics collector via an collection agent installed on each server
+            - lower network latency (usually uses UDP, while pull model uses TCP)
+        
+        ⇒ each models have reasonable pros and cons
+        
+- Data access pattern
+    - heavy write
+    - spiky read
+- Data storage system
+    - needs to effectively handle time series data
+    - candidates are Cassandra, InfluxDB, etc …
+    - we can seperate the storage into hot and cold
+- Alerting
+    - read config and periodically query whether any value exceeds a defined threshold
