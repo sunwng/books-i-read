@@ -135,3 +135,24 @@
     - we can seperate the storage into hot and cold
 - Alerting
     - read config and periodically query whether any value exceeds a defined threshold
+
+## CH06. Ad Click Event Aggregation
+
+- Correctness is important because the data is used for ad billing
+- Requirements
+    - Aggregate the number of clicks for specific ad (`ad_id`) in the last `M` minutes
+    - Return the top `N` most clicked ads in the last `M` minutes
+    - Support aggregation filtering by different attributes
+- Storing data
+    - it is safe to store both raw click event data and aggregated result data
+    - raw data ⇒ for debugging and backup
+    - aggregated result data ⇒ for query efficiency
+- Database
+    - write oriented system
+    - Cassandra can be great due to heavy writes and timestamp-based data structure
+- Architecture
+    - click events are produces using Kafka
+    - data aggregation service consumes them
+        - use MapReduce framework to efficiently process the data
+    - it calculates aggregated results and publish the results
+    - a recording service consumes the results and save them to database
