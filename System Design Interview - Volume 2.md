@@ -156,3 +156,12 @@
         - use MapReduce framework to efficiently process the data
     - it calculates aggregated results and publish the results
     - a recording service consumes the results and save them to database
+- Timestamp
+    - can be generated during
+        - event time
+        - processing time
+    - due to asynchronous processing architecture, gap b/w event time and processing time can be large
+    - using event time ⇒ there can be a delay
+    - using processing time ⇒ it can be not accurate
+        - to handle this problem, we can use watermark method (giving extension of aggregation window)
+        - size is usually determined heuristically, and it is not an absolute solution
