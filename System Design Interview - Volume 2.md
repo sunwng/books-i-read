@@ -165,3 +165,15 @@
     - using processing time ⇒ it can be not accurate
         - to handle this problem, we can use watermark method (giving extension of aggregation window)
         - size is usually determined heuristically, and it is not an absolute solution
+
+## CH07. Hotel Reservation System
+
+- Database
+    - To ensure consistency and avoid concurrent issue, ACID is important
+    - Data structures for Hotel, Room, Rate, Reservation are well-suited to relational modeling
+    
+    ⇒ RDB can be a good choice
+    
+- Architecture
+    - Use caching for hotel data, as it is static
+    - We can use gRPC for inter-microservices communications
