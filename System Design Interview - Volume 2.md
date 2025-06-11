@@ -177,3 +177,15 @@
 - Architecture
     - Use caching for hotel data, as it is static
     - We can use gRPC for inter-microservices communications
+
+- Concurrency issues
+    - multiple clicks of same user
+        
+        ⇒ make API idempotent
+        
+    - multiple requests on same room
+        - needs to consider isolation level of database
+        - Pessimistic lock, Optimistic lock (version number, timestamp, …)
+- Eventual consistency
+    - 2-phase commit
+    - Saga
