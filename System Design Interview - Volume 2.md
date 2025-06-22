@@ -189,3 +189,11 @@
 - Eventual consistency
     - 2-phase commit
     - Saga
+
+## CH08. Distributed Email Service
+
+- Email knowledge
+    - protocols
+        - SMTP (Simple Mail Transfer Protocol) for sending
+        - POP (Post Office Protocol) for receiving
+        - IMAP (Internet Mail Access Protocol) for receiving
