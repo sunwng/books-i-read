@@ -197,3 +197,13 @@
         - SMTP (Simple Mail Transfer Protocol) for sending
         - POP (Post Office Protocol) for receiving
         - IMAP (Internet Mail Access Protocol) for receiving
+- Choosing database
+    - RDB ⇒ not suitable for large email data (also for search something in blob)
+    - NoSQL
+        - Requirements
+            - a single column can be a single-digit of MB
+            - strong data consistency
+            - reduce Dist I/O (full scan)
+- Search
+    - use Elasticsearch
+        - we need to sync Elasticsearch with our primary email store
