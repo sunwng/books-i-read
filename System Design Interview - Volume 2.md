@@ -207,3 +207,14 @@
 - Search
     - use Elasticsearch
         - we need to sync Elasticsearch with our primary email store
+
+## CH09. S3-like Object Storage
+
+- Storage system 101
+    - Block storage
+        - common storage devices that are physically attached to servers
+    - File storage
+        - has hierarchy
+    - Object storage
+        - no hierarchy, immutable
+- Search object id by name of it, then find object with its id
