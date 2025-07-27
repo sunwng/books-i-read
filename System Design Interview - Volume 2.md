@@ -218,3 +218,15 @@
     - Object storage
         - no hierarchy, immutable
 - Search object id by name of it, then find object with its id
+- Data Store Service
+    - Data Rouiting Service
+        - query the Placement Service to get the best data node to store data
+        - read data from data nodes
+        - write data to data nodes
+    - Placement Service
+        - it determines which data nodes should be chosen to store an object
+        - manages virtual cluster map, which contains location information
+        - continuously monitors all data nodes through heartbeats
+        - commonly uses consistent hashing
+    - Data Node
+        - stores the actual object data
