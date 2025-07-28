@@ -34,3 +34,18 @@
 - ingress & egress gateway
     - controll traffics into and out of the cluster
     - independent of any application workload
+
+## CH03. Istio’s data plane: The Envoy proxy
+
+- Envoy is application level (L7) proxy
+    - it understands HTTP1.1, HTTP2, gRPC, …
+- Inter-service features
+    - Listeners: expose a port to outside world
+    - Routes: routing rules how to handle the traffic
+    - Clusters
+- Service discovery
+    - uses discovery API implemented by control plane
+- Distributed Tracing
+    - traceId, spanId, …
+- Dynamic configurations
+    - Listener discovery service, Route discovery service, Cluster discovery service, Endpoint discovery service, Secret discovery service, Aggregate discovery service
