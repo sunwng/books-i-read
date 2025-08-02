@@ -49,3 +49,14 @@
     - traceId, spanId, …
 - Dynamic configurations
     - Listener discovery service, Route discovery service, Cluster discovery service, Endpoint discovery service, Secret discovery service, Aggregate discovery service
+
+## CH04. Istio gateways: Getting traffic into a cluster
+
+- Ingress: a traffic that originates outside the network
+- How to get to ingress point?
+    - Client queries externally exposed api
+    - it resolves domain name to an IP address via DNS
+    - this IP indicates the address of reverse proxy
+    - reverse proxy forwards traffic to actual service instances (virtual hosting)
+- Istio gateway plays the role of network ingress point, load balancing and virtual host routing
+    - Istio uses a single Envoy proxy as the ingress gateway
