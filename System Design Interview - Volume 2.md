@@ -230,3 +230,7 @@
         - commonly uses consistent hashing
     - Data Node
         - stores the actual object data
+- How data is organized
+    - storing small files seperately consumes a lot of blocks and inodes
+    - it is better to merge small objects into a large file (like Write Ahead Log)
+    - UUID-Object mapping should include the name of file and start offset
