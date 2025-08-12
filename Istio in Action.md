@@ -60,3 +60,13 @@
     - reverse proxy forwards traffic to actual service instances (virtual hosting)
 - Istio gateway plays the role of network ingress point, load balancing and virtual host routing
     - Istio uses a single Envoy proxy as the ingress gateway
+
+## CH05. Traffic control: Fine-grained traffic routing
+
+- Deployment vs Release
+    - Deployment ⇒ the code is installed into production (no traffic)
+    - Release ⇒ expose the code to users
+- Istio can help to control the traffic during release
+    - header matching
+    - weight (for canary)
+    - we can automate canary task with using Flagger
