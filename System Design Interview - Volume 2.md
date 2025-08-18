@@ -234,3 +234,24 @@
     - storing small files seperately consumes a lot of blocks and inodes
     - it is better to merge small objects into a large file (like Write Ahead Log)
     - UUID-Object mapping should include the name of file and start offset
+    - we can use erasure coding method to ensure data durability
+        - but it makes larger latency (slower responsibility)
+- Metadata data model
+    - requirements
+        - find the object ID by object name
+        - insert and delete an object based on the object name
+        - list objects in a bucket sharing the same prefix
+    - bucket
+        - `bucket_name`
+        - `bucket_id`
+        - `owner_id`
+    - object
+        - `bucket_name`
+        - `bucket_id`
+        - `object_name`
+        - `object_id`
+    - needs sharding
+        - by `bucket_id` ⇒ prone to hot spot bucket
+        - by `object_id` ⇒ not applicable (queries are based on their `_name`)
+        - by combination of `bucket_name` and `object_name` ⇒ reasonable
+            - to handle complicated implementation for the listing requirement, we can utilize seperate table, sharded by bucket_id, only for the listing
