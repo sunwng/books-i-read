@@ -70,3 +70,24 @@
     - header matching
     - weight (for canary)
     - we can automate canary task with using Flagger
+
+## CH06. Resilience: Solving application network challenges
+
+- Client-side load balancing
+    - let the client pick load-balancing algorithms
+- Locality-aware load balancing
+    - give priority to services that are closer
+    - it spills over only when are failures or unhealthy endpoints
+    - we also can use weighted distribution
+- Timeouts
+    - it makes sense to have larger timeouts at the edge, shorter timeouts for the deeper
+- Retries
+    - default option is retrying two times
+    - we can specify target errors to attempt retry
+    - safe when network connectivity could not be established
+    - `perTryTimeout * (# of attempts) < overall request timeout`
+    - exponential backoff time between retries
+- Circuit breaker
+    - Istio dosen’t have explicit configuration for circuit breaking
+    - but has connection pool settings
+        - `maxConnections`, `http1MaxPendingRequests`, `http2MaxRequests`, …
