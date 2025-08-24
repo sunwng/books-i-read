@@ -255,3 +255,27 @@
         - by `object_id` ⇒ not applicable (queries are based on their `_name`)
         - by combination of `bucket_name` and `object_name` ⇒ reasonable
             - to handle complicated implementation for the listing requirement, we can utilize seperate table, sharded by bucket_id, only for the listing
+
+## CH10. Real-time Gaming Leaderboard
+
+- Using message queue to update scores in leaderboard
+    - if we use message queue, we can propagate the score update to others easily
+- Database
+    - Relational database
+        - racords look like `(user_id, score)`
+        - querying becomes very slow when there are millions of users
+    - Redis
+        - we can use sorted set datatype of redis
+            - it uses a hash table and skip list internally
+            - uses a hash table to map a member (unique key) to its score (value) with `O(1)` complexity
+            - uses a skip list to keep all members sorted by their scores
+                - has multiple layers of hierarchy
+                (higher layers have fewer nodes, and the lowest layer contain all nodes as a sorted linked list)
+                - if a score changes, the corresponding node is removed from the skip list and re-inserted at the proper new position
+                - the complexixty of searching a range of M elements is `O(logN + M)`
+        - increase score with `ZINCRBY`
+        - fetch top users with `ZREVRANGE`
+        - fetch rank of specific user with `ZREVERANK`
+        - we create a new leaderboard sorted set every month
+        - move previous one to historical data storage
+    - NoSQL
