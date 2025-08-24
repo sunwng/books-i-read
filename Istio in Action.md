@@ -91,3 +91,19 @@
     - Istio dosen’t have explicit configuration for circuit breaking
     - but has connection pool settings
         - `maxConnections`, `http1MaxPendingRequests`, `http2MaxRequests`, …
+
+## CH07. Observability: Understanding the behavior of your services
+
+- Improving observability helps us improve mean time to recovery (MTTR)
+- Observability involves various levels
+    - application instrumentation
+    - network instrumentation
+    - signal collection infrastructure
+    - databases
+    - etc..
+- Istio helps with application-level network instrumentation
+- Monitoring is a subset of Observability
+- Using envoy as a service proxy sidecar, we can grap a lot of information about the interaction between services
+- Control plane also has information such as how long configuration synchronization takes
+- One of metrics collecting system is Prometheus
+    - it pulls metrics from its target, rather than expects agents to push
