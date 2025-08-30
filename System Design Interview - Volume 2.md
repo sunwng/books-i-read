@@ -278,4 +278,11 @@
         - fetch rank of specific user with `ZREVERANK`
         - we create a new leaderboard sorted set every month
         - move previous one to historical data storage
+        - it is difficult to consider sharding
+            - hash partition → complex approach to fetch top10 users and calculate exact ranking of specific user
+            - fixed partition → need to move a partition of specific user when the score is updated
     - NoSQL
+        - requirements
+            - optimized for writes
+            - efficiently sort items
+        - candidates are dynamodb and mongodb
