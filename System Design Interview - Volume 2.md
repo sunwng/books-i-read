@@ -279,10 +279,13 @@
         - we create a new leaderboard sorted set every month
         - move previous one to historical data storage
         - it is difficult to consider sharding
-            - hash partition → complex approach to fetch top10 users and calculate exact ranking of specific user
+            - hash partition → complex approach to fetch top10 users and calculate exact ranking of specific user (scatter and gather)
             - fixed partition → need to move a partition of specific user when the score is updated
     - NoSQL
         - requirements
             - optimized for writes
             - efficiently sort items
         - candidates are dynamodb and mongodb
+        - use partition key to distribute data (n partitions for specific month)
+        - use global secondary index to sort (score)
+        - needs scatter and gather application level process
