@@ -289,3 +289,18 @@
         - use partition key to distribute data (n partitions for specific month)
         - use global secondary index to sort (score)
         - needs scatter and gather application level process
+
+## CH11. Payment System
+
+- Reconcilation process between internal and external services is important
+- Ledger
+    - financial record of payment transaction
+- Pay-in flow
+    1. User clicks order button
+    2. Payment service stores payment event in its own database
+    3. Payment executor stores payment order in its own database
+    4. Payment executor calls an external PSP
+    5. Payment service updates the wallet
+    6. Wallet service stores the updated balance information in its own database
+    7. Payment service updates the ledger
+    8. Ledger services appends the new ledger information in its own database
