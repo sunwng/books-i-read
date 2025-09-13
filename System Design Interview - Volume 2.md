@@ -295,7 +295,7 @@
 - Reconcilation process between internal and external services is important
 - Ledger
     - financial record of payment transaction
-- Pay-in flow
+- Pay-in flow (Buyer → Commerce account)
     1. User clicks order button
     2. Payment service stores payment event in its own database
     3. Payment executor stores payment order in its own database
@@ -304,3 +304,20 @@
     6. Wallet service stores the updated balance information in its own database
     7. Payment service updates the ledger
     8. Ledger services appends the new ledger information in its own database
+- Pay-out flow (Commerce account → Seller)
+    - the only difference from Pay-in is that it uses third-party service to move money (not PSP)
+- Typical PSP flow
+    1. checkout
+    2. our service calls PSP with UUID (nonce) and payment information
+    3. our service gets a token from PSP and stores it
+    4. display PSP’s payment page with the token
+    5. client uses PSP’s payment system
+    6. PSP calls our service with the result
+- Drawbacks of synchronos flow in payment system
+    - if any one of services in the chain doesn’t perform well, the whole system is impacted
+    - poor failure isolation
+    - tight coupling
+- Fallback strategy
+    - append-only table
+    - retry queue
+    - dead letter queue
