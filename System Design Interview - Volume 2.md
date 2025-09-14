@@ -321,3 +321,27 @@
     - append-only table
     - retry queue
     - dead letter queue
+
+## CH12. Digital Wallet
+
+- Transfer money from wallet A to wallet B
+- Using relational database
+    - to handle high TPS, database must be sharded
+    - when it is sharded, it is difficult to handle transaction
+- Using Distributed Transaction
+    - Two-phase commit (2PC)
+        - low-level solution
+        - not performant
+        - coordinator can be a single point of failure
+        - same transaction
+    - Try-Confirm/Cancel (TC/C)
+        - seperate transaction
+        - database-agnostic
+    - Saga
+        - de-facto standard
+        - choreography (fully decentralized coordination) / orchestration (single coordinator instructs)
+- Event Sourcing
+    - command / event / state / state machine
+    - all events are saved first as immutable history ⇒ higher reproducibility than others
+- Command Query Responsibility Segregation (CQRS)
+    - uses many read-only state machines
