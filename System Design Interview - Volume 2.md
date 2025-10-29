@@ -345,3 +345,48 @@
     - all events are saved first as immutable history ⇒ higher reproducibility than others
 - Command Query Responsibility Segregation (CQRS)
     - uses many read-only state machines
+- High-performance event sourcing
+    - file-based
+        - save commands and events to a local disk
+        - cache recent commands and events in memory
+        - we can utilize mmap
+        - states can be managed using local file-based db (e.g. RocksDB)
+
+## CH13. Stock Exchange
+
+- Trading flow
+    1. A client places an order via the broker
+    2. The broker sends the order to the exchange
+    3. The risk manager checks risk
+    4. The order manager verifies there are sufficient funds
+    5. The order is sent to the maching engine
+    6. When a match is found, the matching engine emits two executions (buy and sell sides)
+    - Matching engine
+        - maintains the order book for each symbol
+        - matches buy and sell orders
+        - distributes the execution stream as market data
+        => must be deterministic (same input of sequences, same output of executions)
+            - Sequencer helps this, by stamping every incoming orders and outgoing pairs of executions with sequence ID
+    - Order manager
+        - sends orders for risk checks
+        - verifies users' wallet
+        - sends the order to the inbound sequencer
+        - receives the execution from the outbound sequencer
+- Market data flow
+    1. The maching engine generates a stream of executions and the stream is sent to the market data publisher
+    2. The market data publisher constructs the candelstick charts and order books, and send it to the data service
+    3. The data services stores the data and provide stored data to the broker
+- Reporting flow
+- Data model
+    - Product
+        - describes attributes of a trading symbol
+        - doesn't change frequently
+    - Order
+        - inbound instruction for a buy or a sell
+    - Execution
+        - outbound matched result
+        => order and execution data are not stored in database, but in disk or shared memory to meet latency requirement
+    - Orderbook
+        - list of buy and sell orders
+        - fast insert/delete/update
+    - Candlestick chart
