@@ -390,3 +390,7 @@
         - list of buy and sell orders
         - fast insert/delete/update
     - Candlestick chart
+- Performance
+    - To meet low latency requirement, usually everything is on a single gigantic server
+    - Each component (Order manager, Matching Engine, etc) is single-threaded, and the thread is pinned to a fixed CPU core
+        - It is for no context switching and no locks
