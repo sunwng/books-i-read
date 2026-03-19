@@ -1,0 +1,10 @@
+## CH01. Trade-Offs in Data Systems Architecture
+
+- Five functionalities of common applications
+    - Store data → Databases
+    - Remember the result of an expensive operation → Caches
+    - Search data by keyword → Search indexes
+    - Handle evens → Stream processing
+    - Periodically crunch large amount of data → Batch processing
+    
+    ⇒ But, there are various approaches for each of them
