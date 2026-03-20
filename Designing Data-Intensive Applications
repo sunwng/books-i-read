@@ -8,3 +8,6 @@
     - Periodically crunch large amount of data → Batch processing
     
     ⇒ But, there are various approaches for each of them
+- Operational vs Analytics system
+    - Operational systems read and modify the data based on the action performed by users
+    - Analytics system only read the data and process the data for analytics needs
