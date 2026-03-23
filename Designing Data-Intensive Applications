@@ -10,4 +10,9 @@
     ⇒ But, there are various approaches for each of them
 - Operational vs Analytics system
     - Operational systems read and modify the data based on the action performed by users
+        - known as OLTP (Online Transaction Processing)
+        - “Systems of Record” (Source of truth)
     - Analytics system only read the data and process the data for analytics needs
+        - known as OLAP (Online Analytical Processing)
+        - uses Data Warehouse as an seperate database processed by ETL (Extract-Transform-Load)
+        - “Derived data systems”
