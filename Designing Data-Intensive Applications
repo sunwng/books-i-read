@@ -16,3 +16,4 @@
         - known as OLAP (Online Analytical Processing)
         - uses Data Warehouse as an seperate database processed by ETL (Extract-Transform-Load)
         - “Derived data systems”
+- Cloud vs Self-Hosting
