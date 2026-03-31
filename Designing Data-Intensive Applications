@@ -17,3 +17,5 @@
         - uses Data Warehouse as an seperate database processed by ETL (Extract-Transform-Load)
         - “Derived data systems”
 - Cloud vs Self-Hosting
+    - Using cloud-native system can be another option
+        - Higher-level abstractions tend to be more oriented toward particular use cases
