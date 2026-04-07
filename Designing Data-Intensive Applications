@@ -20,3 +20,5 @@
     - Using cloud-native system can be another option
         - Higher-level abstractions tend to be more oriented toward particular use cases
 - Distributed vs Single-Node
+    - When each service ahs its own database, maintaining consistency of data becomes difficult
+    - In MSA, a service has one well-defined purpose
