@@ -22,3 +22,6 @@
 - Distributed vs Single-Node
     - When each service ahs its own database, maintaining consistency of data becomes difficult
     - In MSA, a service has one well-defined purpose
+- Cloud computing vs Supercomputing
+
+## CH02. Defining Nonfunctional Requirements
